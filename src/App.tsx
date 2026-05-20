@@ -32,7 +32,6 @@ import {
   checklistItems,
   coreModules,
   deviceCards,
-  echelonModules,
   entrustmentLevels,
   exercises,
   facultyTemplate,
@@ -42,6 +41,9 @@ import {
   medtronicSafetyNotes,
   medtronicSigniaModules,
   endoStitchModules,
+  endoStitchCompetencyFocus,
+  endoStitchDeviceFacts,
+  endoStitchReloadOptions,
   metricTargets,
   navItems,
   onlineResources,
@@ -58,13 +60,12 @@ const moduleIds = [
   ...coreModules.map((module) => module.code),
   ...medtronicSigniaModules.map((module) => module.id),
   ...endoStitchModules.map((module) => module.id),
-  ...echelonModules.map((module) => module.id),
   ...exercises.map((exercise) => exercise.id)
 ];
 
 function App() {
   const [completedIds, setCompletedIds] = useState<Set<string>>(
-    () => new Set(["STAP-1", "echelon-loading", "exercise-a"])
+    () => new Set(["STAP-1", "signia-platform-orientation", "endostitch-orientation", "exercise-a"])
   );
 
   const toggleComplete = (id: string) => {
@@ -217,8 +218,8 @@ function App() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="Device modules"
-              title="Medtronic stapling and suturing platforms, with comparison context"
-              description="Device content is framed as educational orientation and deliberate practice. Learners should reconcile Signia, Endo Stitch, and comparison content with the current IFU, local inventory, and faculty guidance."
+              title="Medtronic Signia and Endo Stitch device pathways"
+              description="Device content is framed as educational orientation and deliberate practice. Learners reconcile Signia and Endo Stitch training with the current IFU, local inventory, and faculty guidance."
             />
             <div className="mt-10 grid gap-6 lg:grid-cols-2">
               {deviceCards.map((device) => (
@@ -328,36 +329,54 @@ function App() {
           </div>
         </section>
 
-        <section id="echelon" className="px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.3fr]">
-            <div>
-              <SectionTitle
-                eyebrow="ECHELON 3000 training"
-                title="Stepwise simulation workflow"
-                description="Modules are adapted from the uploaded optimized device performance guide and rewritten for simulation practice."
-              />
-              <div className="mt-8 grid gap-4">
-                <img
-                  src="/assets/echelon-angle.webp"
-                  alt="ECHELON 3000 angled device for simulation reference"
-                  className="rounded-lg border border-slate-200 bg-white object-contain p-3 shadow-card"
-                />
-                <img
-                  src="/assets/echelon-marked.webp"
-                  alt="ECHELON stapler image showing dynamic firing and anvil callouts"
-                  className="rounded-lg border border-slate-200 bg-white object-contain p-3 shadow-card"
-                />
+        <section id="endostitch" className="px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <SectionTitle
+              eyebrow="Endo Stitch device information"
+              title="Endoscopic suturing device orientation"
+              description="This section replaces the previous non-Medtronic content with a dedicated Endo Stitch device pathway: product recognition, reload awareness, needle-transfer skills, and simulation stop rules."
+            />
+            <div className="mt-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+              <div className="grid gap-5">
+                <Card title="Device at a glance" icon={<ClipboardCheck className="h-5 w-5" />}>
+                  <dl className="grid gap-4">
+                    {endoStitchDeviceFacts.map((fact) => (
+                      <div key={fact.label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                        <dt className="text-sm font-bold uppercase tracking-[0.12em] text-safety-600">{fact.label}</dt>
+                        <dd className="mt-2 text-sm leading-6 text-slate-700">{fact.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </Card>
+                <Card tone="warning" title="Endo Stitch safety stop rules" icon={<AlertTriangle className="h-5 w-5" />}>
+                  <p className="text-sm leading-6 text-safety-700">
+                    Stop the simulation immediately for lost needle visualization, uncontrolled transfer, uncertain reload status, tissue tearing, crossed suture, or unclear recovery plan. Follow institutional policy, manufacturer IFU, and faculty supervision.
+                  </p>
+                </Card>
               </div>
-              <div className="mt-6 rounded-lg border border-safety-200 bg-safety-50 p-4 text-sm leading-6 text-safety-700">
-                <AlertTriangle className="mb-2 h-5 w-5" aria-hidden="true" />
-                {supervisionNote}
+              <div className="grid gap-5">
+                <Card title="Reload and compatibility awareness" icon={<Layers className="h-5 w-5" />}>
+                  <div className="grid gap-3">
+                    {endoStitchReloadOptions.map((option) => (
+                      <div key={option.title} className="rounded-md border border-slate-200 p-4">
+                        <p className="font-semibold text-navy-900">{option.title}</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">{option.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+                <Card title="Competency focus" icon={<Target className="h-5 w-5" />}>
+                  <ul className="grid gap-2">
+                    {endoStitchCompetencyFocus.map((item) => (
+                      <li key={item} className="flex gap-2 text-sm leading-6 text-slate-700">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-clinical-500" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
               </div>
             </div>
-            <ModuleAccordion
-              modules={echelonModules}
-              completedIds={completedIds}
-              onToggleComplete={toggleComplete}
-            />
           </div>
         </section>
 

@@ -74,7 +74,7 @@ export const navItems = [
   { label: "Overview", href: "#overview" },
   { label: "Devices", href: "#devices" },
   { label: "Medtronic", href: "#medtronic" },
-  { label: "ECHELON", href: "#echelon" },
+  { label: "Endo Stitch", href: "#endostitch" },
   { label: "Signia", href: "#signia" },
   { label: "Exercises", href: "#exercises" },
   { label: "Assessment", href: "#assessment" },
@@ -173,20 +173,6 @@ export const coreModules: CoreModule[] = [
 
 export const deviceCards: DeviceCardData[] = [
   {
-    title: "ECHELON 3000 Stapler",
-    image: "/assets/echelon-reloads.webp",
-    caption: "ECHELON 3000 simulation device image with reload options.",
-    points: [
-      "Powered articulation",
-      "Home button and straight-jaw return",
-      "Reload loading workflow",
-      "Partial-close articulation limits",
-      "Firing trigger lock and knife indicator",
-      "Jaw opening sequence",
-      "Troubleshooting and manual recovery workflow"
-    ]
-  },
-  {
     title: "Medtronic Signia Powered Stapler",
     image: "/assets/signia-side-view.jpg",
     caption: "Medtronic Signia powered stapling system reference image.",
@@ -209,102 +195,6 @@ export const deviceCards: DeviceCardData[] = [
       "Interrupted and running stitch sequencing on synthetic tissue",
       "Needle visibility, retrieval, and loss-prevention stop points",
       "Knot security, tension control, bite spacing, and communication"
-    ]
-  }
-];
-
-export const echelonModules: TrainingModule[] = [
-  {
-    id: "echelon-loading",
-    title: "Module 1: Loading the Device",
-    summary: "Reload loading and pre-use visual checks for simulation practice.",
-    steps: [
-      "Verify reload size matches instrument size.",
-      "Confirm staple retaining cap is present during loading.",
-      "Slide reload against bottom of reload jaw until alignment tab stops in alignment slot.",
-      "Remove retaining cap straight up.",
-      "Confirm reload lies flat and no drivers are visible."
-    ]
-  },
-  {
-    id: "echelon-articulation",
-    title: "Module 2: Articulation and Centering",
-    summary: "Battery, articulation controls, anvil orientation, and home button practice.",
-    steps: [
-      "Insert battery.",
-      "Test left and right articulation buttons.",
-      "Press home button to return jaws straight.",
-      "Practice anvil jaw up and anvil jaw down.",
-      "Explain haptic or audible feedback at maximum articulation."
-    ]
-  },
-  {
-    id: "echelon-partial-close",
-    title: "Module 3: Partial Close Articulation",
-    summary: "Recognize when articulation remains enabled or becomes disabled.",
-    steps: [
-      "Articulation is possible when jaws are open and partial close indicator is visible.",
-      "Once the anvil covers the indicator, articulation is disabled.",
-      "If articulation is attempted while closed, the device provides haptic feedback."
-    ]
-  },
-  {
-    id: "echelon-closure",
-    title: "Module 4: Device Closure",
-    summary: "Flat positioning, visual confirmation, compression interval, and stop points.",
-    steps: [
-      "Position tissue flat between jaws.",
-      "Avoid bunching, twisting, traction, or hidden tissue.",
-      "Hold jaws in place for 15 seconds before firing during simulation practice.",
-      "Confirm both sides are visualized."
-    ]
-  },
-  {
-    id: "echelon-firing",
-    title: "Module 5: Firing",
-    summary: "Trigger lock, controlled activation, knife return, and staple line inspection.",
-    steps: [
-      "Pull back red firing trigger lock.",
-      "Pull dark gray firing trigger.",
-      "Continue until motor stops.",
-      "Release firing trigger to return knife to home.",
-      "Inspect knife indicator and staple line."
-    ]
-  },
-  {
-    id: "echelon-opening",
-    title: "Module 6: Opening the Jaws",
-    summary: "Safe release sequence after confirming knife position.",
-    steps: [
-      "Confirm knife is home.",
-      "Squeeze closing trigger.",
-      "Press clamp release button.",
-      "Slowly release closing trigger.",
-      "If jaws do not open, use approved troubleshooting workflow."
-    ]
-  },
-  {
-    id: "echelon-additional",
-    title: "Module 7: Preparing for Additional Firings",
-    summary: "Simulation cleaning and reload readiness after a completed firing.",
-    steps: [
-      "Submerge anvil and cartridge jaw in sterile solution during simulation cleaning.",
-      "Swish to remove loose staples.",
-      "Wipe inside and outside jaw surfaces.",
-      "Reload only after inspection."
-    ]
-  },
-  {
-    id: "echelon-troubleshooting",
-    title: "Module 8: Jaws Will Not Open",
-    summary: "Escalation-minded troubleshooting flow for simulation drills.",
-    warning: true,
-    steps: [
-      "Confirm battery is seated.",
-      "Press home button.",
-      "Remove and reinsert battery.",
-      "Press home again.",
-      "If unresolved, follow manufacturer IFU and faculty/device representative guidance."
     ]
   }
 ];
@@ -453,10 +343,66 @@ export const medtronicResources = [
   },
   {
     title: "Endo Stitch suturing device",
-    description: "Manufacturer page for the 10 mm endoscopic suturing device used for interrupted or running stitch placement in soft tissue.",
+    description: "Manufacturer page for the 10 mm endoscopic suturing device and related reloads.",
     href: "https://www.medtronic.com/en-us/healthcare-professionals/products/access-instruments/endoscopic-devices/endo-stitch-suturing-device.html",
     type: "Medtronic"
+  },
+  {
+    title: "Endo Stitch single-stitch reload",
+    description: "Manufacturer page for the single-use reload with one sutured needle.",
+    href: "https://www.medtronic.com/en-us/healthcare-professionals/products/wound-closure/endoscopic-suturing/accessories/endo-stitch-single-stitch-reload.html",
+    type: "Medtronic"
+  },
+  {
+    title: "Endo Stitch triple-stitch reload",
+    description: "Manufacturer page for the triple-stitch reload concept used in inventory recognition drills.",
+    href: "https://www.medtronic.com/en-us/healthcare-professionals/products/wound-closure/endoscopic-suturing/accessories/endo-stitch-triple-stitch-reload.html",
+    type: "Medtronic"
   }
+];
+
+export const endoStitchDeviceFacts = [
+  {
+    label: "Manufacturer-described use",
+    value:
+      "Endoscopic placement of interrupted or running stitches in soft tissue. Simulation sessions teach recognition and trainer handling only."
+  },
+  {
+    label: "Instrument profile",
+    value: "10 mm endoscopic suturing device with a listed 15 in / 34 cm shaft length."
+  },
+  {
+    label: "Ordering reference",
+    value: "Medtronic lists item 173016 for the Endo Stitch suturing device; programs should confirm local inventory and IFU."
+  },
+  {
+    label: "Station setup",
+    value:
+      "Dry trainer, marked synthetic tissue, compatible reload examples, needle-control checklist, camera view, and faculty observer."
+  }
+];
+
+export const endoStitchReloadOptions = [
+  {
+    title: "Single-stitch reload",
+    text: "Single-use loading unit with one sutured needle; use for basic reload identification and first-pass needle-transfer drills."
+  },
+  {
+    title: "Triple-stitch reload",
+    text: "Reload concept with three sutured needles; use for inventory comparison, count discipline, and sequence planning discussions."
+  },
+  {
+    title: "V-Loc compatible reload awareness",
+    text: "Teach compatibility awareness and suture-management differences as a faculty-led comparison station, not independent selection advice."
+  }
+];
+
+export const endoStitchCompetencyFocus = [
+  "Names handle, shaft, jaws, needle position, suture tail, and reload type before touching the model.",
+  "Keeps the needle and jaws visible during every transfer, bite, and reset.",
+  "Places symmetric bites on marked pads with controlled spacing, depth, and tissue tension.",
+  "Stops immediately for lost visualization, uncontrolled needle position, tissue tearing, or crossed suture.",
+  "Communicates reload count, needle status, suture tension, and recovery plan to the faculty observer."
 ];
 
 export const signiaConcepts = [
@@ -869,12 +815,6 @@ export const facultyWorkflow = {
 
 export const resources = [
   {
-    title: "ECHELON 3000 Quick Reference",
-    description: "Local optimized device performance guide used to build the simulation modules.",
-    href: "/downloads/echelon-3000-odp-guide.pdf",
-    type: "PDF"
-  },
-  {
     title: "Signia Powered Stapler Concept Sheet",
     description: "Local product information sheet for powered stapling concepts and comparison language.",
     href: "/downloads/signia-powered-stapler-information-sheet.pdf",
@@ -919,14 +859,6 @@ export const resources = [
 ];
 
 export const onlineResources = [
-  {
-    title: "J&J MedTech ECHELON 3000 product page",
-    href: "https://www.jnjmedtech.com/en-US/products/surgery/surgical-staplers/echelon-3000-stapler/"
-  },
-  {
-    title: "J&J MedTech ECHELON 3000 features video",
-    href: "https://www.youtube.com/watch?v=-VrCCmxw5ys"
-  },
   {
     title: "Medtronic Signia stapling system page",
     href: "https://www.medtronic.com/en-us/healthcare-professionals/specialties/surgical-solutions/product-portfolio/signia-stapling-system.html"

@@ -27,8 +27,7 @@ The built site is generated in `dist/`.
 
 - Simulation-first curriculum overview
 - Medtronic Signia platform modules for setup, feedback, firing, release, troubleshooting, and recovery awareness
-- Medtronic Endo Stitch modules for device orientation, needle transfer, interrupted/running stitch drills, and safety stop rules
-- ECHELON 3000 step-by-step training accordion for comparison/source-document continuity
+- Medtronic Endo Stitch device information, reload awareness, needle transfer, interrupted/running stitch drills, and safety stop rules
 - Simulation exercises
 - Assessment checklist, rubric, quiz prompts, objective metrics, and entrustment levels
 - Interactive curriculum tracker with sample data, dashboard metrics, search, and filters
