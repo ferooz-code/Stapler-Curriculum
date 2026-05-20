@@ -71,10 +71,13 @@ export const supervisionNote =
 
 export const navItems = [
   { label: "Home", href: "#home" },
-  { label: "Training", href: "#training" },
+  { label: "Overview", href: "#overview" },
+  { label: "Signia", href: "#signia" },
+  { label: "EndoStitch", href: "#endostitch" },
   { label: "Exercises", href: "#exercises" },
   { label: "Assessment", href: "#assessment" },
   { label: "Tracker", href: "#tracker" },
+  { label: "Calendar", href: "#calendar" },
   { label: "Faculty", href: "#faculty" },
   { label: "Resources", href: "#resources" }
 ];

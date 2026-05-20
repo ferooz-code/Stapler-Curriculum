@@ -26,7 +26,7 @@ The built site is generated in `dist/`.
 ## Included
 
 - Medtronic-only device training interface
-- Separate tabs for Signia Powered Stapler and Endo Stitch
+- Top navigation: Home, Overview, Signia, EndoStitch, Exercises, Assessment, Tracker, Calendar, Faculty, Resources
 - Signia modules for setup, feedback, firing, release, troubleshooting, and recovery awareness
 - Endo Stitch modules for device information, reload awareness, needle transfer, interrupted/running stitch drills, and safety stop rules
 - Simulation exercises

@@ -1,6 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  Activity,
   AlertTriangle,
   BarChart3,
   CalendarDays,
@@ -10,8 +9,7 @@ import {
   MonitorCheck,
   RotateCcw,
   ShieldAlert,
-  Target,
-  Workflow
+  Target
 } from "lucide-react";
 import {
   AssessmentTabs,
@@ -65,6 +63,21 @@ function App() {
     () => new Set(["signia-platform-orientation", "endostitch-orientation", "exercise-signia-setup"])
   );
   const [activeDevice, setActiveDevice] = useState<"signia" | "endostitch">("signia");
+
+  useEffect(() => {
+    const syncDeviceFromHash = () => {
+      if (window.location.hash === "#endostitch") {
+        setActiveDevice("endostitch");
+      }
+      if (window.location.hash === "#signia") {
+        setActiveDevice("signia");
+      }
+    };
+
+    syncDeviceFromHash();
+    window.addEventListener("hashchange", syncDeviceFromHash);
+    return () => window.removeEventListener("hashchange", syncDeviceFromHash);
+  }, []);
 
   const toggleComplete = (id: string) => {
     setCompletedIds((current) => {
@@ -151,7 +164,7 @@ function App() {
           </div>
         </section>
 
-        <section id="training" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
+        <section id="overview" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="Medtronic device tabs"
@@ -161,25 +174,33 @@ function App() {
 
             <div className="mt-8 flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-card sm:flex-row" role="tablist" aria-label="Medtronic device pathways">
               <button
+                id="signia"
                 type="button"
                 role="tab"
                 aria-selected={activeDevice === "signia"}
                 className={`flex-1 rounded-md px-4 py-3 text-left text-sm font-semibold transition ${
                   activeDevice === "signia" ? "bg-navy-800 text-white" : "bg-slate-50 text-navy-900 hover:bg-navy-50"
                 }`}
-                onClick={() => setActiveDevice("signia")}
+                onClick={() => {
+                  setActiveDevice("signia");
+                  window.history.replaceState(null, "", "#signia");
+                }}
               >
                 Signia Powered Stapler
                 <span className="mt-1 block text-xs font-medium opacity-80">{medtronicSigniaModules.length} step-by-step modules</span>
               </button>
               <button
+                id="endostitch"
                 type="button"
                 role="tab"
                 aria-selected={activeDevice === "endostitch"}
                 className={`flex-1 rounded-md px-4 py-3 text-left text-sm font-semibold transition ${
                   activeDevice === "endostitch" ? "bg-navy-800 text-white" : "bg-slate-50 text-navy-900 hover:bg-navy-50"
                 }`}
-                onClick={() => setActiveDevice("endostitch")}
+                onClick={() => {
+                  setActiveDevice("endostitch");
+                  window.history.replaceState(null, "", "#endostitch");
+                }}
               >
                 Endo Stitch Suturing Device
                 <span className="mt-1 block text-xs font-medium opacity-80">{endoStitchModules.length} step-by-step modules</span>

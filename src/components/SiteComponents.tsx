@@ -43,11 +43,11 @@ export function Header({ navItems, completedCount, totalCount }: HeaderProps) {
           </div>
         </a>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
+        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary navigation">
           {navItems.map((item) => (
             <a
               key={item.href}
-              className="rounded-md px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10 hover:text-white"
+              className="rounded-md px-2 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10 hover:text-white xl:px-3"
               href={item.href}
             >
               {item.label}
@@ -55,7 +55,7 @@ export function Header({ navItems, completedCount, totalCount }: HeaderProps) {
           ))}
         </nav>
 
-        <div className="hidden min-w-44 lg:block">
+        <div className="hidden min-w-40 2xl:block">
           <div className="flex items-center justify-between text-xs text-slate-300">
             <span>Local progress</span>
             <span>{percent}%</span>
@@ -190,14 +190,14 @@ export function Hero({ onPrimaryClick }: HeroProps) {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               className="inline-flex items-center justify-center rounded-md bg-navy-800 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-navy-700"
-              href="#training"
+              href="#overview"
               onClick={onPrimaryClick}
             >
               Open Device Tabs
             </a>
             <a
               className="inline-flex items-center justify-center rounded-md border border-navy-200 bg-white px-5 py-3 text-sm font-semibold text-navy-800 shadow-sm transition hover:bg-navy-50"
-              href="#medtronic"
+              href="#signia"
             >
               Start Training
             </a>
