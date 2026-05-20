@@ -38,6 +38,10 @@ import {
   facultyTemplate,
   facultyWorkflow,
   learnerLevels,
+  medtronicResources,
+  medtronicSafetyNotes,
+  medtronicSigniaModules,
+  endoStitchModules,
   metricTargets,
   navItems,
   onlineResources,
@@ -52,6 +56,8 @@ import {
 
 const moduleIds = [
   ...coreModules.map((module) => module.code),
+  ...medtronicSigniaModules.map((module) => module.id),
+  ...endoStitchModules.map((module) => module.id),
   ...echelonModules.map((module) => module.id),
   ...exercises.map((exercise) => exercise.id)
 ];
@@ -211,17 +217,27 @@ function App() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="Device modules"
-              title="Two powered stapling platforms, taught as simulation workflows"
-              description="Device content is framed as educational orientation and deliberate practice. Learners should always reconcile training steps with the current IFU, local inventory, and faculty guidance."
+              title="Medtronic stapling and suturing platforms, with comparison context"
+              description="Device content is framed as educational orientation and deliberate practice. Learners should reconcile Signia, Endo Stitch, and comparison content with the current IFU, local inventory, and faculty guidance."
             />
             <div className="mt-10 grid gap-6 lg:grid-cols-2">
               {deviceCards.map((device) => (
                 <Card key={device.title} title={device.title} icon={<Layers className="h-5 w-5" />}>
-                  <img
-                    src={device.image}
-                    alt={`${device.title} reference`}
-                    className="aspect-[16/8] w-full rounded-md border border-slate-100 object-contain"
-                  />
+                  {device.image ? (
+                    <img
+                      src={device.image}
+                      alt={`${device.title} reference`}
+                      className="aspect-[16/8] w-full rounded-md border border-slate-100 object-contain"
+                    />
+                  ) : (
+                    <div className="grid aspect-[16/8] place-items-center rounded-md border border-slate-100 bg-slate-50 p-6 text-center">
+                      <div>
+                        <p className="text-sm font-bold uppercase tracking-[0.16em] text-safety-600">Simulation module</p>
+                        <p className="mt-2 text-xl font-semibold text-navy-900">Endo Stitch</p>
+                        <p className="mt-1 text-sm text-slate-500">Endoscopic suturing trainer</p>
+                      </div>
+                    </div>
+                  )}
                   <p className="mt-3 text-sm text-slate-500">{device.caption}</p>
                   <ul className="mt-5 grid gap-2">
                     {device.points.map((point) => (
@@ -237,7 +253,82 @@ function App() {
           </div>
         </section>
 
-        <section id="echelon" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
+
+        <section id="medtronic" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <SectionTitle
+              eyebrow="Medtronic device curriculum"
+              title="Signia stapling and Endo Stitch suturing modules"
+              description="A focused Medtronic pathway for simulation-based device orientation, deliberate practice, troubleshooting awareness, and objective assessment before supervised clinical exposure."
+            />
+            <div className="mt-10 grid gap-8 lg:grid-cols-[0.85fr_1.25fr]">
+              <div className="grid gap-5">
+                <Card title="Medtronic source-based guardrails" tone="warning" icon={<ShieldAlert className="h-5 w-5" />}>
+                  <ul className="grid gap-3">
+                    {medtronicSafetyNotes.map((note) => (
+                      <li key={note} className="flex gap-2 text-sm leading-6 text-safety-700">
+                        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                        {note}
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+                <Card title="Medtronic source pack" icon={<ClipboardCheck className="h-5 w-5" />}>
+                  <ul className="grid gap-3">
+                    {medtronicResources.map((resource) => (
+                      <li key={resource.href}>
+                        <a
+                          className="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-clinical-200 hover:bg-clinical-50"
+                          href={resource.href}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <span className="font-semibold text-navy-900">{resource.title}</span>
+                            <span className="rounded-md bg-navy-50 px-2 py-1 text-xs font-bold text-navy-700">{resource.type}</span>
+                          </div>
+                          <p className="mt-2 text-sm leading-6 text-slate-600">{resource.description}</p>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              </div>
+              <div className="grid gap-6">
+                <div>
+                  <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <h3 className="text-2xl font-semibold text-navy-900">Signia powered stapling pathway</h3>
+                      <p className="mt-2 text-sm text-slate-600">Five-step simulation sequence for platform setup, powered feedback, firing, release, and recovery scenarios.</p>
+                    </div>
+                    <span className="text-sm font-semibold text-clinical-700">{medtronicSigniaModules.length} modules</span>
+                  </div>
+                  <ModuleAccordion
+                    modules={medtronicSigniaModules}
+                    completedIds={completedIds}
+                    onToggleComplete={toggleComplete}
+                  />
+                </div>
+                <div>
+                  <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <h3 className="text-2xl font-semibold text-navy-900">Endo Stitch suturing pathway</h3>
+                      <p className="mt-2 text-sm text-slate-600">Needle transfer, interrupted/running stitch patterns, tension control, and rescue stop rules for dry-lab practice.</p>
+                    </div>
+                    <span className="text-sm font-semibold text-clinical-700">{endoStitchModules.length} modules</span>
+                  </div>
+                  <ModuleAccordion
+                    modules={endoStitchModules}
+                    completedIds={completedIds}
+                    onToggleComplete={toggleComplete}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="echelon" className="px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.3fr]">
             <div>
               <SectionTitle
@@ -270,7 +361,7 @@ function App() {
           </div>
         </section>
 
-        <section id="signia" className="px-4 py-16 sm:px-6 lg:px-8">
+        <section id="signia" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="Signia powered stapler concepts"

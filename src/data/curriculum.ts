@@ -13,7 +13,7 @@ export type CoreModule = {
 
 export type DeviceCardData = {
   title: string;
-  image: string;
+  image?: string;
   caption: string;
   points: string[];
 };
@@ -73,6 +73,7 @@ export const navItems = [
   { label: "Home", href: "#home" },
   { label: "Overview", href: "#overview" },
   { label: "Devices", href: "#devices" },
+  { label: "Medtronic", href: "#medtronic" },
   { label: "ECHELON", href: "#echelon" },
   { label: "Signia", href: "#signia" },
   { label: "Exercises", href: "#exercises" },
@@ -127,6 +128,20 @@ export const coreModules: CoreModule[] = [
       "Hazard recognition, stop points, failed release workflow, manual recovery awareness, and team communication."
   },
   {
+    code: "MED-SIGNIA",
+    name: "Medtronic Signia Platform",
+    audience: "PGY2-5 / fellows",
+    description:
+      "Power handle and shell readiness, adapter and reload workflow, powered clamping and firing concepts, feedback interpretation, troubleshooting, and manual recovery awareness."
+  },
+  {
+    code: "MED-ENDOSTITCH",
+    name: "Endo Stitch Endoscopic Suturing",
+    audience: "PGY1-5 / fellows",
+    description:
+      "Device orientation, reload compatibility, needle transfer, interrupted and running stitch drills, tension control, knot security, and needle-loss prevention in simulation."
+  },
+  {
     code: "SUT-1",
     name: "Basic Endoscopic Suturing",
     audience: "PGY1-2 / new fellows",
@@ -172,16 +187,28 @@ export const deviceCards: DeviceCardData[] = [
     ]
   },
   {
-    title: "Signia Powered Stapler",
+    title: "Medtronic Signia Powered Stapler",
     image: "/assets/signia-side-view.jpg",
-    caption: "Signia powered stapling system reference image.",
+    caption: "Medtronic Signia powered stapling system reference image.",
     points: [
-      "Manufacturer-described Adaptive Firing concept",
-      "Tissue and force sensing concepts",
-      "Real-time feedback for reload selection awareness",
-      "Adapter and reload portfolio",
-      "Ergonomic push-button controls",
-      "Powered stapling comparison concepts"
+      "Manufacturer-described Adaptive Firing and Adaptive Compression concepts",
+      "Tissue thickness and force sensing concepts",
+      "Real-time handle feedback for reload-selection awareness",
+      "Power handle, power shell, charger, adapters, reloads, and manual retraction tool",
+      "Powered rotation, articulation, clamping, and firing concepts",
+      "Troubleshooting flow: open, reboot, backup handle, then IFU-directed manual operation"
+    ]
+  },
+  {
+    title: "Medtronic Endo Stitch Suturing",
+    caption: "Endoscopic suturing simulation module for interrupted and running stitch practice.",
+    points: [
+      "10 mm endoscopic suturing device orientation",
+      "Single-stitch, triple-stitch, and compatible reload awareness",
+      "Needle transfer between jaws under direct visualization",
+      "Interrupted and running stitch sequencing on synthetic tissue",
+      "Needle visibility, retrieval, and loss-prevention stop points",
+      "Knot security, tension control, bite spacing, and communication"
     ]
   }
 ];
@@ -282,6 +309,156 @@ export const echelonModules: TrainingModule[] = [
   }
 ];
 
+export const medtronicSigniaModules: TrainingModule[] = [
+  {
+    id: "signia-platform-orientation",
+    title: "Signia Module 1: Platform Orientation",
+    summary: "Identify the reusable and single-use system elements before any simulation firing station.",
+    steps: [
+      "Identify the power handle, power shell, charger, linear adapter options, compatible reloads, insertion guide, sterilization tray, and manual retraction tool.",
+      "Confirm the training station has current IFU access and faculty or device-education supervision.",
+      "Inspect simulation packaging, labels, adapter length, reload family, and expiration/status cues according to local policy.",
+      "Verbalize that reloads and tissue models used in simulation do not authorize independent patient-care use.",
+      "Document the selected adapter and reload in the training log before beginning the station."
+    ]
+  },
+  {
+    id: "signia-assembly-readiness",
+    title: "Signia Module 2: Assembly and Readiness Check",
+    summary: "Practice handle, shell, adapter, and reload readiness as a dry-lab setup workflow.",
+    steps: [
+      "Confirm the handle and power shell are ready for the simulated session and that the display/indicator behavior is reviewed with faculty.",
+      "Attach the appropriate adapter to the handle before connecting a reload, using the station checklist and IFU as the reference.",
+      "Keep hands clear of distal jaws, knife path, and reload edges during setup and demonstration.",
+      "Open, center, rotate, articulate, clamp, and release on the trainer while naming each control aloud.",
+      "Stop the setup if a connection, calibration, display, or movement cue is unexpected."
+    ]
+  },
+  {
+    id: "signia-feedback-adaptive-firing",
+    title: "Signia Module 3: Feedback and Adaptive Firing Concepts",
+    summary: "Translate manufacturer-described sensing and powered firing concepts into simulation discussion points.",
+    steps: [
+      "Explain that Medtronic describes Signia as sensing tissue/forces and adjusting clamping or firing behavior in real time.",
+      "Use synthetic tissue of different thicknesses to discuss why feedback is a pause-and-confirm signal, not permission to proceed automatically.",
+      "Compare expected and unexpected display or audible feedback with the faculty facilitator before firing.",
+      "State the reload-selection rationale and abort criteria before each simulated firing.",
+      "Record feedback interpretation, reload choice, and whether faculty correction was needed."
+    ]
+  },
+  {
+    id: "signia-linear-firing-release",
+    title: "Signia Module 4: Linear Stapling Firing and Release Drill",
+    summary: "Controlled target capture, compression awareness, powered firing, release, and staple-line inspection.",
+    steps: [
+      "Align synthetic tissue flat within the jaws and confirm both sides of the target are visible on the trainer view.",
+      "Announce target, reload, tissue thickness assumption, and stop points before clamping.",
+      "Clamp only after confirming no hidden structure, twist, traction, or off-target capture is present.",
+      "Fire in simulation only after the faculty observer confirms the setup is acceptable.",
+      "Open/release, inspect the staple line, and classify it as acceptable, questionable, or unacceptable using the curriculum rubric."
+    ]
+  },
+  {
+    id: "signia-troubleshooting",
+    title: "Signia Module 5: Troubleshooting and Recovery Awareness",
+    summary: "A faculty-led scenario for loading difficulty, unloading difficulty, incomplete opening, and recovery escalation.",
+    warning: true,
+    steps: [
+      "For loading or unloading difficulty, stop, center/open the adapter as applicable, confirm alignment, and ask faculty to compare the setup with the IFU/troubleshooting guide.",
+      "For unexpected clamping, firing, or feedback behavior, stop the scenario, keep the device stable, and verbalize the concern to the team.",
+      "For failure to retract or open in the scenario, rehearse the escalation sequence: powered opening approach, handle reboot, backup handle if available, then IFU-directed manual operation with faculty/device-representative guidance.",
+      "Know that manual operation can take several minutes and many rotations; do not overtighten or force resistance during demonstration.",
+      "After any recovery drill, label the device scenario as a product-event simulation, inspect the model, and document remediation needs."
+    ]
+  }
+];
+
+export const endoStitchModules: TrainingModule[] = [
+  {
+    id: "endostitch-orientation",
+    title: "Endo Stitch Module 1: Device Orientation and Reloads",
+    summary: "Recognize the 10 mm suturing device, jaws, handle controls, shaft, reload types, and suture path.",
+    steps: [
+      "Identify the Endo Stitch suturing device, shaft, jaws, handle action, needle position, and suture tail on the dry trainer.",
+      "Review single-stitch, triple-stitch, and compatible reload concepts as inventory awareness, not product selection advice.",
+      "Confirm all reload handling is performed on a trainer under faculty supervision and current IFU access.",
+      "Trace the intended suture path before touching the tissue model.",
+      "State the needle-loss stop rule: if the needle is not visible and controlled, pause and call faculty."
+    ]
+  },
+  {
+    id: "endostitch-needle-transfer",
+    title: "Endo Stitch Module 2: Needle Transfer Drill",
+    summary: "Practice deliberate jaw alignment and needle passage without tissue, then through synthetic tissue.",
+    steps: [
+      "Start with air passes to see how the needle transfers between jaws in the trainer field.",
+      "Keep the jaws in view during each open, close, and transfer movement.",
+      "Advance to synthetic tissue only after five consecutive controlled transfers without needle instability.",
+      "Place symmetric bites on marked entry and exit points while avoiding tissue tearing or excessive tension.",
+      "Reset if visualization is lost, the needle is partially captured, or the tissue path is unclear."
+    ]
+  },
+  {
+    id: "endostitch-interrupted-running",
+    title: "Endo Stitch Module 3: Interrupted and Running Stitch Patterns",
+    summary: "Use marked pads to practice spacing, bite symmetry, travel direction, and suture management.",
+    steps: [
+      "Plan the stitch line on the model and verbalize direction, spacing, and tension goal.",
+      "Complete three interrupted stitches with equal bite depth and controlled suture tails.",
+      "Complete a running stitch segment while maintaining consistent spacing and avoiding suture crossing.",
+      "Use faculty-approved knot or closure practice methods for the station; do not convert this to patient-care instruction.",
+      "Score the station for bite spacing, tissue handling, tension, needle control, and communication."
+    ]
+  },
+  {
+    id: "endostitch-error-rescue",
+    title: "Endo Stitch Module 4: Error Recognition and Rescue",
+    summary: "Recognize unsafe needle position, poor bite geometry, tension problems, and loss-of-visualization events.",
+    warning: true,
+    steps: [
+      "Stop immediately if the needle is not visible, not fully controlled, or unexpectedly transferred.",
+      "Identify poor bite symmetry, skim bites, tissue tearing, crossed suture, excessive tension, and slack loops.",
+      "Communicate the error aloud and request camera/instrument stabilization before continuing the scenario.",
+      "Recover only using faculty-approved simulation steps and current IFU guidance.",
+      "Log the event as a remediation item if needle control or visualization stop rules were missed."
+    ]
+  }
+];
+
+export const medtronicSafetyNotes = [
+  "Simulation only: these modules do not replace Medtronic IFU, institutional policy, credentialing, or faculty/device-education supervision.",
+  "Treat powered feedback as a prompt to pause, verify, and communicate; it is not an automatic proceed signal.",
+  "Manual recovery concepts should be demonstrated only by faculty or device educators using approved training equipment and current IFU.",
+  "For Endo Stitch drills, uncontrolled needle position or lost visualization is an immediate stop point."
+];
+
+export const medtronicResources = [
+  {
+    title: "Medtronic Signia stapling system",
+    description: "Manufacturer page describing Adaptive Firing, Adaptive Compression, sensing, feedback, adapters, reloads, and resources.",
+    href: "https://www.medtronic.com/en-us/healthcare-professionals/specialties/surgical-solutions/product-portfolio/signia-stapling-system.html",
+    type: "Medtronic"
+  },
+  {
+    title: "Signia troubleshooting guide",
+    description: "Manufacturer troubleshooting PDF for loading, unloading, retraction/opening difficulty, reboot, backup handle, and manual retraction awareness.",
+    href: "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/products/surgical-stapling/signia-stapling-system-troubleshooting-guide.pdf",
+    type: "PDF"
+  },
+  {
+    title: "Signia adapter manual operation guide",
+    description: "Manufacturer quick-use PDF for linear/circular adapter manual operation concepts and precautions.",
+    href: "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/products/surgical-stapling/signia-stapler-quick-use-linear-circular-adapter-guide.pdf",
+    type: "PDF"
+  },
+  {
+    title: "Endo Stitch suturing device",
+    description: "Manufacturer page for the 10 mm endoscopic suturing device used for interrupted or running stitch placement in soft tissue.",
+    href: "https://www.medtronic.com/en-us/healthcare-professionals/products/access-instruments/endoscopic-devices/endo-stitch-suturing-device.html",
+    type: "Medtronic"
+  }
+];
+
 export const signiaConcepts = [
   {
     title: "Adaptive Firing",
@@ -357,6 +534,42 @@ export const exercises: Exercise[] = [
       "Verbal safety communication",
       "No critical safety error"
     ]
+  },
+  {
+    id: "exercise-f",
+    title: "Exercise F: Signia Feedback and Recovery Drill",
+    objective:
+      "Use a Signia simulation station to interpret powered feedback, choose stop points, and rehearse recovery escalation language.",
+    metrics: [
+      "Feedback interpreted before firing",
+      "Reload rationale stated",
+      "Powered opening/reboot/backup/manual sequence verbalized",
+      "No forced movement during recovery scenario"
+    ]
+  },
+  {
+    id: "exercise-g",
+    title: "Exercise G: Endo Stitch Needle Transfer Station",
+    objective:
+      "Demonstrate controlled needle transfer, symmetric bites, and stop rules on a synthetic tissue model.",
+    metrics: [
+      "Five controlled air transfers",
+      "Needle always visible",
+      "Bite symmetry within target marks",
+      "Immediate stop for lost visualization"
+    ]
+  },
+  {
+    id: "exercise-h",
+    title: "Exercise H: Endo Stitch Running Stitch and Knot Security",
+    objective:
+      "Complete a short running stitch segment with consistent spacing, controlled tension, and faculty-approved knot practice.",
+    metrics: [
+      "Spacing consistency",
+      "Tension control",
+      "No tissue tearing",
+      "Knot or closure security score"
+    ]
   }
 ];
 
@@ -375,7 +588,13 @@ export const checklistItems = [
   "Recognizes unacceptable line",
   "States next step when error occurs",
   "Protects surrounding structures",
-  "Communicates with assistant/camera operator"
+  "Communicates with assistant/camera operator",
+  "Identifies Medtronic Signia handle, shell, adapter, reload, and manual retraction tool",
+  "Interprets powered feedback as a pause-and-confirm cue",
+  "Verbalizes Signia recovery escalation sequence in simulation",
+  "Identifies Endo Stitch jaws, shaft, reload, needle position, and suture tail",
+  "Maintains Endo Stitch needle visibility and control",
+  "Stops immediately for lost visualization or uncontrolled needle position"
 ];
 
 export const rubricDomains = [
@@ -386,6 +605,8 @@ export const rubricDomains = [
   "Firing technique",
   "Staple line evaluation",
   "Troubleshooting",
+  "Powered platform feedback interpretation",
+  "Endoscopic suturing needle transfer",
   "Communication"
 ];
 
@@ -394,7 +615,9 @@ export const safetyFailures = [
   "Captures unintended structure",
   "Chooses clearly inappropriate reload after opportunity to correct",
   "Fails to stop despite malposition",
-  "Produces unacceptable staple line and does not recognize it"
+  "Produces unacceptable staple line and does not recognize it",
+  "Continues Endo Stitch practice after lost needle visualization",
+  "Forces a powered stapler or adapter after unexpected resistance"
 ];
 
 export const quizBlueprint = [
@@ -553,6 +776,50 @@ export const trackerRows: TrackerRow[] = [
     passStatus: "Needs Remediation",
     entrustmentLevel: "Level 2",
     comments: "Critical stop point missed; repeat constrained-angle station."
+  },
+  {
+    date: "2026-12-02",
+    traineeId: "R005",
+    name: "Sam Rivera",
+    role: "Resident",
+    pgyLevel: "PGY3",
+    moduleCode: "MED-SIGNIA",
+    moduleName: "Medtronic Signia Platform",
+    facultyAssessor: "Faculty B",
+    quizScore: 90,
+    checklistScore: 18,
+    checklistMax: 21,
+    rubricAvg: 3.8,
+    criticalSafetyFailures: 0,
+    metric1Name: "Feedback cues",
+    metric1Value: "4/4",
+    metric2Name: "Recovery sequence",
+    metric2Value: "Complete",
+    passStatus: "Pass",
+    entrustmentLevel: "Level 3",
+    comments: "Good Signia setup language; repeat manual recovery tabletop for fluency."
+  },
+  {
+    date: "2027-01-21",
+    traineeId: "R006",
+    name: "Priya Shah",
+    role: "Resident",
+    pgyLevel: "PGY2",
+    moduleCode: "MED-ENDOSTITCH",
+    moduleName: "Endo Stitch Endoscopic Suturing",
+    facultyAssessor: "Faculty E",
+    quizScore: 82,
+    checklistScore: 16,
+    checklistMax: 21,
+    rubricAvg: 3.0,
+    criticalSafetyFailures: 0,
+    metric1Name: "Needle transfers",
+    metric1Value: "5/5",
+    metric2Name: "Bite symmetry",
+    metric2Value: "Within marks",
+    passStatus: "Pass",
+    entrustmentLevel: "Level 2",
+    comments: "Safe needle control in trainer; continue running-stitch practice."
   }
 ];
 
@@ -671,5 +938,29 @@ export const onlineResources = [
   {
     title: "Medtronic Surgical Signia in-service firing video",
     href: "https://www.youtube.com/watch?v=nHngeFrMgjw"
+  },
+  {
+    title: "Medtronic Signia linear stapler product and in-service resources",
+    href: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/surgical-staplers/powered-staplers/signia-linear-stapler-with-tri-staple-technology.html"
+  },
+  {
+    title: "Medtronic Signia troubleshooting guide PDF",
+    href: "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/products/surgical-stapling/signia-stapling-system-troubleshooting-guide.pdf"
+  },
+  {
+    title: "Medtronic Signia adapter manual operation guide PDF",
+    href: "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/products/surgical-stapling/signia-stapler-quick-use-linear-circular-adapter-guide.pdf"
+  },
+  {
+    title: "Medtronic Endo Stitch suturing device page",
+    href: "https://www.medtronic.com/en-us/healthcare-professionals/products/access-instruments/endoscopic-devices/endo-stitch-suturing-device.html"
+  },
+  {
+    title: "Medtronic Endo Stitch single-stitch reload page",
+    href: "https://www.medtronic.com/en-us/healthcare-professionals/products/wound-closure/endoscopic-suturing/accessories/endo-stitch-single-stitch-reload.html"
+  },
+  {
+    title: "Medtronic Endo Stitch triple-stitch reload page",
+    href: "https://www.medtronic.com/en-us/healthcare-professionals/products/wound-closure/endoscopic-suturing/accessories/endo-stitch-triple-stitch-reload.html"
   }
 ];

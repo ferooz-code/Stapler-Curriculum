@@ -39,7 +39,7 @@ export function Header({ navItems, completedCount, totalCount }: HeaderProps) {
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold tracking-wide">StapleSkills</p>
-            <p className="truncate text-xs text-slate-300">Thoracic Curriculum</p>
+            <p className="truncate text-xs text-slate-300">Medtronic Device Curriculum</p>
           </div>
         </a>
 
@@ -178,7 +178,7 @@ export function Hero({ onPrimaryClick }: HeroProps) {
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.95fr] lg:px-8 lg:py-24">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-safety-600">
-            StapleSkills Thoracic Curriculum
+            StapleSkills Medtronic Curriculum
           </p>
           <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight tracking-normal text-navy-900 sm:text-5xl lg:text-6xl">
             Thoracic Surgical Stapler Simulation Curriculum
@@ -197,9 +197,9 @@ export function Hero({ onPrimaryClick }: HeroProps) {
             </a>
             <a
               className="inline-flex items-center justify-center rounded-md border border-navy-200 bg-white px-5 py-3 text-sm font-semibold text-navy-800 shadow-sm transition hover:bg-navy-50"
-              href="#echelon"
+              href="#medtronic"
             >
-              Start Stapler Module
+              Start Medtronic Module
             </a>
             <a
               className="inline-flex items-center justify-center rounded-md border border-clinical-100 bg-clinical-50 px-5 py-3 text-sm font-semibold text-clinical-700 shadow-sm transition hover:bg-clinical-100"
@@ -215,11 +215,11 @@ export function Hero({ onPrimaryClick }: HeroProps) {
         <div className="relative">
           <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-card">
             <img
-              src="/assets/echelon-hero.webp"
-              alt="ECHELON 3000 surgical stapler used as simulation curriculum hero visual"
+              src="/assets/signia-side-view.jpg"
+              alt="Medtronic Signia powered stapler used as simulation curriculum hero visual"
               className="aspect-[4/3] w-full rounded-md object-contain"
             />
-            <p className="mt-3 text-sm text-slate-500">Simulation reference image for device orientation.</p>
+            <p className="mt-3 text-sm text-slate-500">Medtronic Signia simulation reference image for device orientation.</p>
           </div>
         </div>
       </div>
