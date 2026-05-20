@@ -181,25 +181,25 @@ export function Hero({ onPrimaryClick }: HeroProps) {
             StapleSkills Medtronic Curriculum
           </p>
           <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight tracking-normal text-navy-900 sm:text-5xl lg:text-6xl">
-            Thoracic Surgical Stapler Simulation Curriculum
+            Medtronic Device Simulation Curriculum
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-            Structured training for residents and fellows using simulation, deliberate practice,
-            objective assessment, and entrustment-based progression.
+            Tabbed simulation training for Medtronic Signia Powered Stapler and Endo Stitch using
+            deliberate practice, objective assessment, and faculty-supervised progression.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               className="inline-flex items-center justify-center rounded-md bg-navy-800 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-navy-700"
-              href="#overview"
+              href="#training"
               onClick={onPrimaryClick}
             >
-              View Curriculum
+              Open Device Tabs
             </a>
             <a
               className="inline-flex items-center justify-center rounded-md border border-navy-200 bg-white px-5 py-3 text-sm font-semibold text-navy-800 shadow-sm transition hover:bg-navy-50"
               href="#medtronic"
             >
-              Start Medtronic Module
+              Start Training
             </a>
             <a
               className="inline-flex items-center justify-center rounded-md border border-clinical-100 bg-clinical-50 px-5 py-3 text-sm font-semibold text-clinical-700 shadow-sm transition hover:bg-clinical-100"
@@ -460,12 +460,12 @@ function MetricsTable({ metricTargets }: { metricTargets: MetricTarget[] }) {
         <thead className="bg-navy-800 text-white">
           <tr>
             <th className="px-4 py-3 font-semibold">Target</th>
-            <th className="px-4 py-3 font-semibold">Component ID</th>
-            <th className="px-4 py-3 font-semibold">Setup-to-inspection</th>
-            <th className="px-4 py-3 font-semibold">Line deviation</th>
-            <th className="px-4 py-3 font-semibold">Wedge success</th>
-            <th className="px-4 py-3 font-semibold">Safety errors</th>
-            <th className="px-4 py-3 font-semibold">Acceptable line rate</th>
+            <th className="px-4 py-3 font-semibold">Device / Reload ID</th>
+            <th className="px-4 py-3 font-semibold">Station time</th>
+            <th className="px-4 py-3 font-semibold">Target / Bite Accuracy</th>
+            <th className="px-4 py-3 font-semibold">Feedback / Transfer Success</th>
+            <th className="px-4 py-3 font-semibold">Missed Stop Rules</th>
+            <th className="px-4 py-3 font-semibold">Acceptable Completion</th>
           </tr>
         </thead>
         <tbody>
@@ -753,9 +753,9 @@ export function Footer() {
     <footer className="border-t border-slate-200 bg-navy-900 px-4 py-8 text-white sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="font-semibold">StapleSkills Thoracic Curriculum</p>
+          <p className="font-semibold">StapleSkills Medtronic Device Curriculum</p>
           <p className="mt-1 text-sm text-slate-300">
-            Educational simulation curriculum. Follow local policy, manufacturer IFU, and faculty supervision.
+            Educational simulation curriculum for Medtronic Signia and Endo Stitch. Follow local policy, manufacturer IFU, and faculty supervision.
           </p>
         </div>
         <a className="text-sm font-semibold text-clinical-100 hover:text-white" href="#home">

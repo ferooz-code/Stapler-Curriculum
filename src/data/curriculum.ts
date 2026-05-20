@@ -71,103 +71,49 @@ export const supervisionNote =
 
 export const navItems = [
   { label: "Home", href: "#home" },
-  { label: "Overview", href: "#overview" },
-  { label: "Devices", href: "#devices" },
-  { label: "Medtronic", href: "#medtronic" },
-  { label: "Endo Stitch", href: "#endostitch" },
-  { label: "Signia", href: "#signia" },
+  { label: "Training", href: "#training" },
   { label: "Exercises", href: "#exercises" },
   { label: "Assessment", href: "#assessment" },
   { label: "Tracker", href: "#tracker" },
-  { label: "Calendar", href: "#calendar" },
   { label: "Faculty", href: "#faculty" },
   { label: "Resources", href: "#resources" }
 ];
 
 export const learnerLevels: LearnerLevel[] = [
   {
-    title: "Junior Residents",
-    subtitle: "PGY 1-2",
+    title: "Signia Basic Pathway",
+    subtitle: "Setup and feedback",
     focus:
-      "Device recognition, safe basic operation, reloads, setup, tissue positioning, and basic handling."
+      "Power handle, shell, adapter/reload recognition, feedback cues, simulated clamping, firing, release, and staple-line inspection."
   },
   {
-    title: "Senior Residents",
-    subtitle: "PGY 3-5",
+    title: "Signia Recovery Pathway",
+    subtitle: "Troubleshooting",
     focus:
-      "Thoracoscopic stapling, constrained-angle use, troubleshooting, efficiency, and decision-making."
+      "Loading/unloading difficulty, unexpected feedback, failure to retract/open, reboot, backup handle, and IFU-directed manual recovery awareness."
   },
   {
-    title: "Fellows",
-    subtitle: "Advanced trainees",
+    title: "Endo Stitch Pathway",
+    subtitle: "Endoscopic suturing",
     focus:
-      "Mastery, judgment, teaching juniors, complex scenarios, rescue strategies, and OR readiness."
+      "Device orientation, reload awareness, controlled needle transfer, interrupted/running stitch patterns, tension control, and needle-safety stop rules."
   }
 ];
 
 export const coreModules: CoreModule[] = [
   {
-    code: "STAP-1",
-    name: "Stapler Fundamentals",
-    audience: "PGY1-2 / new fellows",
+    code: "SIGNIA",
+    name: "Signia Powered Stapler",
+    audience: "Residents, fellows, faculty assessors",
     description:
-      "Components, reload recognition, loading, safety checks, compression, firing, release, and staple line inspection."
+      "Powered stapling platform orientation, adapter/reload workflow, feedback interpretation, simulated firing, release, troubleshooting, and recovery awareness."
   },
   {
-    code: "STAP-2",
-    name: "Thoracoscopic Stapling",
-    audience: "PGY2-5 / fellows",
+    code: "ENDOSTITCH",
+    name: "Endo Stitch Suturing Device",
+    audience: "Residents, fellows, faculty assessors",
     description:
-      "Port strategy, camera alignment, articulation, target capture, constrained angles, and stable release."
-  },
-  {
-    code: "STAP-3",
-    name: "Stapler Troubleshooting",
-    audience: "PGY3-5 / fellows",
-    description:
-      "Hazard recognition, stop points, failed release workflow, manual recovery awareness, and team communication."
-  },
-  {
-    code: "MED-SIGNIA",
-    name: "Medtronic Signia Platform",
-    audience: "PGY2-5 / fellows",
-    description:
-      "Power handle and shell readiness, adapter and reload workflow, powered clamping and firing concepts, feedback interpretation, troubleshooting, and manual recovery awareness."
-  },
-  {
-    code: "MED-ENDOSTITCH",
-    name: "Endo Stitch Endoscopic Suturing",
-    audience: "PGY1-5 / fellows",
-    description:
-      "Device orientation, reload compatibility, needle transfer, interrupted and running stitch drills, tension control, knot security, and needle-loss prevention in simulation."
-  },
-  {
-    code: "SUT-1",
-    name: "Basic Endoscopic Suturing",
-    audience: "PGY1-2 / new fellows",
-    description:
-      "Needle loading, entry and exit placement, bite symmetry, knot security, tension control, and economy of motion."
-  },
-  {
-    code: "ENERGY-1",
-    name: "Energy Devices and Tissue Effects",
-    audience: "All levels",
-    description:
-      "Energy modality selection, thermal spread, safe activation, tissue effects, and post-activation inspection."
-  },
-  {
-    code: "CAM-1",
-    name: "Thoracoscopic Camera and Instrument Setup",
-    audience: "All levels",
-    description:
-      "Camera orientation, white balance, port ergonomics, assistant communication, and instrument choreography."
-  },
-  {
-    code: "CRM-1",
-    name: "Device Failure and Crisis Resource Management",
-    audience: "Senior residents / fellows",
-    description:
-      "Escalation language, abort criteria, role clarity, equipment backup, and documentation after a device issue."
+      "Endoscopic suturing device orientation, reload recognition, needle transfer, interrupted and running stitch practice, tension control, and needle-safety stop rules."
   }
 ];
 
@@ -199,6 +145,37 @@ export const deviceCards: DeviceCardData[] = [
   }
 ];
 
+export const signiaDeviceFacts = [
+  {
+    label: "Platform",
+    value:
+      "Powered stapling system organized around a reusable handle/power shell, charger, adapters, reloads, and IFU-directed recovery accessories."
+  },
+  {
+    label: "Manufacturer-described feedback",
+    value:
+      "Medtronic describes Signia as using tissue and force sensing with adaptive firing/compression concepts. In this site, feedback is taught as a pause-and-confirm simulation cue."
+  },
+  {
+    label: "Training scope",
+    value:
+      "Dry-lab setup, reload/adaptor recognition, powered controls, target capture, firing/release, troubleshooting, and recovery tabletop drills."
+  },
+  {
+    label: "Critical stop point",
+    value:
+      "Do not proceed in simulation when visualization, reload selection, device movement, feedback, or resistance is unexpected. Call faculty and return to IFU-guided workflow."
+  }
+];
+
+export const signiaInstructionFocus = [
+  "Identify handle, power shell, charger, adapter, reload, jaws, display/feedback cues, and manual retraction tool.",
+  "Assemble handle, shell, adapter, and reload only within a faculty-supervised trainer station.",
+  "Interpret display/audible/handle feedback as a reason to pause, verify tissue model conditions, and communicate.",
+  "Practice target capture, compression awareness, powered firing, release, and staple-line inspection on synthetic tissue.",
+  "Rehearse loading difficulty, unloading difficulty, retraction difficulty, reboot, backup handle, and manual recovery awareness as simulation scenarios."
+];
+
 export const medtronicSigniaModules: TrainingModule[] = [
   {
     id: "signia-platform-orientation",
@@ -209,7 +186,8 @@ export const medtronicSigniaModules: TrainingModule[] = [
       "Confirm the training station has current IFU access and faculty or device-education supervision.",
       "Inspect simulation packaging, labels, adapter length, reload family, and expiration/status cues according to local policy.",
       "Verbalize that reloads and tissue models used in simulation do not authorize independent patient-care use.",
-      "Document the selected adapter and reload in the training log before beginning the station."
+      "Document the selected adapter and reload in the training log before beginning the station.",
+      "State the safety phrase: follow institutional policy, manufacturer IFU, and faculty supervision before simulated use."
     ]
   },
   {
@@ -221,7 +199,8 @@ export const medtronicSigniaModules: TrainingModule[] = [
       "Attach the appropriate adapter to the handle before connecting a reload, using the station checklist and IFU as the reference.",
       "Keep hands clear of distal jaws, knife path, and reload edges during setup and demonstration.",
       "Open, center, rotate, articulate, clamp, and release on the trainer while naming each control aloud.",
-      "Stop the setup if a connection, calibration, display, or movement cue is unexpected."
+      "Stop the setup if a connection, calibration, display, or movement cue is unexpected.",
+      "Return the device to a neutral trainer position and verbally confirm readiness before moving to tissue practice."
     ]
   },
   {
@@ -233,7 +212,8 @@ export const medtronicSigniaModules: TrainingModule[] = [
       "Use synthetic tissue of different thicknesses to discuss why feedback is a pause-and-confirm signal, not permission to proceed automatically.",
       "Compare expected and unexpected display or audible feedback with the faculty facilitator before firing.",
       "State the reload-selection rationale and abort criteria before each simulated firing.",
-      "Record feedback interpretation, reload choice, and whether faculty correction was needed."
+      "Record feedback interpretation, reload choice, and whether faculty correction was needed.",
+      "Repeat the scenario with a different synthetic tissue thickness and compare the expected training response."
     ]
   },
   {
@@ -245,7 +225,8 @@ export const medtronicSigniaModules: TrainingModule[] = [
       "Announce target, reload, tissue thickness assumption, and stop points before clamping.",
       "Clamp only after confirming no hidden structure, twist, traction, or off-target capture is present.",
       "Fire in simulation only after the faculty observer confirms the setup is acceptable.",
-      "Open/release, inspect the staple line, and classify it as acceptable, questionable, or unacceptable using the curriculum rubric."
+      "Open/release, inspect the staple line, and classify it as acceptable, questionable, or unacceptable using the curriculum rubric.",
+      "Announce whether the trainee would pass, repeat, or remediate the station based on the observed result."
     ]
   },
   {
@@ -258,7 +239,8 @@ export const medtronicSigniaModules: TrainingModule[] = [
       "For unexpected clamping, firing, or feedback behavior, stop the scenario, keep the device stable, and verbalize the concern to the team.",
       "For failure to retract or open in the scenario, rehearse the escalation sequence: powered opening approach, handle reboot, backup handle if available, then IFU-directed manual operation with faculty/device-representative guidance.",
       "Know that manual operation can take several minutes and many rotations; do not overtighten or force resistance during demonstration.",
-      "After any recovery drill, label the device scenario as a product-event simulation, inspect the model, and document remediation needs."
+      "After any recovery drill, label the device scenario as a product-event simulation, inspect the model, and document remediation needs.",
+      "Debrief what should be escalated to institutional device channels if this were a real product event."
     ]
   }
 ];
@@ -273,7 +255,8 @@ export const endoStitchModules: TrainingModule[] = [
       "Review single-stitch, triple-stitch, and compatible reload concepts as inventory awareness, not product selection advice.",
       "Confirm all reload handling is performed on a trainer under faculty supervision and current IFU access.",
       "Trace the intended suture path before touching the tissue model.",
-      "State the needle-loss stop rule: if the needle is not visible and controlled, pause and call faculty."
+      "State the needle-loss stop rule: if the needle is not visible and controlled, pause and call faculty.",
+      "Confirm reload count, suture tail orientation, and synthetic tissue target marks before beginning."
     ]
   },
   {
@@ -285,7 +268,8 @@ export const endoStitchModules: TrainingModule[] = [
       "Keep the jaws in view during each open, close, and transfer movement.",
       "Advance to synthetic tissue only after five consecutive controlled transfers without needle instability.",
       "Place symmetric bites on marked entry and exit points while avoiding tissue tearing or excessive tension.",
-      "Reset if visualization is lost, the needle is partially captured, or the tissue path is unclear."
+      "Reset if visualization is lost, the needle is partially captured, or the tissue path is unclear.",
+      "Record number of clean transfers, misfires, partial captures, and faculty prompts."
     ]
   },
   {
@@ -297,7 +281,8 @@ export const endoStitchModules: TrainingModule[] = [
       "Complete three interrupted stitches with equal bite depth and controlled suture tails.",
       "Complete a running stitch segment while maintaining consistent spacing and avoiding suture crossing.",
       "Use faculty-approved knot or closure practice methods for the station; do not convert this to patient-care instruction.",
-      "Score the station for bite spacing, tissue handling, tension, needle control, and communication."
+      "Score the station for bite spacing, tissue handling, tension, needle control, and communication.",
+      "Repeat with the camera angle shifted to test whether the learner can maintain orientation under constrained visualization."
     ]
   },
   {
@@ -310,7 +295,8 @@ export const endoStitchModules: TrainingModule[] = [
       "Identify poor bite symmetry, skim bites, tissue tearing, crossed suture, excessive tension, and slack loops.",
       "Communicate the error aloud and request camera/instrument stabilization before continuing the scenario.",
       "Recover only using faculty-approved simulation steps and current IFU guidance.",
-      "Log the event as a remediation item if needle control or visualization stop rules were missed."
+      "Log the event as a remediation item if needle control or visualization stop rules were missed.",
+      "Debrief how the trainee would communicate needle status, reload status, and recovery plan to the team."
     ]
   }
 ];
@@ -440,167 +426,125 @@ export const signiaConcepts = [
 
 export const exercises: Exercise[] = [
   {
-    id: "exercise-a",
-    title: "Exercise A: Device Orientation and Component Identification",
+    id: "exercise-signia-setup",
+    title: "Signia Exercise 1: Platform Setup and Reload Recognition",
     objective:
-      "Identify parts, controls, reloads, safety lock, articulation, clamp, firing trigger, release, and indicators.",
-    metrics: ["100% component identification", "Time goal 2 minutes"]
+      "Identify Signia handle, power shell, adapter, compatible reloads, feedback cues, and manual recovery accessory in a dry-lab station.",
+    metrics: ["100% component identification", "Correct adapter/reload verbalization", "IFU/faculty supervision stated"]
   },
   {
-    id: "exercise-b",
-    title: "Exercise B: Straight Staple Line on Synthetic Tissue",
-    objective: "Align tissue with target line, compress, fire, release, and inspect.",
-    metrics: [
-      "Deviation from target line",
-      "Incomplete staple lines",
-      "Unsafe firings",
-      "Setup-to-inspection time"
-    ]
-  },
-  {
-    id: "exercise-c",
-    title: "Exercise C: Wedge Resection Drill",
-    objective: "Plan wedge orientation, lesion margin, and stapling sequence.",
-    metrics: ["Margin achieved", "Lesion encompassed", "Number of firings", "Staple line integrity"]
-  },
-  {
-    id: "exercise-d",
-    title: "Exercise D: Constrained-Angle Thoracoscopic Stapling",
-    objective: "Use port access, camera view, articulation, and safe target capture.",
-    metrics: ["Time to position", "Visualization loss events", "Repositioning", "Target accuracy"]
-  },
-  {
-    id: "exercise-e",
-    title: "Exercise E: Error Recognition and Rescue",
+    id: "exercise-signia-fire",
+    title: "Signia Exercise 2: Powered Firing and Release on Synthetic Tissue",
     objective:
-      "Identify tissue twist, wrong reload, poor angle, hidden capture, and abnormal resistance.",
-    metrics: [
-      "Hazard recognition",
-      "Proceed/abort decision",
-      "Verbal safety communication",
-      "No critical safety error"
-    ]
+      "Capture a marked synthetic target, interpret feedback, complete simulated firing/release, and inspect the staple line.",
+    metrics: ["Target capture accuracy", "Feedback interpreted before firing", "No unsafe firing", "Staple-line classification"]
   },
   {
-    id: "exercise-f",
-    title: "Exercise F: Signia Feedback and Recovery Drill",
+    id: "exercise-signia-recovery",
+    title: "Signia Exercise 3: Troubleshooting and Recovery Tabletop",
     objective:
-      "Use a Signia simulation station to interpret powered feedback, choose stop points, and rehearse recovery escalation language.",
-    metrics: [
-      "Feedback interpreted before firing",
-      "Reload rationale stated",
-      "Powered opening/reboot/backup/manual sequence verbalized",
-      "No forced movement during recovery scenario"
-    ]
+      "Rehearse loading difficulty, unloading difficulty, unexpected feedback, failure to retract, reboot, backup handle, and manual recovery awareness.",
+    metrics: ["Escalation sequence complete", "No forced movement", "Faculty/device-representative guidance named", "Documentation plan stated"]
   },
   {
-    id: "exercise-g",
-    title: "Exercise G: Endo Stitch Needle Transfer Station",
+    id: "exercise-endostitch-transfer",
+    title: "Endo Stitch Exercise 1: Device Orientation and Needle Transfer",
     objective:
-      "Demonstrate controlled needle transfer, symmetric bites, and stop rules on a synthetic tissue model.",
-    metrics: [
-      "Five controlled air transfers",
-      "Needle always visible",
-      "Bite symmetry within target marks",
-      "Immediate stop for lost visualization"
-    ]
+      "Identify Endo Stitch components and demonstrate controlled needle transfer through trainer air passes and marked synthetic tissue.",
+    metrics: ["Five controlled air transfers", "Needle always visible", "No partial capture", "Stop rule verbalized"]
   },
   {
-    id: "exercise-h",
-    title: "Exercise H: Endo Stitch Running Stitch and Knot Security",
+    id: "exercise-endostitch-patterns",
+    title: "Endo Stitch Exercise 2: Interrupted and Running Stitch Patterns",
     objective:
-      "Complete a short running stitch segment with consistent spacing, controlled tension, and faculty-approved knot practice.",
-    metrics: [
-      "Spacing consistency",
-      "Tension control",
-      "No tissue tearing",
-      "Knot or closure security score"
-    ]
+      "Complete interrupted and running stitch patterns with consistent bite spacing, suture management, and controlled tension.",
+    metrics: ["Bite symmetry", "Spacing consistency", "Tension control", "No tissue tearing"]
+  },
+  {
+    id: "exercise-endostitch-rescue",
+    title: "Endo Stitch Exercise 3: Error Recognition and Rescue",
+    objective:
+      "Recognize lost visualization, uncontrolled needle position, poor bite geometry, crossed suture, and tension problems during simulation.",
+    metrics: ["Hazard recognized", "Immediate stop", "Needle status communicated", "Remediation plan documented"]
   }
 ];
 
 export const checklistItems = [
-  "Performs device safety check",
-  "Identifies correct stapler and reload",
-  "Names major components",
-  "Loads cartridge correctly",
-  "Maintains orientation",
-  "Positions tissue fully within jaws",
-  "Visualizes both sides",
-  "Applies compression before firing",
-  "Fires smoothly",
-  "Opens and releases safely",
-  "Inspects staple line",
-  "Recognizes unacceptable line",
-  "States next step when error occurs",
-  "Protects surrounding structures",
-  "Communicates with assistant/camera operator",
-  "Identifies Medtronic Signia handle, shell, adapter, reload, and manual retraction tool",
+  "Identifies Signia handle, power shell, charger, adapter, reload, jaws, display cues, and manual retraction tool",
+  "Assembles Signia simulation station only under IFU/faculty-supervised conditions",
+  "States Signia reload/adaptor rationale before clamping",
   "Interprets powered feedback as a pause-and-confirm cue",
-  "Verbalizes Signia recovery escalation sequence in simulation",
-  "Identifies Endo Stitch jaws, shaft, reload, needle position, and suture tail",
+  "Positions synthetic tissue fully within Signia jaws with both sides visualized",
+  "Completes simulated Signia firing and release without forced movement",
+  "Inspects and classifies the simulated Signia staple line",
+  "Verbalizes Signia troubleshooting and recovery escalation sequence",
+  "Identifies Endo Stitch handle, shaft, jaws, reload, needle position, and suture tail",
+  "Confirms Endo Stitch reload count and needle status before transfer",
   "Maintains Endo Stitch needle visibility and control",
-  "Stops immediately for lost visualization or uncontrolled needle position"
+  "Places symmetric Endo Stitch bites on marked synthetic tissue",
+  "Manages suture tension without tearing or crossing",
+  "Stops immediately for lost visualization or uncontrolled needle position",
+  "Communicates device status, safety stop, and recovery plan to faculty"
 ];
 
 export const rubricDomains = [
-  "Device knowledge",
-  "Setup and loading",
-  "Tissue positioning",
-  "Economy of motion",
-  "Firing technique",
-  "Staple line evaluation",
-  "Troubleshooting",
-  "Powered platform feedback interpretation",
-  "Endoscopic suturing needle transfer",
-  "Communication"
+  "Signia device knowledge",
+  "Signia setup and loading",
+  "Signia feedback interpretation",
+  "Signia firing, release, and inspection",
+  "Signia troubleshooting escalation",
+  "Endo Stitch device knowledge",
+  "Endo Stitch needle transfer",
+  "Endo Stitch stitch pattern and tension control",
+  "Safety stop recognition",
+  "Team communication"
 ];
 
 export const safetyFailures = [
-  "Attempts to fire without adequate visualization",
-  "Captures unintended structure",
-  "Chooses clearly inappropriate reload after opportunity to correct",
-  "Fails to stop despite malposition",
-  "Produces unacceptable staple line and does not recognize it",
+  "Attempts simulated Signia firing without adequate visualization",
+  "Uses a clearly mismatched Signia adapter or reload after opportunity to correct",
+  "Ignores unexpected Signia feedback, resistance, or movement cue",
+  "Forces a powered stapler or adapter during recovery simulation",
+  "Fails to recognize an unacceptable Signia staple-line result",
   "Continues Endo Stitch practice after lost needle visualization",
-  "Forces a powered stapler or adapter after unexpected resistance"
+  "Allows uncontrolled Endo Stitch needle position or unaccounted reload status"
 ];
 
 export const quizBlueprint = [
-  "List the major steps of safe stapler use from reload selection to staple line inspection.",
-  "Name three reasons not to fire even if tissue appears within the jaws.",
-  "What features make a staple line unacceptable, and what is the immediate simulation response?",
-  "How do thoracoscopic constraints change visualization and articulation planning?",
-  "What information should be communicated to the assistant or camera operator before firing?"
+  "List the Signia platform elements that must be identified before a simulated firing station.",
+  "What should a learner do when Signia feedback, resistance, or device motion is unexpected?",
+  "Name the Signia troubleshooting escalation sequence rehearsed in simulation.",
+  "List the Endo Stitch elements that must be identified before needle-transfer practice.",
+  "What are the Endo Stitch immediate stop rules for needle visualization, reload status, and tissue handling?"
 ];
 
 export const metricTargets: MetricTarget[] = [
   {
-    level: "Junior Target",
-    componentIdentification: "100%",
-    time: "<=120 sec",
-    deviation: "<=5 mm",
-    wedgeSuccess: ">=80%",
-    safetyErrors: "0",
-    acceptableLineRate: ">=80%"
+    level: "Signia Setup Target",
+    componentIdentification: "100% Signia parts/reloads",
+    time: "<=120 sec station setup",
+    deviation: "Target captured within marks",
+    wedgeSuccess: "Feedback rationale stated",
+    safetyErrors: "0 missed stop rules",
+    acceptableLineRate: ">=90% acceptable classification"
   },
   {
-    level: "Senior Target",
-    componentIdentification: "100%",
-    time: "<=90 sec",
-    deviation: "<=3 mm",
-    wedgeSuccess: ">=90%",
-    safetyErrors: "0",
-    acceptableLineRate: ">=90%"
+    level: "Signia Recovery Target",
+    componentIdentification: "Recovery tools named",
+    time: "<=90 sec escalation verbalized",
+    deviation: "No forced movement",
+    wedgeSuccess: "Recovery sequence complete",
+    safetyErrors: "0 missed stop rules",
+    acceptableLineRate: "100% escalation documented"
   },
   {
-    level: "Fellow Target",
-    componentIdentification: "100%",
-    time: "<=75 sec",
-    deviation: "<=2 mm",
-    wedgeSuccess: "100%",
-    safetyErrors: "0",
-    acceptableLineRate: ">=95%"
+    level: "Endo Stitch Target",
+    componentIdentification: "100% device/reload ID",
+    time: "5 clean transfers before tissue",
+    deviation: "Bites within target marks",
+    wedgeSuccess: ">=90% transfer success",
+    safetyErrors: "0 missed stop rules",
+    acceptableLineRate: ">=90% pattern completion"
   }
 ];
 
@@ -615,173 +559,151 @@ export const entrustmentLevels = [
 export const trackerRows: TrackerRow[] = [
   {
     date: "2026-07-12",
-    traineeId: "R001",
+    traineeId: "M001",
     name: "Alex Sample",
     role: "Resident",
     pgyLevel: "PGY1",
-    moduleCode: "STAP-1",
-    moduleName: "Stapler Fundamentals",
+    moduleCode: "SIGNIA",
+    moduleName: "Signia Platform Setup",
     facultyAssessor: "Faculty A",
-    quizScore: 86,
-    checklistScore: 14,
+    quizScore: 88,
+    checklistScore: 13,
     checklistMax: 15,
-    rubricAvg: 3.2,
+    rubricAvg: 3.3,
     criticalSafetyFailures: 0,
-    metric1Name: "Setup time",
-    metric1Value: "118 sec",
-    metric2Name: "Line deviation",
-    metric2Value: "4 mm",
+    metric1Name: "Component ID",
+    metric1Value: "100%",
+    metric2Name: "Setup time",
+    metric2Value: "112 sec",
     passStatus: "Pass",
     entrustmentLevel: "Level 2",
-    comments: "Safe dry-lab handling; repeat for speed."
+    comments: "Safe Signia setup; repeat for speed and feedback vocabulary."
   },
   {
     date: "2026-08-09",
-    traineeId: "R002",
+    traineeId: "M002",
     name: "Jordan Sample",
     role: "Resident",
     pgyLevel: "PGY3",
-    moduleCode: "STAP-2",
-    moduleName: "Thoracoscopic Stapling",
+    moduleCode: "SIGNIA",
+    moduleName: "Signia Firing and Release",
     facultyAssessor: "Faculty B",
     quizScore: 92,
     checklistScore: 15,
     checklistMax: 15,
     rubricAvg: 4.1,
     criticalSafetyFailures: 0,
-    metric1Name: "Position time",
-    metric1Value: "82 sec",
+    metric1Name: "Feedback cues",
+    metric1Value: "4/4",
     metric2Name: "Target capture",
-    metric2Value: "92%",
+    metric2Value: "Within marks",
     passStatus: "Pass",
     entrustmentLevel: "Level 3",
-    comments: "Good visualization language and controlled release."
+    comments: "Good feedback interpretation and controlled release."
   },
   {
     date: "2026-09-18",
-    traineeId: "F001",
+    traineeId: "M003",
     name: "Morgan Fellow",
     role: "Fellow",
     pgyLevel: "Fellow",
-    moduleCode: "STAP-3",
-    moduleName: "Stapler Troubleshooting",
+    moduleCode: "SIGNIA",
+    moduleName: "Signia Troubleshooting and Recovery",
     facultyAssessor: "Faculty C",
     quizScore: 96,
     checklistScore: 15,
     checklistMax: 15,
     rubricAvg: 4.7,
     criticalSafetyFailures: 0,
-    metric1Name: "Hazards found",
-    metric1Value: "5/5",
-    metric2Name: "Escalation",
-    metric2Value: "Clear",
+    metric1Name: "Recovery sequence",
+    metric1Value: "Complete",
+    metric2Name: "Forced movement",
+    metric2Value: "None",
     passStatus: "Pass",
     entrustmentLevel: "Level 5",
-    comments: "Ready to coach junior learners in simulation."
+    comments: "Ready to coach Signia recovery tabletop scenarios."
   },
   {
     date: "2026-10-04",
-    traineeId: "R003",
+    traineeId: "M004",
     name: "Taylor Lee",
     role: "Resident",
     pgyLevel: "PGY2",
-    moduleCode: "STAP-1",
-    moduleName: "Stapler Fundamentals",
+    moduleCode: "ENDOSTITCH",
+    moduleName: "Endo Stitch Orientation",
     facultyAssessor: "Faculty A",
-    quizScore: 74,
-    checklistScore: 11,
+    quizScore: 82,
+    checklistScore: 12,
     checklistMax: 15,
-    rubricAvg: 2.6,
+    rubricAvg: 3.0,
     criticalSafetyFailures: 0,
-    metric1Name: "Setup time",
-    metric1Value: "142 sec",
-    metric2Name: "Line deviation",
-    metric2Value: "8 mm",
-    passStatus: "Needs Remediation",
-    entrustmentLevel: "Level 1",
-    comments: "Assign reload review and coached repeat within 2 weeks."
+    metric1Name: "Device/reload ID",
+    metric1Value: "100%",
+    metric2Name: "Needle status",
+    metric2Value: "Verbalized",
+    passStatus: "Pass",
+    entrustmentLevel: "Level 2",
+    comments: "Safe orientation; continue needle-transfer practice."
   },
   {
     date: "2026-11-14",
-    traineeId: "R004",
+    traineeId: "M005",
     name: "Casey Morgan",
     role: "Resident",
     pgyLevel: "PGY4",
-    moduleCode: "STAP-2",
-    moduleName: "Thoracoscopic Stapling",
+    moduleCode: "ENDOSTITCH",
+    moduleName: "Endo Stitch Needle Transfer",
     facultyAssessor: "Faculty D",
-    quizScore: 88,
-    checklistScore: 12,
+    quizScore: 84,
+    checklistScore: 11,
     checklistMax: 15,
-    rubricAvg: 3.1,
+    rubricAvg: 2.8,
     criticalSafetyFailures: 1,
-    metric1Name: "Visualization loss",
-    metric1Value: "2 events",
-    metric2Name: "Target capture",
-    metric2Value: "78%",
+    metric1Name: "Clean transfers",
+    metric1Value: "3/5",
+    metric2Name: "Needle visualization",
+    metric2Value: "Lost once",
     passStatus: "Needs Remediation",
-    entrustmentLevel: "Level 2",
-    comments: "Critical stop point missed; repeat constrained-angle station."
+    entrustmentLevel: "Level 1",
+    comments: "Needle visibility stop rule missed; repeat transfer station."
   },
   {
     date: "2026-12-02",
-    traineeId: "R005",
-    name: "Sam Rivera",
-    role: "Resident",
-    pgyLevel: "PGY3",
-    moduleCode: "MED-SIGNIA",
-    moduleName: "Medtronic Signia Platform",
-    facultyAssessor: "Faculty B",
-    quizScore: 90,
-    checklistScore: 18,
-    checklistMax: 21,
-    rubricAvg: 3.8,
-    criticalSafetyFailures: 0,
-    metric1Name: "Feedback cues",
-    metric1Value: "4/4",
-    metric2Name: "Recovery sequence",
-    metric2Value: "Complete",
-    passStatus: "Pass",
-    entrustmentLevel: "Level 3",
-    comments: "Good Signia setup language; repeat manual recovery tabletop for fluency."
-  },
-  {
-    date: "2027-01-21",
-    traineeId: "R006",
+    traineeId: "M006",
     name: "Priya Shah",
     role: "Resident",
     pgyLevel: "PGY2",
-    moduleCode: "MED-ENDOSTITCH",
-    moduleName: "Endo Stitch Endoscopic Suturing",
+    moduleCode: "ENDOSTITCH",
+    moduleName: "Endo Stitch Running Stitch",
     facultyAssessor: "Faculty E",
-    quizScore: 82,
-    checklistScore: 16,
-    checklistMax: 21,
-    rubricAvg: 3.0,
+    quizScore: 90,
+    checklistScore: 14,
+    checklistMax: 15,
+    rubricAvg: 3.7,
     criticalSafetyFailures: 0,
-    metric1Name: "Needle transfers",
-    metric1Value: "5/5",
-    metric2Name: "Bite symmetry",
-    metric2Value: "Within marks",
+    metric1Name: "Bite spacing",
+    metric1Value: "Within marks",
+    metric2Name: "Tension control",
+    metric2Value: "Acceptable",
     passStatus: "Pass",
-    entrustmentLevel: "Level 2",
-    comments: "Safe needle control in trainer; continue running-stitch practice."
+    entrustmentLevel: "Level 3",
+    comments: "Good suture management; add constrained-view repeat."
   }
 ];
 
 export const calendarItems = [
-  ["July", "Program launch and baseline assessment"],
-  ["August", "Stapler fundamentals I"],
-  ["September", "Stapler fundamentals II"],
-  ["October", "Thoracoscopic constrained-angle stapling"],
-  ["November", "Troubleshooting and rescue"],
-  ["December", "Midyear review"],
-  ["January", "Endoscopic suturing fundamentals"],
-  ["February", "Advanced suturing and leak-tested repair"],
-  ["March", "Energy devices and tissue effects"],
-  ["April", "Procedure integration month"],
-  ["May", "Teaching and near-peer coaching"],
-  ["June", "Summative assessment and curriculum revision"]
+  ["July", "Medtronic device orientation and baseline assessment"],
+  ["August", "Signia platform setup, adapter workflow, and reload recognition"],
+  ["September", "Signia powered feedback, firing, release, and staple-line inspection"],
+  ["October", "Signia troubleshooting, recovery awareness, and product-event communication"],
+  ["November", "Endo Stitch device orientation, reloads, and needle-safety stop rules"],
+  ["December", "Endo Stitch needle-transfer deliberate practice"],
+  ["January", "Endo Stitch interrupted stitch patterns"],
+  ["February", "Endo Stitch running stitch patterns and tension control"],
+  ["March", "Combined Signia and Endo Stitch simulation assessment"],
+  ["April", "Remediation month for device-specific weak points"],
+  ["May", "Near-peer coaching for Signia and Endo Stitch stations"],
+  ["June", "Summative device competency review and curriculum update"]
 ] as const;
 
 export const facultyTemplate = [
@@ -816,45 +738,33 @@ export const facultyWorkflow = {
 export const resources = [
   {
     title: "Signia Powered Stapler Concept Sheet",
-    description: "Local product information sheet for powered stapling concepts and comparison language.",
+    description: "Local Medtronic Signia information sheet used for powered stapling concepts and comparison language.",
     href: "/downloads/signia-powered-stapler-information-sheet.pdf",
     type: "PDF"
   },
   {
-    title: "Stapling Skills Checklist",
-    description: "Printable checklist and rubric section for faculty assessment.",
+    title: "Signia Checklist and Rubric",
+    description: "Printable Signia-focused checklist, rubric, objective metrics, and safety-failure section.",
     href: "#assessment",
     type: "Section"
   },
   {
-    title: "Global Rating Rubric",
-    description: "Five-point global domains for formative and summative scoring.",
+    title: "Endo Stitch Checklist and Rubric",
+    description: "Printable Endo Stitch-focused checklist, needle-transfer rubric, and safety stop rules.",
     href: "#assessment",
     type: "Section"
   },
   {
-    title: "Objective Metrics Sheet",
-    description: "Target thresholds for juniors, seniors, and fellows.",
-    href: "#assessment",
+    title: "Device Tracker Table",
+    description: "Interactive local tracker with Signia and Endo Stitch sample sessions, remediation, and entrustment decisions.",
+    href: "#tracker",
     type: "Table"
   },
   {
-    title: "Annual Calendar",
-    description: "Twelve-month curriculum sequence for program planning.",
+    title: "Medtronic Device Calendar",
+    description: "Twelve-month implementation sequence for Signia and Endo Stitch simulation training.",
     href: "#calendar",
     type: "Timeline"
-  },
-  {
-    title: "Resident Logbook Template",
-    description: "Tracker workbook with roster, modules, session log, attempts log, and dashboard.",
-    href: "/downloads/thoracic-surgery-curriculum-tracker.xlsx",
-    type: "XLSX"
-  },
-  {
-    title: "Curriculum Handbook",
-    description: "Local handbook source with levels, modules, exercises, rubrics, and faculty workflow.",
-    href: "/downloads/thoracic-surgery-device-curriculum.docx",
-    type: "DOCX"
   }
 ];
 

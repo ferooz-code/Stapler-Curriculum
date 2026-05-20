@@ -1,6 +1,6 @@
-# StapleSkills Thoracic Curriculum
+# StapleSkills Medtronic Device Curriculum
 
-Modern React + TypeScript + Tailwind CSS training website for a Medtronic-focused thoracic surgery stapler and endoscopic suturing simulation curriculum.
+Modern React + TypeScript + Tailwind CSS training website dedicated to Medtronic Signia Powered Stapler and Endo Stitch simulation training.
 
 ## Run Locally
 
@@ -25,14 +25,15 @@ The built site is generated in `dist/`.
 
 ## Included
 
-- Simulation-first curriculum overview
-- Medtronic Signia platform modules for setup, feedback, firing, release, troubleshooting, and recovery awareness
-- Medtronic Endo Stitch device information, reload awareness, needle transfer, interrupted/running stitch drills, and safety stop rules
+- Medtronic-only device training interface
+- Separate tabs for Signia Powered Stapler and Endo Stitch
+- Signia modules for setup, feedback, firing, release, troubleshooting, and recovery awareness
+- Endo Stitch modules for device information, reload awareness, needle transfer, interrupted/running stitch drills, and safety stop rules
 - Simulation exercises
 - Assessment checklist, rubric, quiz prompts, objective metrics, and entrustment levels
 - Interactive curriculum tracker with sample data, dashboard metrics, search, and filters
 - Annual calendar and faculty guide
-- Local downloadable curriculum/source resources
+- Medtronic device resource cards and printable assessment sections
 - Online Medtronic source pack for Signia, troubleshooting/manual operation PDFs, Endo Stitch device/reload pages, and in-service video links
 
 Educational simulation curriculum only. Follow local policy, manufacturer IFU, and faculty supervision.

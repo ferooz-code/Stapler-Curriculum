@@ -6,13 +6,12 @@ import {
   CalendarDays,
   CheckCircle2,
   ClipboardCheck,
-  GraduationCap,
   Layers,
   MonitorCheck,
   RotateCcw,
   ShieldAlert,
   Target,
-  Users
+  Workflow
 } from "lucide-react";
 import {
   AssessmentTabs,
@@ -30,16 +29,15 @@ import {
 import {
   calendarItems,
   checklistItems,
-  coreModules,
-  deviceCards,
   entrustmentLevels,
   exercises,
   facultyTemplate,
   facultyWorkflow,
-  learnerLevels,
   medtronicResources,
   medtronicSafetyNotes,
   medtronicSigniaModules,
+  signiaDeviceFacts,
+  signiaInstructionFocus,
   endoStitchModules,
   endoStitchCompetencyFocus,
   endoStitchDeviceFacts,
@@ -57,7 +55,6 @@ import {
 } from "./data/curriculum";
 
 const moduleIds = [
-  ...coreModules.map((module) => module.code),
   ...medtronicSigniaModules.map((module) => module.id),
   ...endoStitchModules.map((module) => module.id),
   ...exercises.map((exercise) => exercise.id)
@@ -65,8 +62,9 @@ const moduleIds = [
 
 function App() {
   const [completedIds, setCompletedIds] = useState<Set<string>>(
-    () => new Set(["STAP-1", "signia-platform-orientation", "endostitch-orientation", "exercise-a"])
+    () => new Set(["signia-platform-orientation", "endostitch-orientation", "exercise-signia-setup"])
   );
+  const [activeDevice, setActiveDevice] = useState<"signia" | "endostitch">("signia");
 
   const toggleComplete = (id: string) => {
     setCompletedIds((current) => {
@@ -85,9 +83,9 @@ function App() {
 
   const traineeProgress = useMemo(
     () => [
-      { name: "Alex Sample", label: "Junior pathway", complete: 46 },
-      { name: "Jordan Sample", label: "Senior pathway", complete: 68 },
-      { name: "Morgan Fellow", label: "Fellow pathway", complete: 88 }
+      { name: "Alex Sample", label: "Signia pathway", complete: 48 },
+      { name: "Jordan Sample", label: "Endo Stitch pathway", complete: 64 },
+      { name: "Morgan Faculty Fellow", label: "Combined device pathway", complete: 86 }
     ],
     []
   );
@@ -135,186 +133,151 @@ function App() {
             <Card title="Simulation First" icon={<MonitorCheck className="h-5 w-5" />}>
               <p className="text-sm leading-6 text-slate-600">
                 Learners build baseline competency in dry lab, box trainer, and synthetic tissue stations
-                before primary OR device use.
+                before supervised clinical device exposure.
               </p>
             </Card>
             <Card title="Competency Based" icon={<ClipboardCheck className="h-5 w-5" />}>
               <p className="text-sm leading-6 text-slate-600">
-                Progression depends on quiz scores, checklist performance, global rating domains, objective
-                metrics, and absence of critical safety failures.
+                Progression is tracked separately for Signia Powered Stapler and Endo Stitch using checklist scores,
+                quiz results, objective metrics, and safety stop rules.
               </p>
             </Card>
             <Card title="OR Readiness" icon={<ShieldAlert className="h-5 w-5" />}>
               <p className="text-sm leading-6 text-slate-600">
-                Entrustment decisions combine observed simulation performance, remediation history, and faculty
-                judgment under local supervision standards.
+                Entrustment decisions remain device-specific and combine observed simulation performance,
+                remediation history, and faculty judgment.
               </p>
             </Card>
           </div>
         </section>
 
-        <section id="overview" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
+        <section id="training" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
-              eyebrow="Curriculum overview"
-              title="A spiral curriculum for stapler competency"
-              description="The curriculum revisits device operation with increasing complexity: recognition, controlled simulation practice, troubleshooting, assessment, remediation, and entrustment."
+              eyebrow="Medtronic device tabs"
+              title="Two device pathways, one simulation system"
+              description="Choose Signia Powered Stapler or Endo Stitch. Each tab contains device information, source links, step-by-step simulation instructions, safety stop rules, and completion tracking."
             />
 
-            <div className="mt-10 grid gap-5 lg:grid-cols-3">
-              {learnerLevels.map((level, index) => (
-                <Card
-                  key={level.title}
-                  title={level.title}
-                  eyebrow={level.subtitle}
-                  icon={
-                    index === 0 ? (
-                      <GraduationCap className="h-5 w-5" />
-                    ) : index === 1 ? (
-                      <Target className="h-5 w-5" />
-                    ) : (
-                      <Users className="h-5 w-5" />
-                    )
-                  }
-                >
-                  <p className="text-sm leading-6 text-slate-600">{level.focus}</p>
-                </Card>
-              ))}
+            <div className="mt-8 flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-card sm:flex-row" role="tablist" aria-label="Medtronic device pathways">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeDevice === "signia"}
+                className={`flex-1 rounded-md px-4 py-3 text-left text-sm font-semibold transition ${
+                  activeDevice === "signia" ? "bg-navy-800 text-white" : "bg-slate-50 text-navy-900 hover:bg-navy-50"
+                }`}
+                onClick={() => setActiveDevice("signia")}
+              >
+                Signia Powered Stapler
+                <span className="mt-1 block text-xs font-medium opacity-80">{medtronicSigniaModules.length} step-by-step modules</span>
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeDevice === "endostitch"}
+                className={`flex-1 rounded-md px-4 py-3 text-left text-sm font-semibold transition ${
+                  activeDevice === "endostitch" ? "bg-navy-800 text-white" : "bg-slate-50 text-navy-900 hover:bg-navy-50"
+                }`}
+                onClick={() => setActiveDevice("endostitch")}
+              >
+                Endo Stitch Suturing Device
+                <span className="mt-1 block text-xs font-medium opacity-80">{endoStitchModules.length} step-by-step modules</span>
+              </button>
             </div>
 
-            <div className="mt-12">
-              <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h3 className="text-2xl font-semibold text-navy-900">Core Modules</h3>
-                  <p className="mt-2 text-sm text-slate-600">Mark modules complete as learners progress locally.</p>
-                </div>
-                <p className="text-sm font-semibold text-clinical-700">{completionPercent}% local progress</p>
-              </div>
-              <div className="grid gap-4 lg:grid-cols-2">
-                {coreModules.map((module) => (
-                  <Card key={module.code} className="flex flex-col justify-between">
-                    <div>
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                        <div>
-                          <p className="text-sm font-bold text-safety-600">{module.code}</p>
-                          <h4 className="mt-1 text-xl font-semibold text-navy-900">{module.name}</h4>
-                          <p className="mt-1 text-sm text-slate-500">{module.audience}</p>
+            {activeDevice === "signia" ? (
+              <div className="mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.25fr]" role="tabpanel" aria-label="Signia Powered Stapler training">
+                <div className="grid gap-5">
+                  <Card title="Signia Powered Stapler" icon={<Layers className="h-5 w-5" />}>
+                    <img
+                      src="/assets/signia-side-view.jpg"
+                      alt="Medtronic Signia powered stapler side view"
+                      className="aspect-[16/9] w-full rounded-md border border-slate-100 object-contain"
+                    />
+                    <dl className="mt-5 grid gap-3">
+                      {signiaDeviceFacts.map((fact) => (
+                        <div key={fact.label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                          <dt className="text-sm font-bold uppercase tracking-[0.12em] text-safety-600">{fact.label}</dt>
+                          <dd className="mt-2 text-sm leading-6 text-slate-700">{fact.value}</dd>
                         </div>
-                        <CompletionButton
-                          complete={completedIds.has(module.code)}
-                          onClick={() => toggleComplete(module.code)}
-                        />
+                      ))}
+                    </dl>
+                  </Card>
+                  <Card tone="warning" title="Signia safety guardrails" icon={<ShieldAlert className="h-5 w-5" />}>
+                    <ul className="grid gap-2">
+                      {signiaInstructionFocus.map((item) => (
+                        <li key={item} className="flex gap-2 text-sm leading-6 text-safety-700">
+                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
+                </div>
+                <div className="grid gap-6">
+                  <div>
+                    <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                      <div>
+                        <h3 className="text-2xl font-semibold text-navy-900">Signia step-by-step instructions</h3>
+                        <p className="mt-2 text-sm text-slate-600">Open each accordion for the full simulation sequence and mark it complete as the learner progresses.</p>
                       </div>
-                      <p className="mt-4 text-sm leading-6 text-slate-600">{module.description}</p>
+                      <span className="text-sm font-semibold text-clinical-700">{medtronicSigniaModules.length} modules</span>
+                    </div>
+                    <ModuleAccordion
+                      modules={medtronicSigniaModules}
+                      completedIds={completedIds}
+                      onToggleComplete={toggleComplete}
+                    />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {signiaConcepts.map((concept) => (
+                      <Card key={concept.title} title={concept.title}>
+                        <p className="text-sm leading-6 text-slate-600">{concept.text}</p>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.25fr]" role="tabpanel" aria-label="Endo Stitch training">
+                <div className="grid gap-5">
+                  <Card title="Endo Stitch device information" icon={<ClipboardCheck className="h-5 w-5" />}>
+                    <dl className="grid gap-3">
+                      {endoStitchDeviceFacts.map((fact) => (
+                        <div key={fact.label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                          <dt className="text-sm font-bold uppercase tracking-[0.12em] text-safety-600">{fact.label}</dt>
+                          <dd className="mt-2 text-sm leading-6 text-slate-700">{fact.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </Card>
+                  <Card title="Reload and compatibility awareness" icon={<Layers className="h-5 w-5" />}>
+                    <div className="grid gap-3">
+                      {endoStitchReloadOptions.map((option) => (
+                        <div key={option.title} className="rounded-md border border-slate-200 p-4">
+                          <p className="font-semibold text-navy-900">{option.title}</p>
+                          <p className="mt-2 text-sm leading-6 text-slate-600">{option.text}</p>
+                        </div>
+                      ))}
                     </div>
                   </Card>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="devices" className="px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle
-              eyebrow="Device modules"
-              title="Medtronic Signia and Endo Stitch device pathways"
-              description="Device content is framed as educational orientation and deliberate practice. Learners reconcile Signia and Endo Stitch training with the current IFU, local inventory, and faculty guidance."
-            />
-            <div className="mt-10 grid gap-6 lg:grid-cols-2">
-              {deviceCards.map((device) => (
-                <Card key={device.title} title={device.title} icon={<Layers className="h-5 w-5" />}>
-                  {device.image ? (
-                    <img
-                      src={device.image}
-                      alt={`${device.title} reference`}
-                      className="aspect-[16/8] w-full rounded-md border border-slate-100 object-contain"
-                    />
-                  ) : (
-                    <div className="grid aspect-[16/8] place-items-center rounded-md border border-slate-100 bg-slate-50 p-6 text-center">
-                      <div>
-                        <p className="text-sm font-bold uppercase tracking-[0.16em] text-safety-600">Simulation module</p>
-                        <p className="mt-2 text-xl font-semibold text-navy-900">Endo Stitch</p>
-                        <p className="mt-1 text-sm text-slate-500">Endoscopic suturing trainer</p>
-                      </div>
-                    </div>
-                  )}
-                  <p className="mt-3 text-sm text-slate-500">{device.caption}</p>
-                  <ul className="mt-5 grid gap-2">
-                    {device.points.map((point) => (
-                      <li key={point} className="flex gap-2 text-sm text-slate-700">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-clinical-500" />
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-
-        <section id="medtronic" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle
-              eyebrow="Medtronic device curriculum"
-              title="Signia stapling and Endo Stitch suturing modules"
-              description="A focused Medtronic pathway for simulation-based device orientation, deliberate practice, troubleshooting awareness, and objective assessment before supervised clinical exposure."
-            />
-            <div className="mt-10 grid gap-8 lg:grid-cols-[0.85fr_1.25fr]">
-              <div className="grid gap-5">
-                <Card title="Medtronic source-based guardrails" tone="warning" icon={<ShieldAlert className="h-5 w-5" />}>
-                  <ul className="grid gap-3">
-                    {medtronicSafetyNotes.map((note) => (
-                      <li key={note} className="flex gap-2 text-sm leading-6 text-safety-700">
-                        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-                        {note}
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-                <Card title="Medtronic source pack" icon={<ClipboardCheck className="h-5 w-5" />}>
-                  <ul className="grid gap-3">
-                    {medtronicResources.map((resource) => (
-                      <li key={resource.href}>
-                        <a
-                          className="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-clinical-200 hover:bg-clinical-50"
-                          href={resource.href}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="font-semibold text-navy-900">{resource.title}</span>
-                            <span className="rounded-md bg-navy-50 px-2 py-1 text-xs font-bold text-navy-700">{resource.type}</span>
-                          </div>
-                          <p className="mt-2 text-sm leading-6 text-slate-600">{resource.description}</p>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              </div>
-              <div className="grid gap-6">
-                <div>
-                  <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-navy-900">Signia powered stapling pathway</h3>
-                      <p className="mt-2 text-sm text-slate-600">Five-step simulation sequence for platform setup, powered feedback, firing, release, and recovery scenarios.</p>
-                    </div>
-                    <span className="text-sm font-semibold text-clinical-700">{medtronicSigniaModules.length} modules</span>
-                  </div>
-                  <ModuleAccordion
-                    modules={medtronicSigniaModules}
-                    completedIds={completedIds}
-                    onToggleComplete={toggleComplete}
-                  />
+                  <Card tone="warning" title="Endo Stitch safety stop rules" icon={<AlertTriangle className="h-5 w-5" />}>
+                    <ul className="grid gap-2">
+                      {endoStitchCompetencyFocus.map((item) => (
+                        <li key={item} className="flex gap-2 text-sm leading-6 text-safety-700">
+                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
                 </div>
                 <div>
                   <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <h3 className="text-2xl font-semibold text-navy-900">Endo Stitch suturing pathway</h3>
-                      <p className="mt-2 text-sm text-slate-600">Needle transfer, interrupted/running stitch patterns, tension control, and rescue stop rules for dry-lab practice.</p>
+                      <h3 className="text-2xl font-semibold text-navy-900">Endo Stitch step-by-step instructions</h3>
+                      <p className="mt-2 text-sm text-slate-600">Open each accordion for the full device orientation, needle-transfer, stitch-pattern, and rescue sequence.</p>
                     </div>
                     <span className="text-sm font-semibold text-clinical-700">{endoStitchModules.length} modules</span>
                   </div>
@@ -325,95 +288,15 @@ function App() {
                   />
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
+            )}
 
-        <section id="endostitch" className="px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle
-              eyebrow="Endo Stitch device information"
-              title="Endoscopic suturing device orientation"
-              description="This section replaces the previous non-Medtronic content with a dedicated Endo Stitch device pathway: product recognition, reload awareness, needle-transfer skills, and simulation stop rules."
-            />
-            <div className="mt-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-              <div className="grid gap-5">
-                <Card title="Device at a glance" icon={<ClipboardCheck className="h-5 w-5" />}>
-                  <dl className="grid gap-4">
-                    {endoStitchDeviceFacts.map((fact) => (
-                      <div key={fact.label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                        <dt className="text-sm font-bold uppercase tracking-[0.12em] text-safety-600">{fact.label}</dt>
-                        <dd className="mt-2 text-sm leading-6 text-slate-700">{fact.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </Card>
-                <Card tone="warning" title="Endo Stitch safety stop rules" icon={<AlertTriangle className="h-5 w-5" />}>
-                  <p className="text-sm leading-6 text-safety-700">
-                    Stop the simulation immediately for lost needle visualization, uncontrolled transfer, uncertain reload status, tissue tearing, crossed suture, or unclear recovery plan. Follow institutional policy, manufacturer IFU, and faculty supervision.
-                  </p>
-                </Card>
-              </div>
-              <div className="grid gap-5">
-                <Card title="Reload and compatibility awareness" icon={<Layers className="h-5 w-5" />}>
-                  <div className="grid gap-3">
-                    {endoStitchReloadOptions.map((option) => (
-                      <div key={option.title} className="rounded-md border border-slate-200 p-4">
-                        <p className="font-semibold text-navy-900">{option.title}</p>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">{option.text}</p>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-                <Card title="Competency focus" icon={<Target className="h-5 w-5" />}>
-                  <ul className="grid gap-2">
-                    {endoStitchCompetencyFocus.map((item) => (
-                      <li key={item} className="flex gap-2 text-sm leading-6 text-slate-700">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-clinical-500" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="signia" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle
-              eyebrow="Signia powered stapler concepts"
-              title="Powered stapling comparison, without marketing claims"
-              description="This section presents manufacturer-described concepts as simulation discussion points: adaptive firing, sensing, feedback, reloads, adapters, and ergonomics."
-            />
-            <div className="mt-10 grid gap-8 lg:grid-cols-[0.9fr_1.2fr]">
-              <div className="grid gap-5">
-                <Card title="Signia system image" icon={<Activity className="h-5 w-5" />}>
-                  <img
-                    src="/assets/signia-side-view.jpg"
-                    alt="Signia powered stapling system side view"
-                    className="aspect-[16/9] w-full rounded-md border border-slate-100 object-contain"
-                  />
-                  <p className="mt-3 text-sm leading-6 text-slate-600">
-                    Use this visual to orient learners to the handle, shaft, jaws, adapters, and powered-control
-                    concept before station practice.
-                  </p>
-                </Card>
-                <Card tone="warning" title="Comparison guardrail" icon={<ShieldAlert className="h-5 w-5" />}>
-                  <p className="text-sm leading-6 text-safety-700">
-                    Discuss features as manufacturer-described concepts and simulation prompts. Do not imply
-                    patient-care superiority or substitute this site for official device training.
-                  </p>
-                </Card>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {signiaConcepts.map((concept) => (
-                  <Card key={concept.title} title={concept.title}>
-                    <p className="text-sm leading-6 text-slate-600">{concept.text}</p>
-                  </Card>
-                ))}
-              </div>
+            <div className="mt-8 grid gap-4 rounded-lg border border-safety-200 bg-safety-50 p-5 lg:grid-cols-2">
+              {medtronicSafetyNotes.map((note) => (
+                <div key={note} className="flex gap-2 text-sm leading-6 text-safety-700">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                  {note}
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -421,9 +304,9 @@ function App() {
         <section id="exercises" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
-              eyebrow="Simulation exercises"
-              title="Deliberate practice stations"
-              description="Each station has a defined objective and measurable output so faculty can coach, reassess, and document progression."
+              eyebrow="Device simulation exercises"
+              title="Signia and Endo Stitch deliberate practice stations"
+              description="Each station maps to either the Signia Powered Stapler tab or the Endo Stitch tab so faculty can coach, reassess, and document device-specific progression."
             />
             <div className="mt-10 grid gap-5 lg:grid-cols-2">
               {exercises.map((exercise) => (
@@ -456,7 +339,7 @@ function App() {
             <SectionTitle
               eyebrow="Assessment tools"
               title="Checklist, rubric, quiz, metrics, and entrustment"
-              description="Assessment combines binary behaviors, global ratings, knowledge checks, objective metrics, critical safety failures, and entrustment decisions."
+              description="Assessment is device-specific: Signia powered stapling and Endo Stitch suturing each use checklist behaviors, global ratings, objective metrics, safety failures, and entrustment decisions."
             />
             <div className="mt-10">
               <AssessmentTabs
@@ -475,8 +358,8 @@ function App() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="Curriculum tracker"
-              title="Interactive demo tracker table"
-              description="Sample data mirrors the uploaded tracker fields: session log, quiz score, checklist score, rubric average, safety failures, objective metrics, remediation, and entrustment."
+              title="Medtronic device tracker table"
+              description="Sample data tracks Signia and Endo Stitch sessions with quiz score, checklist score, rubric average, safety failures, objective metrics, remediation, and entrustment."
             />
             <div className="mt-10">
               <TrackerTable rows={trackerRows} />
@@ -540,7 +423,7 @@ function App() {
             <SectionTitle
               eyebrow="Resources"
               title="Quick links for learners and faculty"
-              description="Download local curriculum artifacts, jump to printable sections, and open selected manufacturer resources and videos."
+              description="Open Medtronic Signia and Endo Stitch source links, printable assessment sections, device calendar, and training videos."
             />
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {resources.map((resource) => (
