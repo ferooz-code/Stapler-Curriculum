@@ -24,9 +24,10 @@ type HeaderProps = {
   navItems: NavItem[];
   completedCount: number;
   totalCount: number;
+  activeHref?: string;
 };
 
-export function Header({ navItems, completedCount, totalCount }: HeaderProps) {
+export function Header({ navItems, completedCount, totalCount, activeHref }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const percent = totalCount ? Math.round((completedCount / totalCount) * 100) : 0;
 
@@ -47,7 +48,9 @@ export function Header({ navItems, completedCount, totalCount }: HeaderProps) {
           {navItems.map((item) => (
             <a
               key={item.href}
-              className="rounded-md px-2 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10 hover:text-white xl:px-3"
+              className={`rounded-md px-2 py-2 text-sm font-medium transition hover:bg-white/10 hover:text-white xl:px-3 ${
+                activeHref === item.href ? "bg-white text-navy-900 hover:bg-white hover:text-navy-900" : "text-slate-200"
+              }`}
               href={item.href}
             >
               {item.label}
@@ -80,7 +83,9 @@ export function Header({ navItems, completedCount, totalCount }: HeaderProps) {
             {navItems.map((item) => (
               <a
                 key={item.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-slate-100 hover:bg-white/10"
+                className={`rounded-md px-3 py-2 text-sm font-medium hover:bg-white/10 ${
+                  activeHref === item.href ? "bg-white text-navy-900" : "text-slate-100"
+                }`}
                 href={item.href}
                 onClick={() => setOpen(false)}
               >
@@ -184,7 +189,7 @@ export function Hero({ onPrimaryClick }: HeroProps) {
             Medtronic Device Simulation Curriculum
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-            Tabbed simulation training for Medtronic Signia Powered Stapler and Endo Stitch using
+            Page-based simulation training for Medtronic Signia Powered Stapler and Endo Stitch using
             deliberate practice, objective assessment, and faculty-supervised progression.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -193,13 +198,13 @@ export function Hero({ onPrimaryClick }: HeroProps) {
               href="#overview"
               onClick={onPrimaryClick}
             >
-              Open Device Tabs
+              Open Overview
             </a>
             <a
               className="inline-flex items-center justify-center rounded-md border border-navy-200 bg-white px-5 py-3 text-sm font-semibold text-navy-800 shadow-sm transition hover:bg-navy-50"
               href="#signia"
             >
-              Start Training
+              Start Signia
             </a>
             <a
               className="inline-flex items-center justify-center rounded-md border border-clinical-100 bg-clinical-50 px-5 py-3 text-sm font-semibold text-clinical-700 shadow-sm transition hover:bg-clinical-100"

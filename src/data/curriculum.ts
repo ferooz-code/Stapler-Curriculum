@@ -802,7 +802,7 @@ export const onlineResources = [
   },
   {
     title: "Endo Stitch supplemental training video",
-    href: "https://www.youtube.com/watch?v=IGjBlL5DxFI"
+    href: "https://www.youtube.com/watch?v=4lIzVLi9wpE"
   },
   {
     title: "Medtronic Endo Stitch single-stitch reload page",
