@@ -801,6 +801,10 @@ export const onlineResources = [
     href: "https://www.medtronic.com/en-us/healthcare-professionals/products/access-instruments/endoscopic-devices/endo-stitch-suturing-device.html"
   },
   {
+    title: "Endo Stitch supplemental training video",
+    href: "https://www.youtube.com/watch?v=IGjBlL5DxFI"
+  },
+  {
     title: "Medtronic Endo Stitch single-stitch reload page",
     href: "https://www.medtronic.com/en-us/healthcare-professionals/products/wound-closure/endoscopic-suturing/accessories/endo-stitch-single-stitch-reload.html"
   },

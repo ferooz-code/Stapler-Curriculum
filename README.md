@@ -29,6 +29,7 @@ The built site is generated in `dist/`.
 - Top navigation: Home, Overview, Signia, EndoStitch, Exercises, Assessment, Tracker, Calendar, Faculty, Resources
 - Signia modules for setup, feedback, firing, release, troubleshooting, and recovery awareness
 - Endo Stitch modules for device information, reload awareness, needle transfer, interrupted/running stitch drills, and safety stop rules
+- Embedded supplemental video panels for the Signia and Endo Stitch tabs
 - Simulation exercises
 - Assessment checklist, rubric, quiz prompts, objective metrics, and entrustment levels
 - Interactive curriculum tracker with sample data, dashboard metrics, search, and filters

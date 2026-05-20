@@ -58,6 +58,29 @@ const moduleIds = [
   ...exercises.map((exercise) => exercise.id)
 ];
 
+function YouTubeEmbed({ title, videoId }: { title: string; videoId: string }) {
+  return (
+    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-card">
+      <div className="aspect-video w-full bg-navy-950">
+        <iframe
+          className="h-full w-full"
+          src={`https://www.youtube.com/embed/${videoId}`}
+          title={title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      </div>
+      <div className="p-4">
+        <p className="font-semibold text-navy-900">{title}</p>
+        <p className="mt-1 text-sm leading-6 text-slate-600">
+          Supplemental simulation video. Confirm all device handling against the current manufacturer IFU,
+          institutional policy, and faculty supervision.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [completedIds, setCompletedIds] = useState<Set<string>>(
     () => new Set(["signia-platform-orientation", "endostitch-orientation", "exercise-signia-setup"])
@@ -251,6 +274,7 @@ function App() {
                       onToggleComplete={toggleComplete}
                     />
                   </div>
+                  <YouTubeEmbed title="Signia Powered Stapler supplemental video" videoId="ALg2o9fWQe0" />
                   <div className="grid gap-4 sm:grid-cols-2">
                     {signiaConcepts.map((concept) => (
                       <Card key={concept.title} title={concept.title}>
@@ -294,19 +318,22 @@ function App() {
                     </ul>
                   </Card>
                 </div>
-                <div>
-                  <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-navy-900">Endo Stitch step-by-step instructions</h3>
-                      <p className="mt-2 text-sm text-slate-600">Open each accordion for the full device orientation, needle-transfer, stitch-pattern, and rescue sequence.</p>
+                <div className="grid gap-6">
+                  <div>
+                    <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                      <div>
+                        <h3 className="text-2xl font-semibold text-navy-900">Endo Stitch step-by-step instructions</h3>
+                        <p className="mt-2 text-sm text-slate-600">Open each accordion for the full device orientation, needle-transfer, stitch-pattern, and rescue sequence.</p>
+                      </div>
+                      <span className="text-sm font-semibold text-clinical-700">{endoStitchModules.length} modules</span>
                     </div>
-                    <span className="text-sm font-semibold text-clinical-700">{endoStitchModules.length} modules</span>
+                    <ModuleAccordion
+                      modules={endoStitchModules}
+                      completedIds={completedIds}
+                      onToggleComplete={toggleComplete}
+                    />
                   </div>
-                  <ModuleAccordion
-                    modules={endoStitchModules}
-                    completedIds={completedIds}
-                    onToggleComplete={toggleComplete}
-                  />
+                  <YouTubeEmbed title="Endo Stitch supplemental video" videoId="IGjBlL5DxFI" />
                 </div>
               </div>
             )}
