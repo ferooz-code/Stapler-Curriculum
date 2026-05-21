@@ -1,89 +1,426 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  AlertTriangle,
-  BarChart3,
-  CalendarDays,
+  ArrowRight,
+  BookOpen,
   CheckCircle2,
   ClipboardCheck,
+  ExternalLink,
   Layers,
-  MonitorCheck,
-  RotateCcw,
+  PlayCircle,
   ShieldAlert,
-  Target
+  SlidersHorizontal
 } from "lucide-react";
-import {
-  AssessmentTabs,
-  CalendarTimeline,
-  Card,
-  CompletionButton,
-  Footer,
-  Header,
-  Hero,
-  ModuleAccordion,
-  ResourceCard,
-  SectionTitle,
-  TrackerTable
-} from "./components/SiteComponents";
-import {
-  calendarItems,
-  checklistItems,
-  entrustmentLevels,
-  exercises,
-  facultyTemplate,
-  facultyWorkflow,
-  medtronicSafetyNotes,
-  medtronicSigniaModules,
-  signiaDeviceFacts,
-  signiaInstructionFocus,
-  endoStitchModules,
-  endoStitchCompetencyFocus,
-  endoStitchDeviceFacts,
-  endoStitchReloadOptions,
-  metricTargets,
-  navItems,
-  onlineResources,
-  quizBlueprint,
-  resources,
-  rubricDomains,
-  safetyFailures,
-  signiaConcepts,
-  trackerRows
-} from "./data/curriculum";
 
-const moduleIds = [
-  ...medtronicSigniaModules.map((module) => module.id),
-  ...endoStitchModules.map((module) => module.id),
-  ...exercises.map((exercise) => exercise.id)
+type Page = "home" | "signia" | "endostitch";
+
+type ReloadCard = {
+  name: string;
+  color: string;
+  textColor?: string;
+  tissue: string;
+  stapleHeights: string;
+  description: string;
+  source: string;
+  sourceLabel: string;
+};
+
+const sourceLinks = {
+  surgicalStapling: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling.html",
+  signia: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling/surgical-staplers/powered-staplers/signia-linear-stapler-with-tri-staple-technology.html",
+  reload30: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-30-mm-reload.html",
+  purpleReload: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-purple-reload.html",
+  blackReload: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-black-reload.html",
+  smallDiameter: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/signia-small-diameter-reload.html",
+  curvedTip: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-curved-tip-reload.html",
+  endostitch: "https://www.medtronic.com/en-us/healthcare-professionals/products/access-instruments/endoscopic-devices/endo-stitch-suturing-device.html"
+};
+
+const signiaVideos = [
+  { title: "Signia overview video", videoId: "ALg2o9fWQe0" },
+  { title: "Signia firing video", videoId: "nHngeFrMgjw" }
 ];
 
-const pageIds = [
-  "home",
-  "overview",
-  "signia",
-  "endostitch",
-  "exercises",
-  "assessment",
-  "tracker",
-  "calendar",
-  "faculty",
-  "resources"
-] as const;
+const endoVideos = [{ title: "Endo Stitch supplemental video", videoId: "4lIzVLi9wpE" }];
 
-type PageId = (typeof pageIds)[number];
-
-function getPageFromHash(): PageId {
-  if (typeof window === "undefined") {
-    return "home";
+const reloads: ReloadCard[] = [
+  {
+    name: "Purple",
+    color: "#6f2c91",
+    tissue: "Medium / thick",
+    stapleHeights: "3 / 3.5 / 4 mm",
+    description:
+      "Tri-Staple 2.0 purple reloads are listed by Medtronic for medium/thick tissue. Use this as the main simulation station for recognition and tissue-thickness matching.",
+    source: sourceLinks.purpleReload,
+    sourceLabel: "Purple reload source"
+  },
+  {
+    name: "Black",
+    color: "#111827",
+    tissue: "Extra thick",
+    stapleHeights: "4 / 4.5 / 5 mm",
+    description:
+      "Tri-Staple 2.0 black reloads are described for extra-thick tissue. Simulation focus: identify when the tissue model is outside the learner's assumed load range and pause.",
+    source: sourceLinks.blackReload,
+    sourceLabel: "Black reload source"
+  },
+  {
+    name: "White",
+    color: "#f8fafc",
+    textColor: "#0f172a",
+    tissue: "Small-diameter / vascular-style recognition",
+    stapleHeights: "30 and 45 mm small-diameter reload options",
+    description:
+      "Medtronic lists white Signia small-diameter reload options. In this curriculum, white is used as a recognition station for small-diameter reloads and thin-tissue simulation models.",
+    source: sourceLinks.smallDiameter,
+    sourceLabel: "Small-diameter source"
+  },
+  {
+    name: "Gold / Tan",
+    color: "#b8891f",
+    tissue: "Vascular / medium",
+    stapleHeights: "2 / 2.5 / 3 mm",
+    description:
+      "Medtronic's curved-tip listing uses tan for vascular/medium tissue. The module labels this station Gold/Tan so learners can map local tray terminology to the manufacturer listing.",
+    source: sourceLinks.curvedTip,
+    sourceLabel: "Curved-tip source"
   }
+];
 
+const simulationSteps = [
+  "Confirm the session is simulation-only and open the current IFU or local quick-reference before handling the device.",
+  "Identify the powered handle, power shell, linear adapter, jaws, firing controls, OLED/feedback screen, and manual recovery accessory.",
+  "Select a reload card by tissue-model thickness, then verbalize why that selection fits or why faculty review is needed.",
+  "Capture a marked synthetic target with both sides visible, pause for compression/feedback discussion, then complete the simulated firing sequence only after faculty confirmation.",
+  "Open/release, inspect the staple line on the model, classify it as acceptable/questionable/unacceptable, and document practice attempts in the survey."
+];
+
+function pageFromHash(): Page {
+  if (typeof window === "undefined") return "home";
   const hash = window.location.hash.replace("#", "").toLowerCase();
-  return pageIds.includes(hash as PageId) ? (hash as PageId) : "home";
+  return hash === "signia" || hash === "endostitch" ? hash : "home";
 }
 
-function YouTubeEmbed({ title, videoId }: { title: string; videoId: string }) {
+function App() {
+  const [page, setPage] = useState<Page>(() => pageFromHash());
+  const [survey, setSurvey] = useState({ attempts: "", load: "Purple", confidence: "3", notes: "" });
+
+  useEffect(() => {
+    const sync = () => {
+      setPage(pageFromHash());
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    sync();
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
+
+  const surveySummary = useMemo(() => {
+    const attempts = Number(survey.attempts || 0);
+    if (!attempts) return "No practice attempts logged yet.";
+    return `${attempts} practice run${attempts === 1 ? "" : "s"} logged with ${survey.load} as the primary reload focus.`;
+  }, [survey.attempts, survey.load]);
+
+  const navigate = (next: Page) => {
+    window.location.hash = next === "home" ? "home" : next;
+  };
+
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-card">
-      <div className="aspect-video w-full bg-navy-950">
+    <div className="min-h-screen bg-white text-[#101820]">
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="h-1 bg-[#e31b23]" />
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <button className="flex items-center gap-3 text-left" type="button" onClick={() => navigate("home")}>
+            <span className="grid h-10 w-10 place-items-center rounded-sm bg-[#0057a6] text-white">
+              <BookOpen className="h-5 w-5" />
+            </span>
+            <span>
+              <span className="block text-base font-semibold tracking-tight">StapleSkills</span>
+              <span className="block text-xs uppercase tracking-[0.18em] text-slate-500">Medtronic device lab</span>
+            </span>
+          </button>
+          <nav className="flex items-center gap-1" aria-label="Primary navigation">
+            <NavButton active={page === "home"} onClick={() => navigate("home")}>Home</NavButton>
+            <NavButton active={page === "signia"} onClick={() => navigate("signia")}>Signia</NavButton>
+            <NavButton active={page === "endostitch"} onClick={() => navigate("endostitch")}>Endo Stitch</NavButton>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        {page === "home" && <HomePage onNavigate={navigate} />}
+        {page === "signia" && (
+          <SigniaPage survey={survey} setSurvey={setSurvey} surveySummary={surveySummary} />
+        )}
+        {page === "endostitch" && <EndoStitchPage />}
+      </main>
+
+      <footer className="border-t border-slate-200 bg-[#101820] px-4 py-8 text-white sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <p className="text-sm text-slate-200">
+            Educational simulation curriculum only. Follow institutional policy, manufacturer IFU, and faculty supervision.
+          </p>
+          <a className="text-sm font-semibold text-white underline decoration-[#e31b23] underline-offset-4" href={sourceLinks.surgicalStapling} target="_blank" rel="noreferrer">
+            Medtronic surgical stapling source
+          </a>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function NavButton({ active, children, onClick }: { active: boolean; children: string; onClick: () => void }) {
+  return (
+    <button
+      className={`rounded-sm px-3 py-2 text-sm font-semibold transition ${
+        active ? "bg-[#0057a6] text-white" : "text-slate-700 hover:bg-slate-100 hover:text-[#0057a6]"
+      }`}
+      type="button"
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
+
+function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
+  return (
+    <section className="bg-white">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.95fr] lg:px-8 lg:py-24">
+        <div className="self-center">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">Simulation training microsite</p>
+          <h1 className="mt-5 max-w-4xl text-4xl font-semibold tracking-tight text-[#101820] sm:text-5xl lg:text-6xl">
+            Medtronic stapling and suturing device practice
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+            A cleaner device lab for residents and fellows: choose Signia Powered Stapler or Endo Stitch, review product-focused training content, watch the embedded videos, and log practice in a brief local survey.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <button className="inline-flex items-center justify-center gap-2 rounded-sm bg-[#0057a6] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#004985]" type="button" onClick={() => onNavigate("signia")}>
+              Signia <ArrowRight className="h-4 w-4" />
+            </button>
+            <button className="inline-flex items-center justify-center gap-2 rounded-sm border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-[#101820] shadow-sm transition hover:border-[#0057a6] hover:text-[#0057a6]" type="button" onClick={() => onNavigate("endostitch")}>
+              Endo Stitch <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="mt-8 border-l-4 border-[#e31b23] bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+            Device training is simulation-only. It does not replace manufacturer IFU, institutional policy, credentialing, or supervised clinical judgment.
+          </div>
+        </div>
+        <div className="self-center">
+          <div className="rounded-sm border border-slate-200 bg-slate-50 p-5 shadow-card">
+            <img
+              src="/assets/signia-side-view.jpg"
+              alt="Medtronic Signia powered stapler side view"
+              className="aspect-[4/3] w-full rounded-sm bg-white object-contain"
+            />
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              <MiniMetric label="Pages" value="2" />
+              <MiniMetric label="Videos" value="3" />
+              <MiniMetric label="Mode" value="Sim" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SigniaPage({
+  survey,
+  setSurvey,
+  surveySummary
+}: {
+  survey: { attempts: string; load: string; confidence: string; notes: string };
+  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; load: string; confidence: string; notes: string }>>;
+  surveySummary: string;
+}) {
+  return (
+    <div className="bg-white">
+      <PageHero
+        eyebrow="Signia module"
+        title="Signia powered stapler training"
+        description="Organized around introduction to stapler use, controls, tissue thickness, videos, reload recognition, simulation instructions, and a quick practice survey."
+        image="/assets/signia-side-view.jpg"
+        imageAlt="Medtronic Signia powered stapler"
+      />
+
+      <Section id="intro" label="Introduction to Stapler Use" title="Build a shared mental model before practice">
+        <div className="grid gap-5 lg:grid-cols-3">
+          <InfoCard icon={<SlidersHorizontal className="h-5 w-5" />} title="Controls">
+            <ul className="space-y-3 text-sm leading-6 text-slate-600">
+              <li>Identify the powered handle, power shell, linear adapter, jaws, OLED display, and manual retraction tool.</li>
+              <li>Discuss powered articulation, rotation, clamping, and feedback as simulation controls requiring faculty oversight.</li>
+              <li>Use LED/OLED feedback as a pause-and-confirm cue, not permission to proceed automatically.</li>
+            </ul>
+          </InfoCard>
+          <InfoCard icon={<Layers className="h-5 w-5" />} title="Tissue thickness">
+            <ul className="space-y-3 text-sm leading-6 text-slate-600">
+              <li>Match reload color to synthetic tissue thickness using current IFU and local inventory labels.</li>
+              <li>Practice recognizing when the tissue model looks too thin, too thick, twisted, or poorly visualized for the intended reload.</li>
+              <li>Stop and verbalize the next step when feedback or compression behavior is unexpected.</li>
+            </ul>
+          </InfoCard>
+          <InfoCard icon={<ShieldAlert className="h-5 w-5" />} title="Source guardrails">
+            <p className="text-sm leading-6 text-slate-600">
+              Medtronic notes that website material does not replace device manuals or IFU. This module stays educational and simulation-only.
+            </p>
+            <SourceLink href={sourceLinks.signia}>Open Signia product source</SourceLink>
+          </InfoCard>
+        </div>
+      </Section>
+
+      <Section id="video" label="Video" title="Watch, pause, then practice the sequence">
+        <div className="grid gap-5 lg:grid-cols-2">
+          {signiaVideos.map((video) => (
+            <VideoCard key={video.videoId} {...video} />
+          ))}
+        </div>
+      </Section>
+
+      <Section id="loads" label="Stapler Loads" title="Reload recognition by color and tissue model">
+        <p className="max-w-3xl text-sm leading-6 text-slate-600">
+          These cards translate the program's requested color headings into a training station. Purple and Black map directly to Medtronic Tri-Staple 2.0 reload listings; White maps to Signia small-diameter reloads; Gold is shown as Gold/Tan to match the Medtronic tan curved-tip listing.
+        </p>
+        <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {reloads.map((reload) => (
+            <ReloadTrainingCard key={reload.name} reload={reload} />
+          ))}
+        </div>
+      </Section>
+
+      <Section id="practice" label="Stapler Practice" title="Simulation instructions and quick survey">
+        <div className="grid gap-6 lg:grid-cols-[1fr_0.85fr]">
+          <div className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
+            <h3 className="text-xl font-semibold text-[#101820]">Simulation instructions</h3>
+            <ol className="mt-5 space-y-4">
+              {simulationSteps.map((step, index) => (
+                <li key={step} className="flex gap-3 text-sm leading-6 text-slate-700">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#0057a6] text-xs font-bold text-white">{index + 1}</span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <SurveyCard survey={survey} setSurvey={setSurvey} surveySummary={surveySummary} />
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+function EndoStitchPage() {
+  const steps = [
+    "Identify the 10 mm device, handle, shaft, jaws, needle position, suture tail, and reload type on the dry trainer.",
+    "Practice air transfers first so the learner can see needle movement between jaws without tissue.",
+    "Move to marked synthetic tissue only after controlled visualization and stable needle transfer are demonstrated.",
+    "Stop immediately for lost needle visualization, partial capture, uncontrolled needle position, tissue tearing, or crossed suture.",
+    "Document practice attempts and faculty feedback before moving to another station."
+  ];
+
+  return (
+    <div className="bg-white">
+      <section className="border-b border-slate-200 bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">Endo Stitch module</p>
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-[#101820] sm:text-5xl">
+            Endo Stitch suturing device practice
+          </h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+            A focused simulation page for device recognition, needle-transfer practice, stitch-pattern drills, safety stop rules, and the embedded Endo Stitch video.
+          </p>
+        </div>
+      </section>
+
+      <Section id="endostitch-info" label="Product information" title="What learners identify before practice">
+        <div className="grid gap-5 lg:grid-cols-3">
+          <InfoCard title="Device orientation" icon={<ClipboardCheck className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">
+              Use the dry trainer to identify the handle, shaft, jaws, needle transfer path, suture tail, and reload count before any tissue-model work.
+            </p>
+          </InfoCard>
+          <InfoCard title="Simulation focus" icon={<CheckCircle2 className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">
+              Practice controlled visualization, symmetric bites, suture tension, and immediate communication when the needle or tissue path is not clear.
+            </p>
+          </InfoCard>
+          <InfoCard title="Safety stop" icon={<ShieldAlert className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">
+              Lost visualization or uncontrolled needle position stops the station. Resume only with faculty direction and current IFU/local policy.
+            </p>
+            <SourceLink href={sourceLinks.endostitch}>Open Endo Stitch source</SourceLink>
+          </InfoCard>
+        </div>
+      </Section>
+
+      <Section id="endostitch-video" label="Video" title="Endo Stitch supplemental video">
+        <div className="max-w-3xl">
+          {endoVideos.map((video) => (
+            <VideoCard key={video.videoId} {...video} />
+          ))}
+        </div>
+      </Section>
+
+      <Section id="endostitch-practice" label="Practice" title="Needle-transfer simulation sequence">
+        <div className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
+          <ol className="space-y-4">
+            {steps.map((step, index) => (
+              <li key={step} className="flex gap-3 text-sm leading-6 text-slate-700">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#0057a6] text-xs font-bold text-white">{index + 1}</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+function PageHero({ eyebrow, title, description, image, imageAlt }: { eyebrow: string; title: string; description: string; image: string; imageAlt: string }) {
+  return (
+    <section className="border-b border-slate-200 bg-slate-50 px-4 py-14 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-center">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">{eyebrow}</p>
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-[#101820] sm:text-5xl">{title}</h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">{description}</p>
+        </div>
+        <div className="rounded-sm border border-slate-200 bg-white p-4 shadow-card">
+          <img src={image} alt={imageAlt} className="aspect-[16/10] w-full object-contain" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Section({ id, label, title, children }: { id: string; label: string; title: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className="px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">{label}</p>
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#101820]">{title}</h2>
+        <div className="mt-7">{children}</div>
+      </div>
+    </section>
+  );
+}
+
+function InfoCard({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <article className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
+      <div className="flex items-center gap-3">
+        <span className="grid h-10 w-10 place-items-center rounded-sm bg-[#eaf3fb] text-[#0057a6]">{icon}</span>
+        <h3 className="text-xl font-semibold text-[#101820]">{title}</h3>
+      </div>
+      <div className="mt-5">{children}</div>
+    </article>
+  );
+}
+
+function VideoCard({ title, videoId }: { title: string; videoId: string }) {
+  return (
+    <article className="overflow-hidden rounded-sm border border-slate-200 bg-white shadow-card">
+      <div className="aspect-video bg-[#101820]">
         <iframe
           className="h-full w-full"
           src={`https://www.youtube.com/embed/${videoId}`}
@@ -92,475 +429,132 @@ function YouTubeEmbed({ title, videoId }: { title: string; videoId: string }) {
           allowFullScreen
         />
       </div>
-      <div className="p-4">
-        <p className="font-semibold text-navy-900">{title}</p>
-        <p className="mt-1 text-sm leading-6 text-slate-600">
-          Supplemental simulation video. Confirm all device handling against the current manufacturer IFU,
-          institutional policy, and faculty supervision.
-        </p>
+      <div className="flex items-center gap-3 p-4">
+        <PlayCircle className="h-5 w-5 text-[#e31b23]" />
+        <p className="font-semibold text-[#101820]">{title}</p>
+      </div>
+    </article>
+  );
+}
+
+function ReloadTrainingCard({ reload }: { reload: ReloadCard }) {
+  return (
+    <article className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
+      <ReloadIllustration color={reload.color} textColor={reload.textColor} label={reload.name} />
+      <h3 className="mt-5 text-xl font-semibold text-[#101820]">{reload.name}</h3>
+      <dl className="mt-4 space-y-3 text-sm">
+        <div>
+          <dt className="font-semibold text-slate-900">Tissue model</dt>
+          <dd className="mt-1 text-slate-600">{reload.tissue}</dd>
+        </div>
+        <div>
+          <dt className="font-semibold text-slate-900">Staple heights / format</dt>
+          <dd className="mt-1 text-slate-600">{reload.stapleHeights}</dd>
+        </div>
+      </dl>
+      <p className="mt-4 text-sm leading-6 text-slate-600">{reload.description}</p>
+      <SourceLink href={reload.source}>{reload.sourceLabel}</SourceLink>
+    </article>
+  );
+}
+
+function ReloadIllustration({ color, textColor = "#ffffff", label }: { color: string; textColor?: string; label: string }) {
+  return (
+    <div className="rounded-sm border border-slate-200 bg-slate-50 p-4" aria-label={`${label} reload visual`}>
+      <div className="relative h-24 overflow-hidden rounded-sm bg-white">
+        <div className="absolute left-4 top-7 h-10 w-[78%] rounded-sm border border-slate-300 bg-slate-100" />
+        <div className="absolute left-5 top-8 h-8 w-[68%] rounded-sm" style={{ backgroundColor: color }} />
+        <div className="absolute left-8 top-10 grid w-[58%] grid-cols-8 gap-1">
+          {Array.from({ length: 16 }).map((_, index) => (
+            <span key={index} className="h-1.5 rounded-full bg-white/75" />
+          ))}
+        </div>
+        <div className="absolute right-4 top-6 h-12 w-9 skew-x-[-12deg] rounded-sm border border-slate-300 bg-slate-200" />
+        <div className="absolute bottom-2 left-4 rounded-sm px-2 py-1 text-xs font-bold uppercase tracking-[0.14em]" style={{ backgroundColor: color, color: textColor }}>
+          {label}
+        </div>
       </div>
     </div>
   );
 }
 
-function SafetyNotePanel({ notes }: { notes: string[] }) {
+function SurveyCard({
+  survey,
+  setSurvey,
+  surveySummary
+}: {
+  survey: { attempts: string; load: string; confidence: string; notes: string };
+  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; load: string; confidence: string; notes: string }>>;
+  surveySummary: string;
+}) {
   return (
-    <div className="mt-8 grid gap-4 rounded-lg border border-safety-200 bg-safety-50 p-5 lg:grid-cols-2">
-      {notes.map((note) => (
-        <div key={note} className="flex gap-2 text-sm leading-6 text-safety-700">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-          {note}
-        </div>
-      ))}
+    <div className="rounded-sm border border-slate-200 bg-slate-50 p-6 shadow-card">
+      <h3 className="text-xl font-semibold text-[#101820]">Survey</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-600">Quick local practice log for the current learner. No backend is used.</p>
+      <div className="mt-5 grid gap-4">
+        <label className="text-sm font-semibold text-slate-900">
+          How many practice runs occurred?
+          <input
+            className="mt-2 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
+            min="0"
+            type="number"
+            value={survey.attempts}
+            onChange={(event) => setSurvey((current) => ({ ...current, attempts: event.target.value }))}
+          />
+        </label>
+        <label className="text-sm font-semibold text-slate-900">
+          Primary reload practiced
+          <select
+            className="mt-2 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
+            value={survey.load}
+            onChange={(event) => setSurvey((current) => ({ ...current, load: event.target.value }))}
+          >
+            {reloads.map((reload) => (
+              <option key={reload.name}>{reload.name}</option>
+            ))}
+          </select>
+        </label>
+        <label className="text-sm font-semibold text-slate-900">
+          Confidence after practice: {survey.confidence}/5
+          <input
+            className="mt-2 w-full accent-[#0057a6]"
+            max="5"
+            min="1"
+            type="range"
+            value={survey.confidence}
+            onChange={(event) => setSurvey((current) => ({ ...current, confidence: event.target.value }))}
+          />
+        </label>
+        <label className="text-sm font-semibold text-slate-900">
+          Notes for faculty debrief
+          <textarea
+            className="mt-2 min-h-24 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
+            value={survey.notes}
+            onChange={(event) => setSurvey((current) => ({ ...current, notes: event.target.value }))}
+            placeholder="Reload selection, visualization issue, feedback cue, or remediation item"
+          />
+        </label>
+      </div>
+      <div className="mt-5 rounded-sm border border-[#b9d7ef] bg-white p-4 text-sm font-semibold text-[#0057a6]">
+        {surveySummary}
+      </div>
     </div>
   );
 }
 
-function App() {
-  const [completedIds, setCompletedIds] = useState<Set<string>>(
-    () => new Set(["signia-platform-orientation", "endostitch-orientation", "exercise-signia-setup"])
-  );
-  const [activePage, setActivePage] = useState<PageId>(() => getPageFromHash());
-
-  useEffect(() => {
-    const syncPageFromHash = () => {
-      setActivePage(getPageFromHash());
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    syncPageFromHash();
-    window.addEventListener("hashchange", syncPageFromHash);
-    return () => window.removeEventListener("hashchange", syncPageFromHash);
-  }, []);
-
-  const toggleComplete = (id: string) => {
-    setCompletedIds((current) => {
-      const next = new Set(current);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
-  const completedCount = moduleIds.filter((id) => completedIds.has(id)).length;
-  const completionPercent = Math.round((completedCount / moduleIds.length) * 100);
-
-  const traineeProgress = useMemo(
-    () => [
-      { name: "Alex Sample", label: "Signia pathway", complete: 48 },
-      { name: "Jordan Sample", label: "Endo Stitch pathway", complete: 64 },
-      { name: "Morgan Faculty Fellow", label: "Combined device pathway", complete: 86 }
-    ],
-    []
-  );
-
-  const signiaSafetyNotes = medtronicSafetyNotes.filter((note) => !note.startsWith("For Endo Stitch"));
-  const endoSafetyNotes = medtronicSafetyNotes.filter(
-    (note) => note.startsWith("Simulation only") || note.startsWith("For Endo Stitch")
-  );
-
+function SourceLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-white text-slate-800">
-      <Header
-        navItems={navItems}
-        completedCount={completedCount}
-        totalCount={moduleIds.length}
-        activeHref={`#${activePage}`}
-      />
-      <main className="min-h-[calc(100vh-160px)]">
-        {activePage === "home" && (
-          <>
-            <Hero />
-            <section className="border-y border-slate-200 bg-slate-50 px-4 py-6 sm:px-6 lg:px-8">
-              <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1fr_1.4fr] lg:items-center">
-                <div>
-                  <p className="text-sm font-bold uppercase tracking-[0.16em] text-safety-600">
-                    Local progress summary
-                  </p>
-                  <h2 className="mt-2 text-2xl font-semibold text-navy-900">
-                    {completedCount} of {moduleIds.length} learning items complete
-                  </h2>
-                  <div className="mt-4 h-3 overflow-hidden rounded-full bg-white ring-1 ring-slate-200">
-                    <div className="h-full rounded-full bg-clinical-500" style={{ width: `${completionPercent}%` }} />
-                  </div>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-3">
-                  {traineeProgress.map((trainee) => (
-                    <div key={trainee.name} className="rounded-lg border border-slate-200 bg-white p-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="font-semibold text-navy-900">{trainee.name}</p>
-                          <p className="text-xs text-slate-500">{trainee.label}</p>
-                        </div>
-                        <span className="text-sm font-bold text-clinical-700">{trainee.complete}%</span>
-                      </div>
-                      <div className="mt-3 h-2 rounded-full bg-slate-100">
-                        <div className="h-2 rounded-full bg-clinical-500" style={{ width: `${trainee.complete}%` }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
+    <a className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#0057a6] hover:underline" href={href} target="_blank" rel="noreferrer">
+      {children} <ExternalLink className="h-4 w-4" />
+    </a>
+  );
+}
 
-            <section className="px-4 py-16 sm:px-6 lg:px-8">
-              <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-3">
-                <Card title="Simulation First" icon={<MonitorCheck className="h-5 w-5" />}>
-                  <p className="text-sm leading-6 text-slate-600">
-                    Learners build baseline competency in dry lab, box trainer, and synthetic tissue stations
-                    before supervised clinical device exposure.
-                  </p>
-                </Card>
-                <Card title="Competency Based" icon={<ClipboardCheck className="h-5 w-5" />}>
-                  <p className="text-sm leading-6 text-slate-600">
-                    Progression is tracked separately for Signia Powered Stapler and Endo Stitch using checklist scores,
-                    quiz results, objective metrics, and safety stop rules.
-                  </p>
-                </Card>
-                <Card title="OR Readiness" icon={<ShieldAlert className="h-5 w-5" />}>
-                  <p className="text-sm leading-6 text-slate-600">
-                    Entrustment decisions remain device-specific and combine observed simulation performance,
-                    remediation history, and faculty judgment.
-                  </p>
-                </Card>
-              </div>
-            </section>
-          </>
-        )}
-
-        {activePage === "overview" && (
-          <section id="overview" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Curriculum overview"
-                title="Focused pages for each Medtronic device pathway"
-                description="Use the top navigation to open a single focused page at a time. Signia and Endo Stitch now have separate pages with their own instructions, safety rules, exercises, assessment tools, and tracker links."
-              />
-              <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                <Card title="Signia Powered Stapler" icon={<Layers className="h-5 w-5" />}>
-                  <p className="text-sm leading-6 text-slate-600">
-                    Setup, powered controls, adaptive firing concepts, feedback interpretation, troubleshooting, and two Signia video panels.
-                  </p>
-                  <a className="mt-5 inline-flex rounded-md bg-navy-800 px-4 py-2 text-sm font-semibold text-white hover:bg-navy-700" href="#signia">
-                    Open Signia Page
-                  </a>
-                </Card>
-                <Card title="Endo Stitch Suturing Device" icon={<ClipboardCheck className="h-5 w-5" />}>
-                  <p className="text-sm leading-6 text-slate-600">
-                    Device orientation, reload awareness, needle transfer, interrupted and running stitch drills, written safety stop rules, and a supplemental Endo Stitch video.
-                  </p>
-                  <a className="mt-5 inline-flex rounded-md bg-navy-800 px-4 py-2 text-sm font-semibold text-white hover:bg-navy-700" href="#endostitch">
-                    Open Endo Stitch Page
-                  </a>
-                </Card>
-                <Card title="Assess and Track" icon={<BarChart3 className="h-5 w-5" />}>
-                  <p className="text-sm leading-6 text-slate-600">
-                    Use the assessment page, tracker, annual calendar, and faculty guide as separate workspace pages after device practice.
-                  </p>
-                  <a className="mt-5 inline-flex rounded-md bg-clinical-600 px-4 py-2 text-sm font-semibold text-white hover:bg-clinical-700" href="#tracker">
-                    Open Tracker
-                  </a>
-                </Card>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activePage === "signia" && (
-          <section id="signia" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Signia page"
-                title="Signia Powered Stapler simulation training"
-                description="A dedicated Signia page for device orientation, powered stapling concepts, step-by-step simulation modules, safety guardrails, and embedded Signia videos."
-              />
-              <div className="mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.25fr]">
-                <div className="grid gap-5">
-                  <Card title="Signia Powered Stapler" icon={<Layers className="h-5 w-5" />}>
-                    <img
-                      src="/assets/signia-side-view.jpg"
-                      alt="Medtronic Signia powered stapler side view"
-                      className="aspect-[16/9] w-full rounded-md border border-slate-100 object-contain"
-                    />
-                    <dl className="mt-5 grid gap-3">
-                      {signiaDeviceFacts.map((fact) => (
-                        <div key={fact.label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                          <dt className="text-sm font-bold uppercase tracking-[0.12em] text-safety-600">{fact.label}</dt>
-                          <dd className="mt-2 text-sm leading-6 text-slate-700">{fact.value}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </Card>
-                  <Card tone="warning" title="Signia safety guardrails" icon={<ShieldAlert className="h-5 w-5" />}>
-                    <ul className="grid gap-2">
-                      {signiaInstructionFocus.map((item) => (
-                        <li key={item} className="flex gap-2 text-sm leading-6 text-safety-700">
-                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </Card>
-                </div>
-                <div className="grid gap-6">
-                  <div>
-                    <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                      <div>
-                        <h3 className="text-2xl font-semibold text-navy-900">Signia step-by-step instructions</h3>
-                        <p className="mt-2 text-sm text-slate-600">Open each accordion for the full simulation sequence and mark it complete as the learner progresses.</p>
-                      </div>
-                      <span className="text-sm font-semibold text-clinical-700">{medtronicSigniaModules.length} modules</span>
-                    </div>
-                    <ModuleAccordion
-                      modules={medtronicSigniaModules}
-                      completedIds={completedIds}
-                      onToggleComplete={toggleComplete}
-                    />
-                  </div>
-                  <div className="grid gap-5 xl:grid-cols-2">
-                    <YouTubeEmbed title="Signia Powered Stapler overview video" videoId="ALg2o9fWQe0" />
-                    <YouTubeEmbed title="Signia Powered Stapler firing video" videoId="nHngeFrMgjw" />
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {signiaConcepts.map((concept) => (
-                      <Card key={concept.title} title={concept.title}>
-                        <p className="text-sm leading-6 text-slate-600">{concept.text}</p>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <SafetyNotePanel notes={signiaSafetyNotes} />
-            </div>
-          </section>
-        )}
-
-        {activePage === "endostitch" && (
-          <section id="endostitch" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Endo Stitch page"
-                title="Endo Stitch suturing device simulation training"
-                description="A dedicated Endo Stitch page for device information, reload awareness, needle transfer, stitch-pattern drills, error recognition, and faculty-supervised safety stop rules."
-              />
-              <div className="mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.25fr]">
-                <div className="grid gap-5">
-                  <Card title="Endo Stitch device information" icon={<ClipboardCheck className="h-5 w-5" />}>
-                    <dl className="grid gap-3">
-                      {endoStitchDeviceFacts.map((fact) => (
-                        <div key={fact.label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                          <dt className="text-sm font-bold uppercase tracking-[0.12em] text-safety-600">{fact.label}</dt>
-                          <dd className="mt-2 text-sm leading-6 text-slate-700">{fact.value}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </Card>
-                  <Card title="Reload and compatibility awareness" icon={<Layers className="h-5 w-5" />}>
-                    <div className="grid gap-3">
-                      {endoStitchReloadOptions.map((option) => (
-                        <div key={option.title} className="rounded-md border border-slate-200 p-4">
-                          <p className="font-semibold text-navy-900">{option.title}</p>
-                          <p className="mt-2 text-sm leading-6 text-slate-600">{option.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                  <Card tone="warning" title="Endo Stitch safety stop rules" icon={<AlertTriangle className="h-5 w-5" />}>
-                    <ul className="grid gap-2">
-                      {endoStitchCompetencyFocus.map((item) => (
-                        <li key={item} className="flex gap-2 text-sm leading-6 text-safety-700">
-                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </Card>
-                </div>
-                <div className="grid gap-6">
-                  <div>
-                    <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                      <div>
-                        <h3 className="text-2xl font-semibold text-navy-900">Endo Stitch step-by-step instructions</h3>
-                        <p className="mt-2 text-sm text-slate-600">Open each accordion for the full device orientation, needle-transfer, stitch-pattern, and rescue sequence.</p>
-                      </div>
-                      <span className="text-sm font-semibold text-clinical-700">{endoStitchModules.length} modules</span>
-                    </div>
-                    <ModuleAccordion
-                      modules={endoStitchModules}
-                      completedIds={completedIds}
-                      onToggleComplete={toggleComplete}
-                    />
-                  </div>
-                  <YouTubeEmbed title="Endo Stitch supplemental video" videoId="4lIzVLi9wpE" />
-                </div>
-              </div>
-              <SafetyNotePanel notes={endoSafetyNotes} />
-            </div>
-          </section>
-        )}
-
-        {activePage === "exercises" && (
-          <section id="exercises" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Device simulation exercises"
-                title="Signia and Endo Stitch deliberate practice stations"
-                description="Each station maps to either the Signia Powered Stapler page or the Endo Stitch page so faculty can coach, reassess, and document device-specific progression."
-              />
-              <div className="mt-10 grid gap-5 lg:grid-cols-2">
-                {exercises.map((exercise) => (
-                  <Card key={exercise.id} title={exercise.title} icon={<Target className="h-5 w-5" />}>
-                    <p className="text-sm font-semibold text-navy-900">Objective</p>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">{exercise.objective}</p>
-                    <p className="mt-5 text-sm font-semibold text-navy-900">Metrics</p>
-                    <ul className="mt-2 grid gap-2">
-                      {exercise.metrics.map((metric) => (
-                        <li key={metric} className="flex gap-2 text-sm text-slate-700">
-                          <BarChart3 className="mt-0.5 h-4 w-4 shrink-0 text-clinical-500" />
-                          {metric}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-5">
-                      <CompletionButton
-                        complete={completedIds.has(exercise.id)}
-                        onClick={() => toggleComplete(exercise.id)}
-                      />
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activePage === "assessment" && (
-          <section id="assessment" className="px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Assessment tools"
-                title="Checklist, rubric, quiz, metrics, and entrustment"
-                description="Assessment is device-specific: Signia powered stapling and Endo Stitch suturing each use checklist behaviors, global ratings, objective metrics, safety failures, and entrustment decisions."
-              />
-              <div className="mt-10">
-                <AssessmentTabs
-                  checklistItems={checklistItems}
-                  rubricDomains={rubricDomains}
-                  quizBlueprint={quizBlueprint}
-                  safetyFailures={safetyFailures}
-                  metricTargets={metricTargets}
-                  entrustmentLevels={entrustmentLevels}
-                />
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activePage === "tracker" && (
-          <section id="tracker" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Curriculum tracker"
-                title="Medtronic device tracker table"
-                description="Sample data tracks Signia and Endo Stitch sessions with quiz score, checklist score, rubric average, safety failures, objective metrics, remediation, and entrustment."
-              />
-              <div className="mt-10">
-                <TrackerTable rows={trackerRows} />
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activePage === "calendar" && (
-          <section id="calendar" className="px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Annual calendar"
-                title="Twelve-month implementation timeline"
-                description="A practical annual rhythm for formal simulation, optional open lab, quiz/prework, and quarterly faculty review."
-              />
-              <div className="mt-10">
-                <CalendarTimeline items={calendarItems} />
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activePage === "faculty" && (
-          <section id="faculty" className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Faculty guide"
-                title="Session template and assessment workflow"
-                description="Faculty use the same structure across levels so expectations, scoring, remediation, and entrustment stay consistent."
-              />
-              <div className="mt-10 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-                <Card title="Standard Session Template" icon={<CalendarDays className="h-5 w-5" />}>
-                  <ol className="grid gap-3">
-                    {facultyTemplate.map((item, index) => (
-                      <li key={item} className="flex gap-3 text-sm leading-6 text-slate-700">
-                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-navy-800 text-xs font-bold text-white">
-                          {index + 1}
-                        </span>
-                        {item}
-                      </li>
-                    ))}
-                  </ol>
-                </Card>
-                <div className="grid gap-5 md:grid-cols-3">
-                  {Object.entries(facultyWorkflow).map(([phase, items]) => (
-                    <Card key={phase} title={phase} icon={<RotateCcw className="h-5 w-5" />}>
-                      <ul className="grid gap-2">
-                        {items.map((item) => (
-                          <li key={item} className="flex gap-2 text-sm leading-6 text-slate-700">
-                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-clinical-500" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activePage === "resources" && (
-          <section id="resources" className="px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              <SectionTitle
-                eyebrow="Resources"
-                title="Quick links for learners and faculty"
-                description="Open Medtronic Signia and Endo Stitch source links, printable assessment sections, device calendar, and Signia in-service videos."
-              />
-              <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {resources.map((resource) => (
-                  <ResourceCard key={resource.title} {...resource} />
-                ))}
-              </div>
-              <div className="mt-12">
-                <h3 className="text-2xl font-semibold text-navy-900">Online resources and videos</h3>
-                <div className="mt-5 grid gap-4 lg:grid-cols-2">
-                  {onlineResources.map((resource) => (
-                    <ResourceCard
-                      key={resource.href}
-                      title={resource.title}
-                      description="External resource. Confirm details against the current IFU and institutional device education program."
-                      href={resource.href}
-                      type="External"
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-      </main>
-      <Footer />
+function MiniMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-sm border border-slate-200 bg-white p-3">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-[#0057a6]">{value}</p>
     </div>
   );
 }
