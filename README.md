@@ -1,6 +1,6 @@
-# StapleSkills Medtronic Device Lab
+# Medtronic Device LMS
 
-Clean React + TypeScript + Tailwind CSS simulation microsite for two Medtronic device modules: Signia Powered Stapler and Endo Stitch.
+Clean React + TypeScript + Tailwind CSS learning management microsite for Medtronic Signia™ Stapling System and Endo Stitch™ simulation education.
 
 ## Run Locally
 
@@ -26,10 +26,10 @@ The built site is generated in `dist/`.
 ## Included
 
 - Clean Medtronic-inspired visual theme
-- Home page with two clear device buttons: Signia and Endo Stitch
+- Home page with the “Learn to Safely Operate and Use Advanced Surgical Devices” LMS copy and two clear device buttons
 - Signia module organized by Introduction to Stapler Use, Controls, Tissue Thickness, Video, Stapler Loads, Stapler Practice, and Survey
 - Reload recognition cards for Purple, Black, White, and Gold/Tan with source links
-- Embedded Signia videos and Endo Stitch video
-- Simulation-only language and IFU/faculty supervision guardrails
+- Embedded Signia videos plus two Endo Stitch videos
+- Endo Stitch image, loading, insertion/safety, suturing, and unloading/changing needle modules
 
 Educational simulation curriculum only. Follow local policy, manufacturer IFU, and faculty supervision.

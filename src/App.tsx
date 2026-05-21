@@ -32,7 +32,9 @@ const sourceLinks = {
   blackReload: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-black-reload.html",
   smallDiameter: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/signia-small-diameter-reload.html",
   curvedTip: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-curved-tip-reload.html",
-  endostitch: "https://www.medtronic.com/en-us/healthcare-professionals/products/access-instruments/endoscopic-devices/endo-stitch-suturing-device.html"
+  endostitch: "https://www.medtronic.com/en-ca/healthcare-professionals/products/access-instruments/endoscopic-devices/endo-stitch-suturing-device.html",
+  endostitchSingleReload: "https://www.medtronic.com/en-us/healthcare-professionals/products/wound-closure/endoscopic-suturing/accessories/endo-stitch-single-stitch-reload.html",
+  medtronicManuals: "https://manuals.medtronic.com/manuals/main/region"
 };
 
 const signiaVideos = [
@@ -40,7 +42,10 @@ const signiaVideos = [
   { title: "Signia firing video", videoId: "nHngeFrMgjw" }
 ];
 
-const endoVideos = [{ title: "Endo Stitch supplemental video", videoId: "4lIzVLi9wpE" }];
+const endoVideos = [
+  { title: "Endo Stitch suturing device video", videoId: "4lIzVLi9wpE" },
+  { title: "Auto Suture Endo Stitch demonstration", videoId: "v8kAcloFghM" }
+];
 
 const reloads: ReloadCard[] = [
   {
@@ -134,8 +139,8 @@ function App() {
               <BookOpen className="h-5 w-5" />
             </span>
             <span>
-              <span className="block text-base font-semibold tracking-tight">StapleSkills</span>
-              <span className="block text-xs uppercase tracking-[0.18em] text-slate-500">Medtronic device lab</span>
+              <span className="block text-base font-semibold tracking-tight">Medtronic Device LMS</span>
+              <span className="block text-xs uppercase tracking-[0.18em] text-slate-500">Surgical education platform</span>
             </span>
           </button>
           <nav className="flex items-center gap-1" aria-label="Primary navigation">
@@ -189,10 +194,10 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
         <div className="self-center">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">Simulation training microsite</p>
           <h1 className="mt-5 max-w-4xl text-4xl font-semibold tracking-tight text-[#101820] sm:text-5xl lg:text-6xl">
-            Medtronic stapling and suturing device practice
+            Learn to Safely Operate and Use Advanced Surgical Devices
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-            A cleaner device lab for residents and fellows: choose Signia Powered Stapler or Endo Stitch, review product-focused training content, watch the embedded videos, and log practice in a brief local survey.
+            This educational platform is designed to help residents, surgeons, fellows, and operating room teams learn about the Medtronic Signia™ Stapling System and Endo Stitch™ devices through structured, interactive surgical education.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button className="inline-flex items-center justify-center gap-2 rounded-sm bg-[#0057a6] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#004985]" type="button" onClick={() => onNavigate("signia")}>
@@ -202,20 +207,60 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
               Endo Stitch <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-          <div className="mt-8 border-l-4 border-[#e31b23] bg-slate-50 p-4 text-sm leading-6 text-slate-700">
-            Device training is simulation-only. It does not replace manufacturer IFU, institutional policy, credentialing, or supervised clinical judgment.
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+            <div className="border-l-4 border-[#e31b23] bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+              Explore how these devices work, how to safely operate them, and how they are used in real surgical procedures through step-by-step learning modules, procedural demonstrations, safety guidance, troubleshooting resources, and expert instructional content.
+            </div>
+            <div className="border-l-4 border-[#0057a6] bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+              Built to support modern surgical training, competency development, and safer operative practice using Signia™ and Endo Stitch™ technologies. Educational simulation only. Follow institutional policy, manufacturer IFU, and faculty supervision.
+            </div>
+          </div>
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+            <FeatureList
+              title="Learner outcomes"
+              items={[
+                "Device operation knowledge",
+                "Surgical workflow understanding",
+                "Safe handling techniques",
+                "Cartridge and reload selection skills",
+                "Troubleshooting and technical awareness",
+                "Procedural confidence",
+                "Clinical decision-making skills",
+                "Best practices for patient safety"
+              ]}
+            />
+            <FeatureList
+              title="Platform features"
+              items={[
+                "Interactive learning modules",
+                "Surgical procedure walkthroughs",
+                "Device setup and operation training",
+                "Safety and error prevention education",
+                "Video demonstrations and expert guidance",
+                "Technical support resources",
+                "Case-based learning and assessments",
+                "Simulation-focused educational content"
+              ]}
+            />
           </div>
         </div>
         <div className="self-center">
           <div className="rounded-sm border border-slate-200 bg-slate-50 p-5 shadow-card">
-            <img
-              src="/assets/signia-side-view.jpg"
-              alt="Medtronic Signia powered stapler side view"
-              className="aspect-[4/3] w-full rounded-sm bg-white object-contain"
-            />
+            <div className="grid gap-4">
+              <img
+                src="/assets/signia-side-view.jpg"
+                alt="Medtronic Signia powered stapler side view"
+                className="aspect-[16/9] w-full rounded-sm bg-white object-contain"
+              />
+              <img
+                src="/assets/endo-stitch.webp"
+                alt="Medtronic Endo Stitch suturing device"
+                className="aspect-[16/9] w-full rounded-sm bg-white object-contain"
+              />
+            </div>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               <MiniMetric label="Pages" value="2" />
-              <MiniMetric label="Videos" value="3" />
+              <MiniMetric label="Videos" value="4" />
               <MiniMetric label="Mode" value="Sim" />
             </div>
           </div>
@@ -309,67 +354,122 @@ function SigniaPage({
 }
 
 function EndoStitchPage() {
-  const steps = [
-    "Identify the 10 mm device, handle, shaft, jaws, needle position, suture tail, and reload type on the dry trainer.",
-    "Practice air transfers first so the learner can see needle movement between jaws without tissue.",
-    "Move to marked synthetic tissue only after controlled visualization and stable needle transfer are demonstrated.",
-    "Stop immediately for lost needle visualization, partial capture, uncontrolled needle position, tissue tearing, or crossed suture.",
-    "Document practice attempts and faculty feedback before moving to another station."
+  const endoModules = [
+    {
+      title: "1. Loading the Suture Cartridge",
+      steps: [
+        "Verify initial state: ensure the device jaws are completely open and the metal internal bars are fully extended.",
+        "Orient the handle so the side with printed writing faces upward.",
+        "Align the small alignment divot on the distal tip with the Endo Stitch™ Single-Stitch Reload cartridge.",
+        "Push the tip firmly down into the cartridge until it snaps into place.",
+        "Squeeze the handle tightly and slide the green/teal toggle levers backward to capture the needle.",
+        "Lift the device straight up to snap off the plastic cartridge housing.",
+        "Cycle the toggle lever forward and back in simulation to confirm the needle transitions smoothly across the jaws."
+      ]
+    },
+    {
+      title: "2. Surgical Insertion and Safety Positions",
+      steps: [
+        "Maintain the closed position whenever the device is not actively passing through tissue in the trainer.",
+        "For trocar-entry simulation, keep the jaws tightly shut to avoid catching the sharp needle tips on tissue models.",
+        "Avoid pulling or shifting the suture while jaws are open; this is taught as a jamming and needle-bending risk scenario.",
+        "Stop the drill for lost visualization, uncontrolled needle position, resistance, or uncertain suture path."
+      ]
+    },
+    {
+      title: "3. Suturing Process",
+      steps: [
+        "Advance the toggle lever forward to open the jaws at the target tissue site; the needle sits in the jaw corresponding to lever direction.",
+        "Position open jaws around the targeted soft tissue layer on the model and squeeze the handle completely to pierce it.",
+        "With the handle fully compressed, activate the opposite toggle lever to release the needle from its current jaw and lock it into the opposing jaw.",
+        "Relax grip to reopen the jaws, then draw the device back to pull the suture length through the simulated tissue structure."
+      ]
+    },
+    {
+      title: "4. Unloading and Changing the Needle",
+      steps: [
+        "Fully squeeze the handle closed and move the green/teal toggle levers to the middle index position to lock the internal prongs.",
+        "Push the black release button or knob on the handle forward so the needle-retention prongs extend at the tip.",
+        "Open the handle while keeping the prongs exposed to release the used needle safely into a sharps container during simulation cleanup.",
+        "Document whether the learner used standard suture material or a barbed wound closure device such as V-Loc™ as part of the faculty debrief."
+      ]
+    }
   ];
 
   return (
     <div className="bg-white">
-      <section className="border-b border-slate-200 bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">Endo Stitch module</p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-[#101820] sm:text-5xl">
-            Endo Stitch suturing device practice
-          </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-            A focused simulation page for device recognition, needle-transfer practice, stitch-pattern drills, safety stop rules, and the embedded Endo Stitch video.
-          </p>
+      <section className="border-b border-slate-200 bg-slate-50 px-4 py-14 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-center">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">Endo Stitch module</p>
+            <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-[#101820] sm:text-5xl">
+              Endo Stitch™ suturing device practice
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+              The Medtronic Endo Stitch™ is an automated endoscopic suturing device operated by squeezing a handle to close its jaws and toggling a thumb lever to pass a proprietary double-pointed needle back and forth between those jaws.
+            </p>
+            <div className="mt-6 rounded-sm border-l-4 border-[#e31b23] bg-white p-4 text-sm leading-6 text-slate-700 shadow-card">
+              Always verify device requirements against official Medtronic product documentation, current IFU, institutional policy, and faculty supervision.
+            </div>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <SourceLink href={sourceLinks.endostitch}>Open Medtronic Endo Stitch source</SourceLink>
+              <SourceLink href={sourceLinks.endostitchSingleReload}>Open Single-Stitch Reload source</SourceLink>
+              <SourceLink href={sourceLinks.medtronicManuals}>Open Medtronic manual library</SourceLink>
+            </div>
+          </div>
+          <div className="rounded-sm border border-slate-200 bg-white p-4 shadow-card">
+            <img
+              src="/assets/endo-stitch.webp"
+              alt="Medtronic Endo Stitch suturing device"
+              className="aspect-[16/10] w-full object-contain"
+            />
+          </div>
         </div>
       </section>
 
-      <Section id="endostitch-info" label="Product information" title="What learners identify before practice">
+      <Section id="endostitch-info" label="Product information" title="Device controls and training focus">
         <div className="grid gap-5 lg:grid-cols-3">
-          <InfoCard title="Device orientation" icon={<ClipboardCheck className="h-5 w-5" />}>
+          <InfoCard title="Handle and jaws" icon={<ClipboardCheck className="h-5 w-5" />}>
             <p className="text-sm leading-6 text-slate-600">
-              Use the dry trainer to identify the handle, shaft, jaws, needle transfer path, suture tail, and reload count before any tissue-model work.
+              Squeezing the handle closes the jaws around the simulated tissue target. Learners practice complete closure, visual confirmation, and controlled release before timed drills.
             </p>
           </InfoCard>
-          <InfoCard title="Simulation focus" icon={<CheckCircle2 className="h-5 w-5" />}>
+          <InfoCard title="Thumb toggle" icon={<CheckCircle2 className="h-5 w-5" />}>
             <p className="text-sm leading-6 text-slate-600">
-              Practice controlled visualization, symmetric bites, suture tension, and immediate communication when the needle or tissue path is not clear.
+              The thumb lever passes the double-pointed needle between jaws. The training emphasis is smooth transition, needle visibility, and immediate pause for any partial transfer.
             </p>
           </InfoCard>
           <InfoCard title="Safety stop" icon={<ShieldAlert className="h-5 w-5" />}>
             <p className="text-sm leading-6 text-slate-600">
-              Lost visualization or uncontrolled needle position stops the station. Resume only with faculty direction and current IFU/local policy.
+              Lost visualization, suture traction with open jaws, uncontrolled needle position, or resistance stops the station. Resume only with faculty direction.
             </p>
-            <SourceLink href={sourceLinks.endostitch}>Open Endo Stitch source</SourceLink>
           </InfoCard>
         </div>
       </Section>
 
-      <Section id="endostitch-video" label="Video" title="Endo Stitch supplemental video">
-        <div className="max-w-3xl">
+      <Section id="endostitch-video" label="Video" title="Endo Stitch videos">
+        <div className="grid gap-5 lg:grid-cols-2">
           {endoVideos.map((video) => (
             <VideoCard key={video.videoId} {...video} />
           ))}
         </div>
       </Section>
 
-      <Section id="endostitch-practice" label="Practice" title="Needle-transfer simulation sequence">
-        <div className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
-          <ol className="space-y-4">
-            {steps.map((step, index) => (
-              <li key={step} className="flex gap-3 text-sm leading-6 text-slate-700">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#0057a6] text-xs font-bold text-white">{index + 1}</span>
-                <span>{step}</span>
-              </li>
-            ))}
-          </ol>
+      <Section id="endostitch-practice" label="Practice modules" title="Step-by-step simulation workflow">
+        <div className="grid gap-5 lg:grid-cols-2">
+          {endoModules.map((module) => (
+            <article key={module.title} className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
+              <h3 className="text-xl font-semibold text-[#101820]">{module.title}</h3>
+              <ol className="mt-5 space-y-4">
+                {module.steps.map((step, index) => (
+                  <li key={step} className="flex gap-3 text-sm leading-6 text-slate-700">
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#0057a6] text-xs font-bold text-white">{index + 1}</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </article>
+          ))}
         </div>
       </Section>
     </div>
@@ -547,6 +647,22 @@ function SourceLink({ href, children }: { href: string; children: React.ReactNod
     <a className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#0057a6] hover:underline" href={href} target="_blank" rel="noreferrer">
       {children} <ExternalLink className="h-4 w-4" />
     </a>
+  );
+}
+
+function FeatureList({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
+      <h3 className="text-lg font-semibold text-[#101820]">{title}</h3>
+      <ul className="mt-4 grid gap-2 text-sm leading-6 text-slate-600">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#0057a6]" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
