@@ -11,7 +11,7 @@ import {
   SlidersHorizontal
 } from "lucide-react";
 
-type Page = "home" | "signia" | "endostitch";
+type Page = "home" | "signia" | "triStaple" | "endostitch";
 
 type ReloadCard = {
   name: string;
@@ -24,14 +24,76 @@ type ReloadCard = {
   sourceLabel: string;
 };
 
+type TriStapleMatrixRow = {
+  name: string;
+  color: string;
+  textColor?: string;
+  tissue: string;
+  openHeights: string;
+  closedHeights: string;
+  indicatedRange: string;
+  lengths: string;
+  application: string;
+};
+
+type TriStapleProduct = {
+  name: string;
+  category: string;
+  summary: string;
+  href: string;
+};
+
+type TriStapleFamily = {
+  name: string;
+  color: string;
+  summary: string;
+  href: string;
+  details: string[];
+};
+
+type SurveyLog = {
+  id: string;
+  date: string;
+  attempts: number;
+  load: string;
+  confidence: number;
+  notes: string;
+};
+
+const surveyStorageKey = "signia-survey-logs-v1";
+
+function loadSurveyLogs(): SurveyLog[] {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const saved = window.localStorage.getItem(surveyStorageKey);
+    if (!saved) return [];
+    const parsed = JSON.parse(saved) as SurveyLog[];
+    return Array.isArray(parsed) ? parsed.filter((entry) => Number.isFinite(entry.attempts)) : [];
+  } catch {
+    return [];
+  }
+}
+
 const sourceLinks = {
   surgicalStapling: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling.html",
+  nzSurgicalStapling: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling.html",
   signia: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling/surgical-staplers/powered-staplers/signia-linear-stapler-with-tri-staple-technology.html",
+  nzSignia: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/signia-stapling-system.html",
   reload30: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-30-mm-reload.html",
   purpleReload: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-purple-reload.html",
   blackReload: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-black-reload.html",
   smallDiameter: "https://www.medtronic.com/en-us/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/signia-small-diameter-reload.html",
   curvedTip: "https://www.medtronic.com/en-ca/healthcare-professionals/products/surgical-stapling/stapler-reloads-loading-units/tri-staple-2-0-curved-tip-reload.html",
+  nzReinforcedReload: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/endo-gia-reinforced-reload.html",
+  nzCurvedTipReload: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/endo-gia-curved-tip-reload.html",
+  nzBlackReload: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/endo-gia-black-reload.html",
+  nzRadialReload: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/endo-gia-radial-reload.html",
+  nzReload30: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/endo-gia-30-mm-reload.html",
+  nzLaparoscopicStaplers: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/laparoscopic-staplers.html",
+  nzOpenStaplers: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/open-staplers.html",
+  nzCircularStaplers: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/circular-staplers.html",
+  nzSkinStaplers: "https://www.medtronic.com/covidien/en-nz/products/surgical-stapling/skin-staplers.html",
   endostitch: "https://www.medtronic.com/en-ca/healthcare-professionals/products/access-instruments/endoscopic-devices/endo-stitch-suturing-device.html",
   endostitchSingleReload: "https://www.medtronic.com/en-us/healthcare-professionals/products/wound-closure/endoscopic-suturing/accessories/endo-stitch-single-stitch-reload.html",
   medtronicManuals: "https://manuals.medtronic.com/manuals/main/region"
@@ -91,6 +153,100 @@ const reloads: ReloadCard[] = [
   }
 ];
 
+const triStapleMatrix: TriStapleMatrixRow[] = [
+  {
+    name: "Gray",
+    color: "#64748b",
+    tissue: "Vascular",
+    openHeights: "2.0 mm",
+    closedHeights: "0.75 mm",
+    indicatedRange: "0.75-1.0 mm",
+    lengths: "30, 45 mm",
+    application: "Thin vascular-style tissue models"
+  },
+  {
+    name: "Tan",
+    color: "#b8891f",
+    tissue: "Vascular / medium",
+    openHeights: "2.0, 2.5, 3.0 mm",
+    closedHeights: "0.75, 1.0, 1.25 mm",
+    indicatedRange: "0.88-1.8 mm",
+    lengths: "30, 45, 60 mm",
+    application: "Vascular-to-medium synthetic tissue stations"
+  },
+  {
+    name: "Purple",
+    color: "#6f2c91",
+    tissue: "Medium / thick",
+    openHeights: "3.0, 3.5, 4.0 mm",
+    closedHeights: "1.25, 1.5, 1.75 mm",
+    indicatedRange: "1.5-2.25 mm",
+    lengths: "30, 45, 60 mm",
+    application: "Medium-to-thick model recognition and selection"
+  },
+  {
+    name: "Black",
+    color: "#111827",
+    tissue: "Extra thick",
+    openHeights: "4.0, 4.5, 5.0 mm",
+    closedHeights: "1.75, 2.0, 2.25 mm",
+    indicatedRange: "2.25-3.0 mm",
+    lengths: "45, 60 mm",
+    application: "Extra-thick models and stop-to-confirm drills"
+  }
+];
+
+const medtronicNzProductList: TriStapleProduct[] = [
+  { name: "Signia™ Stapling System", category: "Smart stapling", summary: "Powered stapling platform listed in Medtronic NZ surgical stapling products.", href: sourceLinks.nzSignia },
+  { name: "Endo GIA™ Reinforced Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Preloaded buttress/reinforcement reload family in purple and black options.", href: sourceLinks.nzReinforcedReload },
+  { name: "Endo GIA™ Curved Tip Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Curved distal tip reloads for visibility and maneuverability around target tissue models.", href: sourceLinks.nzCurvedTipReload },
+  { name: "Endo GIA™ Black Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Extra-thick reload option listed in 45 and 60 mm lengths.", href: sourceLinks.nzBlackReload },
+  { name: "Endo GIA™ Radial Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Radial reload with 360-degree rotation and purple/black options.", href: sourceLinks.nzRadialReload },
+  { name: "Endo GIA™ 30 mm Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Extra-short reload for confined-space simulation and reload recognition.", href: sourceLinks.nzReload30 },
+  { name: "Laparoscopic Staplers", category: "Category page", summary: "Medtronic NZ listing for laparoscopic stapling systems and related products.", href: sourceLinks.nzLaparoscopicStaplers },
+  { name: "Open Staplers", category: "Category page", summary: "Medtronic NZ listing for open stapling systems.", href: sourceLinks.nzOpenStaplers },
+  { name: "Circular Staplers", category: "Category page", summary: "Medtronic NZ listing for circular stapling products.", href: sourceLinks.nzCircularStaplers },
+  { name: "Skin Staplers", category: "Category page", summary: "Medtronic NZ listing for skin stapling products.", href: sourceLinks.nzSkinStaplers }
+];
+
+const triStapleFamilies: TriStapleFamily[] = [
+  {
+    name: "30 mm Reload",
+    color: "#b8891f",
+    summary: "Extra-short profile for constrained-space training; the Medtronic NZ page lists tan and purple Tri-Staple options plus a gray vascular reload that is not Tri-Staple technology.",
+    href: sourceLinks.nzReload30,
+    details: ["EGIA30AVM tan: 2, 2.5, 3 mm", "EGIA30AMT purple: 3, 3.5, 4 mm", "EGIA30CTAVM curved tip tan: 2, 2.5, 3 mm"]
+  },
+  {
+    name: "Curved Tip Reload",
+    color: "#6f2c91",
+    summary: "Curved anvil tip family intended to improve visibility and maneuverability around target tissues and vessels.",
+    href: sourceLinks.nzCurvedTipReload,
+    details: ["Tan 30, 45, 60 mm vascular/medium options", "Purple 45 and 60 mm medium/thick options", "Gray 45 mm vascular option listed without Tri-Staple technology marker"]
+  },
+  {
+    name: "Black Reload",
+    color: "#111827",
+    summary: "Extra-thick tissue family listed in 45 and 60 mm articulating lengths.",
+    href: sourceLinks.nzBlackReload,
+    details: ["EGIA45AXT black: 4, 4.5, 5 mm", "EGIA60AXT black: 4, 4.5, 5 mm", "Use as a simulation station for too-thick or abnormal-compression stop points"]
+  },
+  {
+    name: "Radial Reload",
+    color: "#0057a6",
+    summary: "Radial reload family with 360-degree rotation and purple/black options for access-angle learning.",
+    href: sourceLinks.nzRadialReload,
+    details: ["EGIARADMT purple: 3, 3.5, 4 mm", "EGIARADXT black: 4, 4.5, 5 mm", "Use for coronal/sagittal access discussion in simulation"]
+  },
+  {
+    name: "Reinforced Reload",
+    color: "#e31b23",
+    summary: "Preloaded reinforcement family compatible with manual and powered handles per Medtronic NZ product content.",
+    href: sourceLinks.nzReinforcedReload,
+    details: ["Purple 45 and 60 mm medium/thick reinforced options", "Black 45 and 60 mm extra-thick reinforced options", "Teach buttress recognition, packaging check, and faculty confirmation before use"]
+  }
+];
+
 const simulationSteps = [
   "Confirm the session is simulation-only and open the current IFU or local quick-reference before handling the device.",
   "Identify the powered handle, power shell, linear adapter, jaws, firing controls, OLED/feedback screen, and manual recovery accessory.",
@@ -102,12 +258,15 @@ const simulationSteps = [
 function pageFromHash(): Page {
   if (typeof window === "undefined") return "home";
   const hash = window.location.hash.replace("#", "").toLowerCase();
-  return hash === "signia" || hash === "endostitch" ? hash : "home";
+  if (hash === "signia" || hash === "endostitch") return hash;
+  if (hash === "tristaple" || hash === "tri-staple") return "triStaple";
+  return "home";
 }
 
 function App() {
   const [page, setPage] = useState<Page>(() => pageFromHash());
   const [survey, setSurvey] = useState({ attempts: "", load: "Purple", confidence: "3", notes: "" });
+  const [surveyLogs, setSurveyLogs] = useState<SurveyLog[]>(() => loadSurveyLogs());
 
   useEffect(() => {
     const sync = () => {
@@ -119,11 +278,39 @@ function App() {
     return () => window.removeEventListener("hashchange", sync);
   }, []);
 
+  useEffect(() => {
+    window.localStorage.setItem(surveyStorageKey, JSON.stringify(surveyLogs));
+  }, [surveyLogs]);
+
   const surveySummary = useMemo(() => {
     const attempts = Number(survey.attempts || 0);
-    if (!attempts) return "No practice attempts logged yet.";
-    return `${attempts} practice run${attempts === 1 ? "" : "s"} logged with ${survey.load} as the primary reload focus.`;
+    if (!attempts) return "Enter the number of practice runs, then submit to add it to the tracker.";
+    return `${attempts} practice run${attempts === 1 ? "" : "s"} ready to submit with ${survey.load} as the primary reload focus.`;
   }, [survey.attempts, survey.load]);
+
+  const surveyTotals = useMemo(() => {
+    const totalAttempts = surveyLogs.reduce((sum, entry) => sum + entry.attempts, 0);
+    const totalConfidence = surveyLogs.reduce((sum, entry) => sum + entry.confidence, 0);
+    const averageConfidence = surveyLogs.length ? (totalConfidence / surveyLogs.length).toFixed(1) : "0.0";
+    return { totalAttempts, totalSessions: surveyLogs.length, averageConfidence };
+  }, [surveyLogs]);
+
+  const submitSurvey = () => {
+    const attempts = Number(survey.attempts || 0);
+    if (!Number.isFinite(attempts) || attempts <= 0) return;
+
+    const entry: SurveyLog = {
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      date: new Date().toISOString(),
+      attempts,
+      load: survey.load,
+      confidence: Number(survey.confidence),
+      notes: survey.notes.trim()
+    };
+
+    setSurveyLogs((current) => [entry, ...current]);
+    setSurvey((current) => ({ ...current, attempts: "", notes: "" }));
+  };
 
   const navigate = (next: Page) => {
     window.location.hash = next === "home" ? "home" : next;
@@ -146,6 +333,7 @@ function App() {
           <nav className="flex items-center gap-1" aria-label="Primary navigation">
             <NavButton active={page === "home"} onClick={() => navigate("home")}>Home</NavButton>
             <NavButton active={page === "signia"} onClick={() => navigate("signia")}>Signia</NavButton>
+            <NavButton active={page === "triStaple"} onClick={() => navigate("triStaple")}>Tri Staple</NavButton>
             <NavButton active={page === "endostitch"} onClick={() => navigate("endostitch")}>Endo Stitch</NavButton>
           </nav>
         </div>
@@ -154,8 +342,16 @@ function App() {
       <main>
         {page === "home" && <HomePage onNavigate={navigate} />}
         {page === "signia" && (
-          <SigniaPage survey={survey} setSurvey={setSurvey} surveySummary={surveySummary} />
+          <SigniaPage
+            survey={survey}
+            setSurvey={setSurvey}
+            surveySummary={surveySummary}
+            surveyLogs={surveyLogs}
+            surveyTotals={surveyTotals}
+            onSubmitSurvey={submitSurvey}
+          />
         )}
+        {page === "triStaple" && <TriStaplePage />}
         {page === "endostitch" && <EndoStitchPage />}
       </main>
 
@@ -164,8 +360,8 @@ function App() {
           <p className="text-sm text-slate-200">
             Educational simulation curriculum only. Follow institutional policy, manufacturer IFU, and faculty supervision.
           </p>
-          <a className="text-sm font-semibold text-white underline decoration-[#e31b23] underline-offset-4" href={sourceLinks.surgicalStapling} target="_blank" rel="noreferrer">
-            Medtronic surgical stapling source
+          <a className="text-sm font-semibold text-white underline decoration-[#e31b23] underline-offset-4" href={sourceLinks.nzSurgicalStapling} target="_blank" rel="noreferrer">
+            Medtronic NZ surgical stapling list
           </a>
         </div>
       </footer>
@@ -197,11 +393,14 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
             Learn to Safely Operate and Use Advanced Surgical Devices
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-            This educational platform is designed to help residents, surgeons, fellows, and operating room teams learn about the Medtronic Signia™ Stapling System and Endo Stitch™ devices through structured, interactive surgical education.
+            This educational platform is designed to help residents, surgeons, fellows, and operating room teams learn about the Medtronic Signia™ Stapling System, Tri-Staple™ reload families, and Endo Stitch™ devices through structured, interactive surgical education.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button className="inline-flex items-center justify-center gap-2 rounded-sm bg-[#0057a6] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#004985]" type="button" onClick={() => onNavigate("signia")}>
               Signia <ArrowRight className="h-4 w-4" />
+            </button>
+            <button className="inline-flex items-center justify-center gap-2 rounded-sm border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-[#101820] shadow-sm transition hover:border-[#0057a6] hover:text-[#0057a6]" type="button" onClick={() => onNavigate("triStaple")}>
+              Tri Staple <ArrowRight className="h-4 w-4" />
             </button>
             <button className="inline-flex items-center justify-center gap-2 rounded-sm border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-[#101820] shadow-sm transition hover:border-[#0057a6] hover:text-[#0057a6]" type="button" onClick={() => onNavigate("endostitch")}>
               Endo Stitch <ArrowRight className="h-4 w-4" />
@@ -222,7 +421,7 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
                 "Device operation knowledge",
                 "Surgical workflow understanding",
                 "Safe handling techniques",
-                "Cartridge and reload selection skills",
+                "Cartridge and Tri-Staple reload selection skills",
                 "Troubleshooting and technical awareness",
                 "Procedural confidence",
                 "Clinical decision-making skills",
@@ -259,7 +458,7 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
               />
             </div>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <MiniMetric label="Pages" value="2" />
+              <MiniMetric label="Pages" value="3" />
               <MiniMetric label="Videos" value="4" />
               <MiniMetric label="Mode" value="Sim" />
             </div>
@@ -273,11 +472,17 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
 function SigniaPage({
   survey,
   setSurvey,
-  surveySummary
+  surveySummary,
+  surveyLogs,
+  surveyTotals,
+  onSubmitSurvey
 }: {
   survey: { attempts: string; load: string; confidence: string; notes: string };
   setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; load: string; confidence: string; notes: string }>>;
   surveySummary: string;
+  surveyLogs: SurveyLog[];
+  surveyTotals: { totalAttempts: number; totalSessions: number; averageConfidence: string };
+  onSubmitSurvey: () => void;
 }) {
   return (
     <div className="bg-white">
@@ -346,7 +551,159 @@ function SigniaPage({
               ))}
             </ol>
           </div>
-          <SurveyCard survey={survey} setSurvey={setSurvey} surveySummary={surveySummary} />
+          <SurveyCard
+            survey={survey}
+            setSurvey={setSurvey}
+            surveySummary={surveySummary}
+            surveyLogs={surveyLogs}
+            surveyTotals={surveyTotals}
+            onSubmitSurvey={onSubmitSurvey}
+          />
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+function TriStaplePage() {
+  return (
+    <div className="bg-white">
+      <section className="border-b border-slate-200 bg-slate-50 px-4 py-14 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-center">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">Tri Staple module</p>
+            <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-[#101820] sm:text-5xl">
+              Tri-Staple™ reload selection and product map
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+              A simulation-focused reload reference built from the uploaded Tri Staple reload document and the Medtronic NZ surgical stapling product listing. Learners use this page to recognize reload colors, tissue ranges, lengths, and product families before faculty-supervised practice.
+            </p>
+            <div className="mt-6 rounded-sm border-l-4 border-[#e31b23] bg-white p-4 text-sm leading-6 text-slate-700 shadow-card">
+              Educational simulation only. Reload selection and device use must follow institutional policy, manufacturer IFU, and faculty supervision.
+            </div>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <SourceLink href={sourceLinks.nzSurgicalStapling}>Open Medtronic NZ product list</SourceLink>
+              <SourceLink href={sourceLinks.surgicalStapling}>Open Medtronic surgical stapling source</SourceLink>
+            </div>
+          </div>
+          <div className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {triStapleMatrix.map((reload) => (
+                <ReloadIllustration key={reload.name} color={reload.color} textColor={reload.textColor} label={reload.name} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Section id="tri-concepts" label="Core concepts" title="What Tri-Staple adds to reload training">
+        <div className="grid gap-5 lg:grid-cols-4">
+          <InfoCard title="Stepped cartridge face" icon={<Layers className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">The uploaded reload guide describes a stepped cartridge face. In simulation, learners use this as a visual cue to discuss tissue compression and reload orientation.</p>
+          </InfoCard>
+          <InfoCard title="Variable staple heights" icon={<SlidersHorizontal className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">Tri-Staple reloads use progressive staple-height rows. The teaching goal is matching color and height range to a validated synthetic tissue station.</p>
+          </InfoCard>
+          <InfoCard title="Fixed anvil" icon={<ClipboardCheck className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">The document lists a fixed anvil as a feature. Learners identify it and verbalize why instrument alignment matters before clamping.</p>
+          </InfoCard>
+          <InfoCard title="I-beam mechanism" icon={<ShieldAlert className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">The I-beam is taught as a device-design concept, not a reason to bypass visualization, compression checks, IFU review, or faculty stop points.</p>
+          </InfoCard>
+        </div>
+      </Section>
+
+      <Section id="tri-matrix" label="Reload matrix" title="Laparoscopic Tri-Staple reload colors">
+        <div className="overflow-hidden rounded-sm border border-slate-200 bg-white shadow-card">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
+              <thead className="bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
+                <tr>
+                  <th className="px-4 py-3 font-bold">Color</th>
+                  <th className="px-4 py-3 font-bold">Open heights</th>
+                  <th className="px-4 py-3 font-bold">Closed heights</th>
+                  <th className="px-4 py-3 font-bold">Indicated tissue range</th>
+                  <th className="px-4 py-3 font-bold">Linear lengths</th>
+                  <th className="px-4 py-3 font-bold">Training application</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {triStapleMatrix.map((reload) => (
+                  <tr key={reload.name} className="align-top">
+                    <td className="px-4 py-4 font-semibold text-[#101820]">
+                      <span className="mr-2 inline-block h-3 w-3 rounded-full align-middle" style={{ backgroundColor: reload.color }} />
+                      {reload.name} <span className="block text-xs font-normal text-slate-500">{reload.tissue}</span>
+                    </td>
+                    <td className="px-4 py-4 text-slate-700">{reload.openHeights}</td>
+                    <td className="px-4 py-4 text-slate-700">{reload.closedHeights}</td>
+                    <td className="px-4 py-4 text-slate-700">{reload.indicatedRange}</td>
+                    <td className="px-4 py-4 text-slate-700">{reload.lengths}</td>
+                    <td className="px-4 py-4 text-slate-700">{reload.application}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Section>
+
+      <Section id="tri-products" label="Medtronic NZ listing" title="All surgical stapling items from the product list">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {medtronicNzProductList.map((product) => (
+            <article key={product.name} className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#e31b23]">{product.category}</p>
+              <h3 className="mt-2 text-lg font-semibold text-[#101820]">{product.name}</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{product.summary}</p>
+              <SourceLink href={product.href}>Open product page</SourceLink>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="tri-families" label="Tri-Staple families" title="Reload family details for simulation stations">
+        <div className="grid gap-5 lg:grid-cols-2">
+          {triStapleFamilies.map((family) => (
+            <article key={family.name} className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
+              <div className="flex items-start gap-4">
+                <span className="mt-1 h-4 w-4 shrink-0 rounded-full" style={{ backgroundColor: family.color }} />
+                <div>
+                  <h3 className="text-xl font-semibold text-[#101820]">{family.name}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">{family.summary}</p>
+                </div>
+              </div>
+              <ul className="mt-5 space-y-3 text-sm leading-6 text-slate-700">
+                {family.details.map((detail) => (
+                  <li key={detail} className="flex gap-2">
+                    <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#0057a6]" />
+                    <span>{detail}</span>
+                  </li>
+                ))}
+              </ul>
+              <SourceLink href={family.href}>Open family source</SourceLink>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="tri-open" label="Open and circular reference" title="Additional Tri-Staple details from the uploaded guide">
+        <div className="grid gap-5 lg:grid-cols-2">
+          <article className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
+            <h3 className="text-xl font-semibold text-[#101820]">Tri-Staple™ GIA™ open stapling</h3>
+            <p className="mt-3 text-sm leading-6 text-slate-600">The uploaded guide lists tan, purple, and black open GIA options with 60 and 80 mm linear lengths, seven reloads/eight total firings, and a new knife blade after every fire.</p>
+            <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-3">
+              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Tan</dt><dd className="mt-1 text-slate-600">2.4, 2.7, 3.0 mm open</dd></div>
+              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Purple</dt><dd className="mt-1 text-slate-600">3.0, 3.5, 4.0 mm open</dd></div>
+              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Black</dt><dd className="mt-1 text-slate-600">4.0, 4.5, 5.0 mm open</dd></div>
+            </dl>
+          </article>
+          <article className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
+            <h3 className="text-xl font-semibold text-[#101820]">Tri-Staple™ EEA™ circular stapling</h3>
+            <p className="mt-3 text-sm leading-6 text-slate-600">The uploaded guide lists purple and black circular options in 21, 25, 28, 31, and 33 mm diameters with standard and XL shaft lengths.</p>
+            <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Purple</dt><dd className="mt-1 text-slate-600">1.5-2.25 mm indicated tissue range</dd></div>
+              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Black</dt><dd className="mt-1 text-slate-600">2.25-3.0 mm indicated tissue range</dd></div>
+            </dl>
+          </article>
         </div>
       </Section>
     </div>
@@ -581,16 +938,24 @@ function ReloadIllustration({ color, textColor = "#ffffff", label }: { color: st
 function SurveyCard({
   survey,
   setSurvey,
-  surveySummary
+  surveySummary,
+  surveyLogs,
+  surveyTotals,
+  onSubmitSurvey
 }: {
   survey: { attempts: string; load: string; confidence: string; notes: string };
   setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; load: string; confidence: string; notes: string }>>;
   surveySummary: string;
+  surveyLogs: SurveyLog[];
+  surveyTotals: { totalAttempts: number; totalSessions: number; averageConfidence: string };
+  onSubmitSurvey: () => void;
 }) {
+  const canSubmit = Number(survey.attempts || 0) > 0;
+
   return (
     <div className="rounded-sm border border-slate-200 bg-slate-50 p-6 shadow-card">
-      <h3 className="text-xl font-semibold text-[#101820]">Survey</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">Quick local practice log for the current learner. No backend is used.</p>
+      <h3 className="text-xl font-semibold text-[#101820]">Survey and practice tracker</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-600">Submit each practice session to save it locally and update the totals below.</p>
       <div className="mt-5 grid gap-4">
         <label className="text-sm font-semibold text-slate-900">
           How many practice runs occurred?
@@ -638,6 +1003,47 @@ function SurveyCard({
       <div className="mt-5 rounded-sm border border-[#b9d7ef] bg-white p-4 text-sm font-semibold text-[#0057a6]">
         {surveySummary}
       </div>
+      <button
+        className="mt-4 w-full rounded-sm bg-[#0057a6] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#004985] disabled:cursor-not-allowed disabled:bg-slate-300"
+        type="button"
+        disabled={!canSubmit}
+        onClick={onSubmitSurvey}
+      >
+        Submit practice session
+      </button>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        <PracticeMetric label="Total runs" value={String(surveyTotals.totalAttempts)} />
+        <PracticeMetric label="Sessions" value={String(surveyTotals.totalSessions)} />
+        <PracticeMetric label="Avg confidence" value={surveyTotals.averageConfidence} />
+      </div>
+
+      <div className="mt-6 rounded-sm border border-slate-200 bg-white p-4">
+        <h4 className="font-semibold text-[#101820]">Previous submissions</h4>
+        {surveyLogs.length === 0 ? (
+          <p className="mt-3 text-sm leading-6 text-slate-600">No previous survey submissions yet.</p>
+        ) : (
+          <ol className="mt-4 space-y-3">
+            {surveyLogs.slice(0, 5).map((entry) => (
+              <li key={entry.id} className="rounded-sm border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-700">
+                <div className="flex flex-wrap items-center justify-between gap-2 font-semibold text-[#101820]">
+                  <span>{entry.attempts} run{entry.attempts === 1 ? "" : "s"} with {entry.load}</span>
+                  <span>{new Date(entry.date).toLocaleDateString()}</span>
+                </div>
+                <p className="mt-1 text-slate-600">Confidence {entry.confidence}/5{entry.notes ? ` - ${entry.notes}` : ""}</p>
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+    </div>
+  );
+}
+function PracticeMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-sm border border-slate-200 bg-white p-3">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-[#0057a6]">{value}</p>
     </div>
   );
 }
