@@ -27,6 +27,8 @@ type ReloadCard = {
   source: string;
   sourceLabel: string;
   sourceNote?: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 type TriStapleMatrixRow = {
@@ -46,6 +48,8 @@ type TriStapleProduct = {
   category: string;
   summary: string;
   href: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 type TriStapleFamily = {
@@ -54,6 +58,7 @@ type TriStapleFamily = {
   summary: string;
   href: string;
   details: string[];
+  images?: Array<{ src: string; alt: string; caption: string }>;
 };
 
 type SurveyLog = {
@@ -154,7 +159,9 @@ const reloads: ReloadCard[] = [
     description:
       "Medtronic identifies tan Tri-Staple reloads for vascular-to-medium tissue, including 30 mm and curved-tip options. The LMS labels this Tan/Gold to match common local tray language.",
     source: sourceLinks.curvedTip,
-    sourceLabel: "Tan / curved-tip source"
+    sourceLabel: "Tan / curved-tip source",
+    image: "/assets/endo-gia-curved-tip-reload-b.avif",
+    imageAlt: "Endo GIA curved tip reload"
   },
   {
     name: "Purple",
@@ -168,7 +175,9 @@ const reloads: ReloadCard[] = [
     description:
       "Tri-Staple 2.0 purple reloads are listed by Medtronic for medium/thick tissue and are referenced for bariatric, thoracic, and colorectal procedures. Use this as the main medium-thickness simulation station.",
     source: sourceLinks.purpleReload,
-    sourceLabel: "Purple reload source"
+    sourceLabel: "Purple reload source",
+    image: "/assets/endo-gia-30mm-reload-purple.avif",
+    imageAlt: "Endo GIA 30 mm purple reload"
   },
   {
     name: "Black",
@@ -182,7 +191,9 @@ const reloads: ReloadCard[] = [
     description:
       "Tri-Staple 2.0 black reloads are described by Medtronic for extra-thick tissue. Simulation focus: identify high-resistance tissue, confirm the reload choice, and pause before firing.",
     source: sourceLinks.blackReload,
-    sourceLabel: "Black reload source"
+    sourceLabel: "Black reload source",
+    image: "/assets/endo-gia-black-reload-b.avif",
+    imageAlt: "Endo GIA black reload"
   },
   {
     name: "White",
@@ -246,14 +257,18 @@ const triStapleMatrix: TriStapleMatrixRow[] = [
 ];
 
 const medtronicNzProductList: TriStapleProduct[] = [
-  { name: "Signia™ Stapling System", category: "Smart stapling", summary: "Powered stapling platform listed in Medtronic NZ surgical stapling products.", href: sourceLinks.nzSignia },
-  { name: "Endo GIA™ Reinforced Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Preloaded buttress/reinforcement reload family in purple and black options.", href: sourceLinks.nzReinforcedReload },
-  { name: "Endo GIA™ Curved Tip Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Curved distal tip reloads for visibility and maneuverability around target tissue models.", href: sourceLinks.nzCurvedTipReload },
-  { name: "Endo GIA™ Black Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Extra-thick reload option listed in 45 and 60 mm lengths.", href: sourceLinks.nzBlackReload },
-  { name: "Endo GIA™ Radial Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Radial reload with 360-degree rotation and purple/black options.", href: sourceLinks.nzRadialReload },
-  { name: "Endo GIA™ 30 mm Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Extra-short reload for confined-space simulation and reload recognition.", href: sourceLinks.nzReload30 },
-  { name: "Laparoscopic Staplers", category: "Category page", summary: "Medtronic NZ listing for laparoscopic stapling systems and related products.", href: sourceLinks.nzLaparoscopicStaplers },
-  { name: "Open Staplers", category: "Category page", summary: "Medtronic NZ listing for open stapling systems.", href: sourceLinks.nzOpenStaplers },
+  { name: "Signia™ Stapling System", category: "Smart stapling", summary: "Powered stapling platform listed in Medtronic NZ surgical stapling products.", href: sourceLinks.nzSignia, image: "/assets/signia-side-view.jpg", imageAlt: "Signia powered stapler" },
+  { name: "Endo GIA™ Ultra Universal Stapler", category: "Laparoscopic staplers", summary: "Universal stapler handle image for laparoscopic stapling orientation and handle recognition.", href: sourceLinks.nzLaparoscopicStaplers, image: "/assets/endo-gia-ultra-universal-stapler-f.avif", imageAlt: "Endo GIA Ultra Universal Stapler" },
+  { name: "Endo GIA™ Universal Stapler", category: "Laparoscopic staplers", summary: "Universal stapler handle image for device identification and reload compatibility discussion.", href: sourceLinks.nzLaparoscopicStaplers, image: "/assets/endo-gia-universal-stapler-f.avif", imageAlt: "Endo GIA Universal Stapler" },
+  { name: "DST Series™ GIA™ Single Use Reloadable Stapler", category: "Open staplers", summary: "Open GIA stapler image for the open stapling reference section and product recognition.", href: sourceLinks.nzOpenStaplers, image: "/assets/dst-series-gia-single-use-reloadable-stapler-f.avif", imageAlt: "DST Series GIA Single Use Reloadable Stapler" },
+  { name: "Endo GIA™ Reinforced Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Preloaded buttress/reinforcement reload family in purple and black options.", href: sourceLinks.nzReinforcedReload, image: "/assets/endo-gia-reinforced-reload-b.avif", imageAlt: "Endo GIA reinforced reload" },
+  { name: "Reinforced Reload 60 mm AXT for iDrive™ Ultra", category: "Stapler reloads", summary: "Extra-thick reinforced 60 mm reload image used for reinforced reload recognition.", href: sourceLinks.nzReinforcedReload, image: "/assets/reinforced-reload-60mm-axt-idrive-ultra-f.avif", imageAlt: "Reinforced reload 60 mm AXT iDrive Ultra" },
+  { name: "Endo GIA™ Curved Tip Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Curved distal tip reloads for visibility and maneuverability around target tissue models.", href: sourceLinks.nzCurvedTipReload, image: "/assets/endo-gia-curved-tip-reload-b.avif", imageAlt: "Endo GIA curved tip reload" },
+  { name: "Endo GIA™ Black Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Extra-thick reload option listed in 45 and 60 mm lengths.", href: sourceLinks.nzBlackReload, image: "/assets/endo-gia-black-reload-b.avif", imageAlt: "Endo GIA black reload" },
+  { name: "Endo GIA™ Radial Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Radial reload with 360-degree rotation and purple/black options.", href: sourceLinks.nzRadialReload, image: "/assets/endo-gia-radial-reload-b.avif", imageAlt: "Endo GIA radial reload" },
+  { name: "Endo GIA™ 30 mm Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Extra-short reload for confined-space simulation and reload recognition.", href: sourceLinks.nzReload30, image: "/assets/endo-gia-30mm-reload-purple.avif", imageAlt: "Endo GIA 30 mm purple reload" },
+  { name: "Laparoscopic Staplers", category: "Category page", summary: "Medtronic NZ listing for laparoscopic stapling systems and related products.", href: sourceLinks.nzLaparoscopicStaplers, image: "/assets/endo-gia-ultra-universal-stapler-f.avif", imageAlt: "Endo GIA Ultra Universal Stapler" },
+  { name: "Open Staplers", category: "Category page", summary: "Medtronic NZ listing for open stapling systems.", href: sourceLinks.nzOpenStaplers, image: "/assets/dst-series-gia-single-use-reloadable-stapler-f.avif", imageAlt: "DST Series GIA open stapler" },
   { name: "Circular Staplers", category: "Category page", summary: "Medtronic NZ listing for circular stapling products.", href: sourceLinks.nzCircularStaplers },
   { name: "Skin Staplers", category: "Category page", summary: "Medtronic NZ listing for skin stapling products.", href: sourceLinks.nzSkinStaplers }
 ];
@@ -264,35 +279,43 @@ const triStapleFamilies: TriStapleFamily[] = [
     color: "#b8891f",
     summary: "Extra-short profile for constrained-space training; the Medtronic NZ page lists tan and purple Tri-Staple options plus a gray vascular reload that is not Tri-Staple technology.",
     href: sourceLinks.nzReload30,
-    details: ["EGIA30AVM tan: 2, 2.5, 3 mm", "EGIA30AMT purple: 3, 3.5, 4 mm", "EGIA30CTAVM curved tip tan: 2, 2.5, 3 mm"]
+    details: ["EGIA30AVM tan: 2, 2.5, 3 mm", "EGIA30AMT purple: 3, 3.5, 4 mm", "EGIA30CTAVM curved tip tan: 2, 2.5, 3 mm"],
+    images: [{ src: "/assets/endo-gia-30mm-reload-purple.avif", alt: "Endo GIA 30 mm purple reload", caption: "30 mm purple reload" }]
   },
   {
     name: "Curved Tip Reload",
     color: "#6f2c91",
     summary: "Curved anvil tip family intended to improve visibility and maneuverability around target tissues and vessels.",
     href: sourceLinks.nzCurvedTipReload,
-    details: ["Tan 30, 45, 60 mm vascular/medium options", "Purple 45 and 60 mm medium/thick options", "Gray 45 mm vascular option listed without Tri-Staple technology marker"]
+    details: ["Tan 30, 45, 60 mm vascular/medium options", "Purple 45 and 60 mm medium/thick options", "Gray 45 mm vascular option listed without Tri-Staple technology marker"],
+    images: [{ src: "/assets/endo-gia-curved-tip-reload-b.avif", alt: "Endo GIA curved tip reload", caption: "Curved tip reload" }]
   },
   {
     name: "Black Reload",
     color: "#111827",
     summary: "Extra-thick tissue family listed in 45 and 60 mm articulating lengths.",
     href: sourceLinks.nzBlackReload,
-    details: ["EGIA45AXT black: 4, 4.5, 5 mm", "EGIA60AXT black: 4, 4.5, 5 mm", "Use as a simulation station for too-thick or abnormal-compression stop points"]
+    details: ["EGIA45AXT black: 4, 4.5, 5 mm", "EGIA60AXT black: 4, 4.5, 5 mm", "Use as a simulation station for too-thick or abnormal-compression stop points"],
+    images: [{ src: "/assets/endo-gia-black-reload-b.avif", alt: "Endo GIA black reload", caption: "Black reload" }]
   },
   {
     name: "Radial Reload",
     color: "#0057a6",
     summary: "Radial reload family with 360-degree rotation and purple/black options for access-angle learning.",
     href: sourceLinks.nzRadialReload,
-    details: ["EGIARADMT purple: 3, 3.5, 4 mm", "EGIARADXT black: 4, 4.5, 5 mm", "Use for coronal/sagittal access discussion in simulation"]
+    details: ["EGIARADMT purple: 3, 3.5, 4 mm", "EGIARADXT black: 4, 4.5, 5 mm", "Use for coronal/sagittal access discussion in simulation"],
+    images: [{ src: "/assets/endo-gia-radial-reload-b.avif", alt: "Endo GIA radial reload", caption: "Radial reload" }]
   },
   {
     name: "Reinforced Reload",
     color: "#e31b23",
     summary: "Preloaded reinforcement family compatible with manual and powered handles per Medtronic NZ product content.",
     href: sourceLinks.nzReinforcedReload,
-    details: ["Purple 45 and 60 mm medium/thick reinforced options", "Black 45 and 60 mm extra-thick reinforced options", "Teach buttress recognition, packaging check, and faculty confirmation before use"]
+    details: ["Purple 45 and 60 mm medium/thick reinforced options", "Black 45 and 60 mm extra-thick reinforced options", "Teach buttress recognition, packaging check, and faculty confirmation before use"],
+    images: [
+      { src: "/assets/endo-gia-reinforced-reload-b.avif", alt: "Endo GIA reinforced reload", caption: "Reinforced reload" },
+      { src: "/assets/reinforced-reload-60mm-axt-idrive-ultra-f.avif", alt: "Reinforced reload 60 mm AXT iDrive Ultra", caption: "60 mm AXT reinforced reload" }
+    ]
   }
 ];
 
@@ -642,7 +665,8 @@ function TriStaplePage() {
             </div>
           </div>
           <div className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <ProductImage src="/assets/endo-gia-30mm-reload-purple.avif" alt="Endo GIA 30 mm purple reload" />
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
               {triStapleMatrix.map((reload) => (
                 <ReloadIllustration key={reload.name} color={reload.color} textColor={reload.textColor} label={reload.name} />
               ))}
@@ -706,7 +730,8 @@ function TriStaplePage() {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {medtronicNzProductList.map((product) => (
             <article key={product.name} className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#e31b23]">{product.category}</p>
+              {product.image && <ProductImage src={product.image} alt={product.imageAlt || product.name} />}
+              <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[#e31b23]">{product.category}</p>
               <h3 className="mt-2 text-lg font-semibold text-[#101820]">{product.name}</h3>
               <p className="mt-3 text-sm leading-6 text-slate-600">{product.summary}</p>
               <SourceLink href={product.href}>Open product page</SourceLink>
@@ -719,6 +744,13 @@ function TriStaplePage() {
         <div className="grid gap-5 lg:grid-cols-2">
           {triStapleFamilies.map((family) => (
             <article key={family.name} className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
+              {family.images && (
+                <div className={`mb-5 grid gap-3 ${family.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
+                  {family.images.map((image) => (
+                    <ProductImage key={image.src} src={image.src} alt={image.alt} caption={image.caption} />
+                  ))}
+                </div>
+              )}
               <div className="flex items-start gap-4">
                 <span className="mt-1 h-4 w-4 shrink-0 rounded-full" style={{ backgroundColor: family.color }} />
                 <div>
@@ -743,7 +775,8 @@ function TriStaplePage() {
       <Section id="tri-open" label="Open and circular reference" title="Additional Tri-Staple details from the uploaded guide">
         <div className="grid gap-5 lg:grid-cols-2">
           <article className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
-            <h3 className="text-xl font-semibold text-[#101820]">Tri-Staple™ GIA™ open stapling</h3>
+            <ProductImage src="/assets/dst-series-gia-single-use-reloadable-stapler-f.avif" alt="DST Series GIA Single Use Reloadable Stapler" caption="DST Series GIA open stapler" />
+            <h3 className="mt-5 text-xl font-semibold text-[#101820]">Tri-Staple™ GIA™ open stapling</h3>
             <p className="mt-3 text-sm leading-6 text-slate-600">The uploaded guide lists tan, purple, and black open GIA options with 60 and 80 mm linear lengths, seven reloads/eight total firings, and a new knife blade after every fire.</p>
             <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-3">
               <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Tan</dt><dd className="mt-1 text-slate-600">2.4, 2.7, 3.0 mm open</dd></div>
@@ -949,10 +982,23 @@ function VideoCard({ title, videoId }: { title: string; videoId: string }) {
   );
 }
 
+function ProductImage({ src, alt, caption }: { src: string; alt: string; caption?: string }) {
+  return (
+    <figure className="overflow-hidden rounded-sm border border-slate-200 bg-white">
+      <img src={src} alt={alt} className="aspect-[16/10] w-full bg-white object-contain p-3" loading="lazy" />
+      {caption && <figcaption className="border-t border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">{caption}</figcaption>}
+    </figure>
+  );
+}
+
 function ReloadTrainingCard({ reload }: { reload: ReloadCard }) {
   return (
     <article className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
-      <ReloadIllustration color={reload.color} textColor={reload.textColor} label={reload.name} />
+      {reload.image ? (
+        <ProductImage src={reload.image} alt={reload.imageAlt || reload.name} />
+      ) : (
+        <ReloadIllustration color={reload.color} textColor={reload.textColor} label={reload.name} />
+      )}
       <h3 className="mt-5 text-xl font-semibold text-[#101820]">{reload.name}</h3>
       <dl className="mt-4 space-y-3 text-sm">
         <div>
