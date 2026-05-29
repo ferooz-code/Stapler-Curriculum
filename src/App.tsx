@@ -18,10 +18,15 @@ type ReloadCard = {
   color: string;
   textColor?: string;
   tissue: string;
+  trainingModel: string;
   stapleHeights: string;
+  indicatedRange?: string;
+  examples: string[];
+  recognitionCues: string[];
   description: string;
   source: string;
   sourceLabel: string;
+  sourceNote?: string;
 };
 
 type TriStapleMatrixRow = {
@@ -55,8 +60,9 @@ type SurveyLog = {
   id: string;
   date: string;
   attempts: number;
+  handsFreeAt: number | null;
   load: string;
-  confidence: number;
+  confidence?: number;
   notes: string;
 };
 
@@ -68,8 +74,20 @@ function loadSurveyLogs(): SurveyLog[] {
   try {
     const saved = window.localStorage.getItem(surveyStorageKey);
     if (!saved) return [];
-    const parsed = JSON.parse(saved) as SurveyLog[];
-    return Array.isArray(parsed) ? parsed.filter((entry) => Number.isFinite(entry.attempts)) : [];
+    const parsed = JSON.parse(saved) as Partial<SurveyLog>[];
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed
+      .filter((entry) => Number.isFinite(Number(entry.attempts)))
+      .map((entry) => ({
+        id: entry.id || `${entry.date || Date.now()}-${Math.random().toString(16).slice(2)}`,
+        date: entry.date || new Date().toISOString(),
+        attempts: Number(entry.attempts),
+        handsFreeAt: Number.isFinite(Number(entry.handsFreeAt)) ? Number(entry.handsFreeAt) : null,
+        load: entry.load || "Purple",
+        confidence: Number.isFinite(Number(entry.confidence)) ? Number(entry.confidence) : undefined,
+        notes: entry.notes || ""
+      }));
   } catch {
     return [];
   }
@@ -111,12 +129,44 @@ const endoVideos = [
 
 const reloads: ReloadCard[] = [
   {
+    name: "Gray",
+    color: "#64748b",
+    tissue: "Extra thin / vascular",
+    trainingModel: "Thin vascular-style synthetic strip or small vessel model",
+    stapleHeights: "2 / 2 / 2 mm",
+    indicatedRange: "0.75-1.0 mm in the uploaded matrix; Medtronic 45 mm gray listing names extra-thin/vascular tissue.",
+    examples: ["Pulmonary vessel-style trainer", "Thin vascular pedicle model", "Small-diameter anatomy station"],
+    recognitionCues: ["Thinnest color station", "Use when the model compresses easily", "Pause if the model looks thicker than vascular simulation material"],
+    description:
+      "Medtronic lists gray Tri-Staple 2.0 reloads for vascular or extra-thin/vascular tissue. Use it in simulation for the thinnest vascular-style tissue models, never as a default load.",
+    source: sourceLinks.reload30,
+    sourceLabel: "Gray / 30 mm reload source"
+  },
+  {
+    name: "Tan / Gold",
+    color: "#b8891f",
+    tissue: "Vascular / medium",
+    trainingModel: "Thin-to-medium soft tissue or vessel-adjacent model",
+    stapleHeights: "2 / 2.5 / 3 mm",
+    indicatedRange: "0.88-1.8 mm in the uploaded matrix; Medtronic pages list vascular/medium or medium/vascular.",
+    examples: ["Vascular/medium pedicle model", "Thin lung-parenchyma strip", "Confined-space 30 mm station"],
+    recognitionCues: ["Between gray and purple", "Gold tray labels usually map to Medtronic tan", "Use when the model is no longer extra-thin but not medium/thick"],
+    description:
+      "Medtronic identifies tan Tri-Staple reloads for vascular-to-medium tissue, including 30 mm and curved-tip options. The LMS labels this Tan/Gold to match common local tray language.",
+    source: sourceLinks.curvedTip,
+    sourceLabel: "Tan / curved-tip source"
+  },
+  {
     name: "Purple",
     color: "#6f2c91",
     tissue: "Medium / thick",
+    trainingModel: "Medium-to-thick synthetic tissue block or lung wedge model",
     stapleHeights: "3 / 3.5 / 4 mm",
+    indicatedRange: "1.5-2.25 mm in the uploaded matrix; Medtronic lists medium/thick tissue.",
+    examples: ["Lung wedge model", "Medium parenchymal tissue station", "Thicker soft-tissue strip"],
+    recognitionCues: ["Most common medium/thick station", "Larger staple heights than tan", "Stop if tissue appears extra-thick or does not compress as expected"],
     description:
-      "Tri-Staple 2.0 purple reloads are listed by Medtronic for medium/thick tissue. Use this as the main simulation station for recognition and tissue-thickness matching.",
+      "Tri-Staple 2.0 purple reloads are listed by Medtronic for medium/thick tissue and are referenced for bariatric, thoracic, and colorectal procedures. Use this as the main medium-thickness simulation station.",
     source: sourceLinks.purpleReload,
     sourceLabel: "Purple reload source"
   },
@@ -124,9 +174,13 @@ const reloads: ReloadCard[] = [
     name: "Black",
     color: "#111827",
     tissue: "Extra thick",
+    trainingModel: "Extra-thick compressible tissue block or abnormal-thickness decision station",
     stapleHeights: "4 / 4.5 / 5 mm",
+    indicatedRange: "2.25-3.0 mm in the uploaded matrix; Medtronic lists extra-thick tissue.",
+    examples: ["Extra-thick tissue block", "High-resistance compression scenario", "Reload-escalation discussion station"],
+    recognitionCues: ["Tallest Tri-Staple linear reload in this module", "Used after faculty confirms extra-thick simulation material", "Abort if visibility or compression is poor"],
     description:
-      "Tri-Staple 2.0 black reloads are described for extra-thick tissue. Simulation focus: identify when the tissue model is outside the learner's assumed load range and pause.",
+      "Tri-Staple 2.0 black reloads are described by Medtronic for extra-thick tissue. Simulation focus: identify high-resistance tissue, confirm the reload choice, and pause before firing.",
     source: sourceLinks.blackReload,
     sourceLabel: "Black reload source"
   },
@@ -134,22 +188,17 @@ const reloads: ReloadCard[] = [
     name: "White",
     color: "#f8fafc",
     textColor: "#0f172a",
-    tissue: "Small-diameter / vascular-style recognition",
-    stapleHeights: "30 and 45 mm small-diameter reload options",
+    tissue: "Small-diameter reload recognition",
+    trainingModel: "Small-diameter access and visualization trainer",
+    stapleHeights: "30 mm short and 45 mm long Signia small-diameter reload options",
+    indicatedRange: "Manufacturer page lists color and length, not a Tri-Staple tissue-thickness range.",
+    examples: ["Narrow-space trainer", "Small-vessel approach model", "Thoracic tight-angle access station"],
+    recognitionCues: ["Not the same color-to-thickness map as Tri-Staple gray/tan/purple/black", "Focus on small-diameter access", "Confirm local IFU and inventory label before use"],
     description:
-      "Medtronic lists white Signia small-diameter reload options. In this curriculum, white is used as a recognition station for small-diameter reloads and thin-tissue simulation models.",
+      "Medtronic lists white Signia small-diameter reload options. In this curriculum, white is a recognition station for small-diameter access and thin/narrow training models rather than a direct Tri-Staple tissue-thickness category.",
     source: sourceLinks.smallDiameter,
-    sourceLabel: "Small-diameter source"
-  },
-  {
-    name: "Gold / Tan",
-    color: "#b8891f",
-    tissue: "Vascular / medium",
-    stapleHeights: "2 / 2.5 / 3 mm",
-    description:
-      "Medtronic's curved-tip listing uses tan for vascular/medium tissue. The module labels this station Gold/Tan so learners can map local tray terminology to the manufacturer listing.",
-    source: sourceLinks.curvedTip,
-    sourceLabel: "Curved-tip source"
+    sourceLabel: "Small-diameter source",
+    sourceNote: "White is included because the program requested it; Medtronic's small-diameter page does not state a specific tissue thickness category for white."
   }
 ];
 
@@ -265,7 +314,7 @@ function pageFromHash(): Page {
 
 function App() {
   const [page, setPage] = useState<Page>(() => pageFromHash());
-  const [survey, setSurvey] = useState({ attempts: "", load: "Purple", confidence: "3", notes: "" });
+  const [survey, setSurvey] = useState({ attempts: "", handsFreeAt: "", load: "Purple", notes: "" });
   const [surveyLogs, setSurveyLogs] = useState<SurveyLog[]>(() => loadSurveyLogs());
 
   useEffect(() => {
@@ -284,32 +333,38 @@ function App() {
 
   const surveySummary = useMemo(() => {
     const attempts = Number(survey.attempts || 0);
-    if (!attempts) return "Enter the number of practice runs, then submit to add it to the tracker.";
-    return `${attempts} practice run${attempts === 1 ? "" : "s"} ready to submit with ${survey.load} as the primary reload focus.`;
-  }, [survey.attempts, survey.load]);
+    const handsFreeAt = Number(survey.handsFreeAt || 0);
+    if (!attempts) return "Enter how many practice runs were completed, then submit to add the session to the tracker.";
+    if (!handsFreeAt) {
+      return `${attempts} practice run${attempts === 1 ? "" : "s"} ready to submit with ${survey.load}; add the hands-visibility milestone if known.`;
+    }
+    return `${attempts} practice run${attempts === 1 ? "" : "s"} ready to submit; learner stopped needing to watch hands after ${handsFreeAt} run${handsFreeAt === 1 ? "" : "s"}.`;
+  }, [survey.attempts, survey.handsFreeAt, survey.load]);
 
   const surveyTotals = useMemo(() => {
     const totalAttempts = surveyLogs.reduce((sum, entry) => sum + entry.attempts, 0);
-    const totalConfidence = surveyLogs.reduce((sum, entry) => sum + entry.confidence, 0);
-    const averageConfidence = surveyLogs.length ? (totalConfidence / surveyLogs.length).toFixed(1) : "0.0";
-    return { totalAttempts, totalSessions: surveyLogs.length, averageConfidence };
+    const handsFreeEntries = surveyLogs.filter((entry) => Number.isFinite(entry.handsFreeAt));
+    const totalHandsFreeAt = handsFreeEntries.reduce((sum, entry) => sum + (entry.handsFreeAt ?? 0), 0);
+    const averageHandsFreeAt = handsFreeEntries.length ? (totalHandsFreeAt / handsFreeEntries.length).toFixed(1) : "Not logged";
+    return { totalAttempts, totalSessions: surveyLogs.length, averageHandsFreeAt };
   }, [surveyLogs]);
 
   const submitSurvey = () => {
     const attempts = Number(survey.attempts || 0);
     if (!Number.isFinite(attempts) || attempts <= 0) return;
 
+    const handsFreeAt = Number(survey.handsFreeAt || 0);
     const entry: SurveyLog = {
       id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
       date: new Date().toISOString(),
       attempts,
+      handsFreeAt: Number.isFinite(handsFreeAt) && handsFreeAt > 0 ? handsFreeAt : null,
       load: survey.load,
-      confidence: Number(survey.confidence),
       notes: survey.notes.trim()
     };
 
     setSurveyLogs((current) => [entry, ...current]);
-    setSurvey((current) => ({ ...current, attempts: "", notes: "" }));
+    setSurvey((current) => ({ ...current, attempts: "", handsFreeAt: "", notes: "" }));
   };
 
   const navigate = (next: Page) => {
@@ -477,11 +532,11 @@ function SigniaPage({
   surveyTotals,
   onSubmitSurvey
 }: {
-  survey: { attempts: string; load: string; confidence: string; notes: string };
-  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; load: string; confidence: string; notes: string }>>;
+  survey: { attempts: string; handsFreeAt: string; load: string; notes: string };
+  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; handsFreeAt: string; load: string; notes: string }>>;
   surveySummary: string;
   surveyLogs: SurveyLog[];
-  surveyTotals: { totalAttempts: number; totalSessions: number; averageConfidence: string };
+  surveyTotals: { totalAttempts: number; totalSessions: number; averageHandsFreeAt: string };
   onSubmitSurvey: () => void;
 }) {
   return (
@@ -529,7 +584,7 @@ function SigniaPage({
 
       <Section id="loads" label="Stapler Loads" title="Reload recognition by color and tissue model">
         <p className="max-w-3xl text-sm leading-6 text-slate-600">
-          These cards translate the program's requested color headings into a training station. Purple and Black map directly to Medtronic Tri-Staple 2.0 reload listings; White maps to Signia small-diameter reloads; Gold is shown as Gold/Tan to match the Medtronic tan curved-tip listing.
+          These cards translate color recognition into simulation stations. Gray, Tan/Gold, Purple, and Black follow Medtronic Tri-Staple 2.0 tissue categories and the uploaded reload matrix; White is included as a Signia small-diameter recognition station because it is listed separately from the Tri-Staple tissue-thickness color map.
         </p>
         <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {reloads.map((reload) => (
@@ -901,15 +956,48 @@ function ReloadTrainingCard({ reload }: { reload: ReloadCard }) {
       <h3 className="mt-5 text-xl font-semibold text-[#101820]">{reload.name}</h3>
       <dl className="mt-4 space-y-3 text-sm">
         <div>
-          <dt className="font-semibold text-slate-900">Tissue model</dt>
+          <dt className="font-semibold text-slate-900">Manufacturer-listed tissue type</dt>
           <dd className="mt-1 text-slate-600">{reload.tissue}</dd>
+        </div>
+        <div>
+          <dt className="font-semibold text-slate-900">Simulation tissue model</dt>
+          <dd className="mt-1 text-slate-600">{reload.trainingModel}</dd>
         </div>
         <div>
           <dt className="font-semibold text-slate-900">Staple heights / format</dt>
           <dd className="mt-1 text-slate-600">{reload.stapleHeights}</dd>
         </div>
+        {reload.indicatedRange && (
+          <div>
+            <dt className="font-semibold text-slate-900">Thickness range note</dt>
+            <dd className="mt-1 text-slate-600">{reload.indicatedRange}</dd>
+          </div>
+        )}
       </dl>
+      <div className="mt-4 rounded-sm border border-slate-200 bg-slate-50 p-3">
+        <p className="text-sm font-semibold text-slate-900">Works well for simulation of</p>
+        <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+          {reload.examples.map((example) => (
+            <li key={example} className="flex gap-2">
+              <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#0057a6]" />
+              <span>{example}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="mt-4 rounded-sm border border-[#f3c5c8] bg-white p-3">
+        <p className="text-sm font-semibold text-[#101820]">Recognition and safety cues</p>
+        <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+          {reload.recognitionCues.map((cue) => (
+            <li key={cue} className="flex gap-2">
+              <ShieldAlert className="mt-1 h-4 w-4 shrink-0 text-[#e31b23]" />
+              <span>{cue}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <p className="mt-4 text-sm leading-6 text-slate-600">{reload.description}</p>
+      {reload.sourceNote && <p className="mt-3 text-xs leading-5 text-slate-500">{reload.sourceNote}</p>}
       <SourceLink href={reload.source}>{reload.sourceLabel}</SourceLink>
     </article>
   );
@@ -943,11 +1031,11 @@ function SurveyCard({
   surveyTotals,
   onSubmitSurvey
 }: {
-  survey: { attempts: string; load: string; confidence: string; notes: string };
-  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; load: string; confidence: string; notes: string }>>;
+  survey: { attempts: string; handsFreeAt: string; load: string; notes: string };
+  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; handsFreeAt: string; load: string; notes: string }>>;
   surveySummary: string;
   surveyLogs: SurveyLog[];
-  surveyTotals: { totalAttempts: number; totalSessions: number; averageConfidence: string };
+  surveyTotals: { totalAttempts: number; totalSessions: number; averageHandsFreeAt: string };
   onSubmitSurvey: () => void;
 }) {
   const canSubmit = Number(survey.attempts || 0) > 0;
@@ -958,7 +1046,7 @@ function SurveyCard({
       <p className="mt-2 text-sm leading-6 text-slate-600">Submit each practice session to save it locally and update the totals below.</p>
       <div className="mt-5 grid gap-4">
         <label className="text-sm font-semibold text-slate-900">
-          How many practice runs occurred?
+          How many practice runs did you complete?
           <input
             className="mt-2 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
             min="0"
@@ -980,14 +1068,14 @@ function SurveyCard({
           </select>
         </label>
         <label className="text-sm font-semibold text-slate-900">
-          Confidence after practice: {survey.confidence}/5
+          How many practice runs did it take before you did not need to watch your hands?
           <input
-            className="mt-2 w-full accent-[#0057a6]"
-            max="5"
-            min="1"
-            type="range"
-            value={survey.confidence}
-            onChange={(event) => setSurvey((current) => ({ ...current, confidence: event.target.value }))}
+            className="mt-2 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
+            min="0"
+            type="number"
+            value={survey.handsFreeAt}
+            onChange={(event) => setSurvey((current) => ({ ...current, handsFreeAt: event.target.value }))}
+            placeholder="Example: 5"
           />
         </label>
         <label className="text-sm font-semibold text-slate-900">
@@ -1013,9 +1101,9 @@ function SurveyCard({
       </button>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
-        <PracticeMetric label="Total runs" value={String(surveyTotals.totalAttempts)} />
+        <PracticeMetric label="Total practice" value={String(surveyTotals.totalAttempts)} />
         <PracticeMetric label="Sessions" value={String(surveyTotals.totalSessions)} />
-        <PracticeMetric label="Avg confidence" value={surveyTotals.averageConfidence} />
+        <PracticeMetric label="Avg hands-free" value={surveyTotals.averageHandsFreeAt} />
       </div>
 
       <div className="mt-6 rounded-sm border border-slate-200 bg-white p-4">
@@ -1030,7 +1118,10 @@ function SurveyCard({
                   <span>{entry.attempts} run{entry.attempts === 1 ? "" : "s"} with {entry.load}</span>
                   <span>{new Date(entry.date).toLocaleDateString()}</span>
                 </div>
-                <p className="mt-1 text-slate-600">Confidence {entry.confidence}/5{entry.notes ? ` - ${entry.notes}` : ""}</p>
+                <p className="mt-1 text-slate-600">
+                  Hands-free milestone: {entry.handsFreeAt ? `${entry.handsFreeAt} run${entry.handsFreeAt === 1 ? "" : "s"}` : "not recorded"}
+                  {entry.notes ? ` - ${entry.notes}` : ""}
+                </p>
               </li>
             ))}
           </ol>
