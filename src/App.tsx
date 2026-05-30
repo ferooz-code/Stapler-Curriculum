@@ -11,7 +11,7 @@ import {
   SlidersHorizontal
 } from "lucide-react";
 
-type Page = "home" | "signia" | "triStaple" | "endostitch";
+type Page = "home" | "signia" | "endostitch";
 
 type ReloadCard = {
   name: string;
@@ -331,7 +331,7 @@ function pageFromHash(): Page {
   if (typeof window === "undefined") return "home";
   const hash = window.location.hash.replace("#", "").toLowerCase();
   if (hash === "signia" || hash === "endostitch") return hash;
-  if (hash === "tristaple" || hash === "tri-staple") return "triStaple";
+  if (hash === "tristaple" || hash === "tri-staple") return "signia";
   return "home";
 }
 
@@ -411,7 +411,6 @@ function App() {
           <nav className="flex items-center gap-1" aria-label="Primary navigation">
             <NavButton active={page === "home"} onClick={() => navigate("home")}>Home</NavButton>
             <NavButton active={page === "signia"} onClick={() => navigate("signia")}>Signia</NavButton>
-            <NavButton active={page === "triStaple"} onClick={() => navigate("triStaple")}>Tri Staple</NavButton>
             <NavButton active={page === "endostitch"} onClick={() => navigate("endostitch")}>Endo Stitch</NavButton>
           </nav>
         </div>
@@ -429,7 +428,6 @@ function App() {
             onSubmitSurvey={submitSurvey}
           />
         )}
-        {page === "triStaple" && <TriStaplePage />}
         {page === "endostitch" && <EndoStitchPage />}
       </main>
 
@@ -471,14 +469,11 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
             Learn to Safely Operate and Use Advanced Surgical Devices
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-            This educational platform is designed to help residents, surgeons, fellows, and operating room teams learn about the Medtronic Signia™ Stapling System, Tri-Staple™ reload families, and Endo Stitch™ devices through structured, interactive surgical education.
+            This educational platform is designed to help residents, surgeons, fellows, and operating room teams learn about the Medtronic Signia™ Stapling System with its Tri-Staple™ reload/load options, plus Endo Stitch™ devices, through structured interactive surgical education.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button className="inline-flex items-center justify-center gap-2 rounded-sm bg-[#0057a6] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#004985]" type="button" onClick={() => onNavigate("signia")}>
               Signia <ArrowRight className="h-4 w-4" />
-            </button>
-            <button className="inline-flex items-center justify-center gap-2 rounded-sm border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-[#101820] shadow-sm transition hover:border-[#0057a6] hover:text-[#0057a6]" type="button" onClick={() => onNavigate("triStaple")}>
-              Tri Staple <ArrowRight className="h-4 w-4" />
             </button>
             <button className="inline-flex items-center justify-center gap-2 rounded-sm border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-[#101820] shadow-sm transition hover:border-[#0057a6] hover:text-[#0057a6]" type="button" onClick={() => onNavigate("endostitch")}>
               Endo Stitch <ArrowRight className="h-4 w-4" />
@@ -536,7 +531,7 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
               />
             </div>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <MiniMetric label="Pages" value="3" />
+              <MiniMetric label="Pages" value="2" />
               <MiniMetric label="Videos" value="4" />
               <MiniMetric label="Mode" value="Sim" />
             </div>
@@ -567,7 +562,7 @@ function SigniaPage({
       <PageHero
         eyebrow="Signia module"
         title="Signia powered stapler training"
-        description="Organized around introduction to stapler use, controls, tissue thickness, videos, reload recognition, simulation instructions, and a quick practice survey."
+        description="A single Signia module that connects powered stapler controls, Adaptive Firing feedback, and Tri-Staple reload/load selection by color, tissue model, and simulation decision points."
         image="/assets/signia-side-view.jpg"
         imageAlt="Medtronic Signia powered stapler"
       />
@@ -605,15 +600,79 @@ function SigniaPage({
         </div>
       </Section>
 
-      <Section id="loads" label="Stapler Loads" title="Reload recognition by color and tissue model">
-        <p className="max-w-3xl text-sm leading-6 text-slate-600">
-          These cards translate color recognition into simulation stations. Gray, Tan/Gold, Purple, and Black follow Medtronic Tri-Staple 2.0 tissue categories and the uploaded reload matrix; White is included as a Signia small-diameter recognition station because it is listed separately from the Tri-Staple tissue-thickness color map.
-        </p>
-        <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <Section id="loads" label="Tri-Staple loads" title="Signia reload selection by color and tissue model">
+        <div className="max-w-4xl space-y-4 text-sm leading-6 text-slate-600">
+          <p>
+            Tri-Staple is not a separate curriculum tab here; it is the Signia reload/load system. Medtronic describes the Signia linear stapler with Tri-Staple technology as pairing powered stapling feedback with Tri-Staple reloads so learners must understand both the handle controls and the cartridge color map together.
+          </p>
+          <p>
+            Use the color cards as simulation recognition stations. They do not replace IFU review, local inventory labels, faculty supervision, or device representative guidance.
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+          <InfoCard title="Signia platform" icon={<SlidersHorizontal className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">The powered handle, shell, adapter, OLED feedback, and firing behavior are practiced before any reload station begins.</p>
+          </InfoCard>
+          <InfoCard title="Tri-Staple loads" icon={<Layers className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">Tri-Staple reloads use a stepped cartridge concept and progressive staple heights. The learner task is color, thickness, and tissue-model matching.</p>
+          </InfoCard>
+          <InfoCard title="Selection rule" icon={<ShieldAlert className="h-5 w-5" />}>
+            <p className="text-sm leading-6 text-slate-600">Do not choose by color alone. Pause for visualization, compression behavior, tissue-model thickness, and faculty confirmation.</p>
+          </InfoCard>
+        </div>
+
+        <div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {reloads.map((reload) => (
             <ReloadTrainingCard key={reload.name} reload={reload} />
           ))}
         </div>
+
+        <details className="mt-6 rounded-sm border border-slate-200 bg-white shadow-card">
+          <summary className="cursor-pointer px-5 py-4 text-sm font-semibold text-[#0057a6]">Show Tri-Staple height matrix</summary>
+          <div className="overflow-x-auto border-t border-slate-200">
+            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
+              <thead className="bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
+                <tr>
+                  <th className="px-4 py-3 font-bold">Color</th>
+                  <th className="px-4 py-3 font-bold">Open heights</th>
+                  <th className="px-4 py-3 font-bold">Closed heights</th>
+                  <th className="px-4 py-3 font-bold">Indicated range</th>
+                  <th className="px-4 py-3 font-bold">Lengths</th>
+                  <th className="px-4 py-3 font-bold">Training use</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {triStapleMatrix.map((reload) => (
+                  <tr key={reload.name} className="align-top">
+                    <td className="px-4 py-4 font-semibold text-[#101820]">
+                      <span className="mr-2 inline-block h-3 w-3 rounded-full align-middle" style={{ backgroundColor: reload.color }} />
+                      {reload.name}
+                    </td>
+                    <td className="px-4 py-4 text-slate-700">{reload.openHeights}</td>
+                    <td className="px-4 py-4 text-slate-700">{reload.closedHeights}</td>
+                    <td className="px-4 py-4 text-slate-700">{reload.indicatedRange}</td>
+                    <td className="px-4 py-4 text-slate-700">{reload.lengths}</td>
+                    <td className="px-4 py-4 text-slate-700">{reload.application}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details className="mt-4 rounded-sm border border-slate-200 bg-white shadow-card">
+          <summary className="cursor-pointer px-5 py-4 text-sm font-semibold text-[#0057a6]">Show related Signia and Endo GIA product images</summary>
+          <div className="grid gap-4 border-t border-slate-200 p-5 md:grid-cols-2 xl:grid-cols-4">
+            {medtronicNzProductList.filter((product) => product.image).map((product) => (
+              <article key={product.name} className="rounded-sm border border-slate-200 bg-slate-50 p-3">
+                <ProductImage src={product.image || ""} alt={product.imageAlt || product.name} />
+                <p className="mt-3 text-xs font-bold uppercase tracking-[0.14em] text-[#e31b23]">{product.category}</p>
+                <h3 className="mt-1 text-sm font-semibold leading-5 text-[#101820]">{product.name}</h3>
+              </article>
+            ))}
+          </div>
+        </details>
       </Section>
 
       <Section id="practice" label="Stapler Practice" title="Simulation instructions and quick survey">
@@ -999,52 +1058,62 @@ function ReloadTrainingCard({ reload }: { reload: ReloadCard }) {
       ) : (
         <ReloadIllustration color={reload.color} textColor={reload.textColor} label={reload.name} />
       )}
-      <h3 className="mt-5 text-xl font-semibold text-[#101820]">{reload.name}</h3>
-      <dl className="mt-4 space-y-3 text-sm">
+      <div className="mt-5 flex items-start justify-between gap-3">
         <div>
-          <dt className="font-semibold text-slate-900">Manufacturer-listed tissue type</dt>
-          <dd className="mt-1 text-slate-600">{reload.tissue}</dd>
+          <h3 className="text-xl font-semibold text-[#101820]">{reload.name}</h3>
+          <p className="mt-1 text-sm font-semibold text-[#0057a6]">{reload.tissue}</p>
         </div>
+        <span className="mt-1 h-4 w-4 shrink-0 rounded-full border border-slate-300" style={{ backgroundColor: reload.color }} />
+      </div>
+      <dl className="mt-4 grid gap-3 text-sm">
         <div>
           <dt className="font-semibold text-slate-900">Simulation tissue model</dt>
           <dd className="mt-1 text-slate-600">{reload.trainingModel}</dd>
         </div>
-        <div>
-          <dt className="font-semibold text-slate-900">Staple heights / format</dt>
-          <dd className="mt-1 text-slate-600">{reload.stapleHeights}</dd>
-        </div>
-        {reload.indicatedRange && (
+        <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <dt className="font-semibold text-slate-900">Thickness range note</dt>
-            <dd className="mt-1 text-slate-600">{reload.indicatedRange}</dd>
+            <dt className="font-semibold text-slate-900">Staple heights</dt>
+            <dd className="mt-1 text-slate-600">{reload.stapleHeights}</dd>
           </div>
-        )}
+          <div>
+            <dt className="font-semibold text-slate-900">Best for simulation</dt>
+            <dd className="mt-1 text-slate-600">{reload.examples[0]}</dd>
+          </div>
+        </div>
       </dl>
-      <div className="mt-4 rounded-sm border border-slate-200 bg-slate-50 p-3">
-        <p className="text-sm font-semibold text-slate-900">Works well for simulation of</p>
-        <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
-          {reload.examples.map((example) => (
-            <li key={example} className="flex gap-2">
-              <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#0057a6]" />
-              <span>{example}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="mt-4 rounded-sm border border-[#f3c5c8] bg-white p-3">
-        <p className="text-sm font-semibold text-[#101820]">Recognition and safety cues</p>
-        <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
-          {reload.recognitionCues.map((cue) => (
-            <li key={cue} className="flex gap-2">
-              <ShieldAlert className="mt-1 h-4 w-4 shrink-0 text-[#e31b23]" />
-              <span>{cue}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <p className="mt-4 text-sm leading-6 text-slate-600">{reload.description}</p>
-      {reload.sourceNote && <p className="mt-3 text-xs leading-5 text-slate-500">{reload.sourceNote}</p>}
-      <SourceLink href={reload.source}>{reload.sourceLabel}</SourceLink>
+      <details className="mt-4 rounded-sm border border-slate-200 bg-slate-50">
+        <summary className="cursor-pointer px-3 py-2 text-sm font-semibold text-[#0057a6]">Practice cues and source</summary>
+        <div className="space-y-4 border-t border-slate-200 p-3">
+          {reload.indicatedRange && (
+            <p className="text-sm leading-6 text-slate-600"><span className="font-semibold text-slate-900">Thickness note:</span> {reload.indicatedRange}</p>
+          )}
+          <div>
+            <p className="text-sm font-semibold text-slate-900">Works well for simulation of</p>
+            <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+              {reload.examples.map((example) => (
+                <li key={example} className="flex gap-2">
+                  <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#0057a6]" />
+                  <span>{example}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-slate-900">Recognition and safety cues</p>
+            <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+              {reload.recognitionCues.map((cue) => (
+                <li key={cue} className="flex gap-2">
+                  <ShieldAlert className="mt-1 h-4 w-4 shrink-0 text-[#e31b23]" />
+                  <span>{cue}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <p className="text-sm leading-6 text-slate-600">{reload.description}</p>
+          {reload.sourceNote && <p className="text-xs leading-5 text-slate-500">{reload.sourceNote}</p>}
+          <SourceLink href={reload.source}>{reload.sourceLabel}</SourceLink>
+        </div>
+      </details>
     </article>
   );
 }
