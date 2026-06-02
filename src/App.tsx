@@ -18,47 +18,10 @@ type ReloadCard = {
   color: string;
   textColor?: string;
   tissue: string;
-  trainingModel: string;
-  stapleHeights: string;
-  indicatedRange?: string;
-  examples: string[];
-  recognitionCues: string[];
-  description: string;
+  sizes: string;
   source: string;
-  sourceLabel: string;
-  sourceNote?: string;
   image?: string;
   imageAlt?: string;
-};
-
-type TriStapleMatrixRow = {
-  name: string;
-  color: string;
-  textColor?: string;
-  tissue: string;
-  openHeights: string;
-  closedHeights: string;
-  indicatedRange: string;
-  lengths: string;
-  application: string;
-};
-
-type TriStapleProduct = {
-  name: string;
-  category: string;
-  summary: string;
-  href: string;
-  image?: string;
-  imageAlt?: string;
-};
-
-type TriStapleFamily = {
-  name: string;
-  color: string;
-  summary: string;
-  href: string;
-  details: string[];
-  images?: Array<{ src: string; alt: string; caption: string }>;
 };
 
 type SurveyLog = {
@@ -136,30 +99,16 @@ const reloads: ReloadCard[] = [
   {
     name: "Gray",
     color: "#64748b",
-    tissue: "Extra thin / vascular",
-    trainingModel: "Thin vascular-style synthetic strip or small vessel model",
-    stapleHeights: "2 / 2 / 2 mm",
-    indicatedRange: "0.75-1.0 mm in the uploaded matrix; Medtronic 45 mm gray listing names extra-thin/vascular tissue.",
-    examples: ["Pulmonary vessel-style trainer", "Thin vascular pedicle model", "Small-diameter anatomy station"],
-    recognitionCues: ["Thinnest color station", "Use when the model compresses easily", "Pause if the model looks thicker than vascular simulation material"],
-    description:
-      "Medtronic lists gray Tri-Staple 2.0 reloads for vascular or extra-thin/vascular tissue. Use it in simulation for the thinnest vascular-style tissue models, never as a default load.",
-    source: sourceLinks.reload30,
-    sourceLabel: "Gray / 30 mm reload source"
+    tissue: "Vascular / extra thin",
+    sizes: "30, 45 mm",
+    source: sourceLinks.reload30
   },
   {
     name: "Tan / Gold",
     color: "#b8891f",
     tissue: "Vascular / medium",
-    trainingModel: "Thin-to-medium soft tissue or vessel-adjacent model",
-    stapleHeights: "2 / 2.5 / 3 mm",
-    indicatedRange: "0.88-1.8 mm in the uploaded matrix; Medtronic pages list vascular/medium or medium/vascular.",
-    examples: ["Vascular/medium pedicle model", "Thin lung-parenchyma strip", "Confined-space 30 mm station"],
-    recognitionCues: ["Between gray and purple", "Gold tray labels usually map to Medtronic tan", "Use when the model is no longer extra-thin but not medium/thick"],
-    description:
-      "Medtronic identifies tan Tri-Staple reloads for vascular-to-medium tissue, including 30 mm and curved-tip options. The LMS labels this Tan/Gold to match common local tray language.",
+    sizes: "30, 45, 60 mm",
     source: sourceLinks.curvedTip,
-    sourceLabel: "Tan / curved-tip source",
     image: "/assets/endo-gia-curved-tip-reload-b.avif",
     imageAlt: "Endo GIA curved tip reload"
   },
@@ -167,15 +116,8 @@ const reloads: ReloadCard[] = [
     name: "Purple",
     color: "#6f2c91",
     tissue: "Medium / thick",
-    trainingModel: "Medium-to-thick synthetic tissue block or lung wedge model",
-    stapleHeights: "3 / 3.5 / 4 mm",
-    indicatedRange: "1.5-2.25 mm in the uploaded matrix; Medtronic lists medium/thick tissue.",
-    examples: ["Lung wedge model", "Medium parenchymal tissue station", "Thicker soft-tissue strip"],
-    recognitionCues: ["Most common medium/thick station", "Larger staple heights than tan", "Stop if tissue appears extra-thick or does not compress as expected"],
-    description:
-      "Tri-Staple 2.0 purple reloads are listed by Medtronic for medium/thick tissue and are referenced for bariatric, thoracic, and colorectal procedures. Use this as the main medium-thickness simulation station.",
+    sizes: "30, 45, 60 mm",
     source: sourceLinks.purpleReload,
-    sourceLabel: "Purple reload source",
     image: "/assets/endo-gia-30mm-reload-purple.avif",
     imageAlt: "Endo GIA 30 mm purple reload"
   },
@@ -183,15 +125,8 @@ const reloads: ReloadCard[] = [
     name: "Black",
     color: "#111827",
     tissue: "Extra thick",
-    trainingModel: "Extra-thick compressible tissue block or abnormal-thickness decision station",
-    stapleHeights: "4 / 4.5 / 5 mm",
-    indicatedRange: "2.25-3.0 mm in the uploaded matrix; Medtronic lists extra-thick tissue.",
-    examples: ["Extra-thick tissue block", "High-resistance compression scenario", "Reload-escalation discussion station"],
-    recognitionCues: ["Tallest Tri-Staple linear reload in this module", "Used after faculty confirms extra-thick simulation material", "Abort if visibility or compression is poor"],
-    description:
-      "Tri-Staple 2.0 black reloads are described by Medtronic for extra-thick tissue. Simulation focus: identify high-resistance tissue, confirm the reload choice, and pause before firing.",
+    sizes: "45, 60 mm",
     source: sourceLinks.blackReload,
-    sourceLabel: "Black reload source",
     image: "/assets/endo-gia-black-reload-b.avif",
     imageAlt: "Endo GIA black reload"
   },
@@ -199,123 +134,9 @@ const reloads: ReloadCard[] = [
     name: "White",
     color: "#f8fafc",
     textColor: "#0f172a",
-    tissue: "Small-diameter reload recognition",
-    trainingModel: "Small-diameter access and visualization trainer",
-    stapleHeights: "30 mm short and 45 mm long Signia small-diameter reload options",
-    indicatedRange: "Manufacturer page lists color and length, not a Tri-Staple tissue-thickness range.",
-    examples: ["Narrow-space trainer", "Small-vessel approach model", "Thoracic tight-angle access station"],
-    recognitionCues: ["Not the same color-to-thickness map as Tri-Staple gray/tan/purple/black", "Focus on small-diameter access", "Confirm local IFU and inventory label before use"],
-    description:
-      "Medtronic lists white Signia small-diameter reload options. In this curriculum, white is a recognition station for small-diameter access and thin/narrow training models rather than a direct Tri-Staple tissue-thickness category.",
-    source: sourceLinks.smallDiameter,
-    sourceLabel: "Small-diameter source",
-    sourceNote: "White is included because the program requested it; Medtronic's small-diameter page does not state a specific tissue thickness category for white."
-  }
-];
-
-const triStapleMatrix: TriStapleMatrixRow[] = [
-  {
-    name: "Gray",
-    color: "#64748b",
-    tissue: "Vascular",
-    openHeights: "2.0 mm",
-    closedHeights: "0.75 mm",
-    indicatedRange: "0.75-1.0 mm",
-    lengths: "30, 45 mm",
-    application: "Thin vascular-style tissue models"
-  },
-  {
-    name: "Tan",
-    color: "#b8891f",
-    tissue: "Vascular / medium",
-    openHeights: "2.0, 2.5, 3.0 mm",
-    closedHeights: "0.75, 1.0, 1.25 mm",
-    indicatedRange: "0.88-1.8 mm",
-    lengths: "30, 45, 60 mm",
-    application: "Vascular-to-medium synthetic tissue stations"
-  },
-  {
-    name: "Purple",
-    color: "#6f2c91",
-    tissue: "Medium / thick",
-    openHeights: "3.0, 3.5, 4.0 mm",
-    closedHeights: "1.25, 1.5, 1.75 mm",
-    indicatedRange: "1.5-2.25 mm",
-    lengths: "30, 45, 60 mm",
-    application: "Medium-to-thick model recognition and selection"
-  },
-  {
-    name: "Black",
-    color: "#111827",
-    tissue: "Extra thick",
-    openHeights: "4.0, 4.5, 5.0 mm",
-    closedHeights: "1.75, 2.0, 2.25 mm",
-    indicatedRange: "2.25-3.0 mm",
-    lengths: "45, 60 mm",
-    application: "Extra-thick models and stop-to-confirm drills"
-  }
-];
-
-const medtronicNzProductList: TriStapleProduct[] = [
-  { name: "Signia™ Stapling System", category: "Smart stapling", summary: "Powered stapling platform listed in Medtronic NZ surgical stapling products.", href: sourceLinks.nzSignia, image: "/assets/signia-side-view.jpg", imageAlt: "Signia powered stapler" },
-  { name: "Endo GIA™ Ultra Universal Stapler", category: "Laparoscopic staplers", summary: "Universal stapler handle image for laparoscopic stapling orientation and handle recognition.", href: sourceLinks.nzLaparoscopicStaplers, image: "/assets/endo-gia-ultra-universal-stapler-f.avif", imageAlt: "Endo GIA Ultra Universal Stapler" },
-  { name: "Endo GIA™ Universal Stapler", category: "Laparoscopic staplers", summary: "Universal stapler handle image for device identification and reload compatibility discussion.", href: sourceLinks.nzLaparoscopicStaplers, image: "/assets/endo-gia-universal-stapler-f.avif", imageAlt: "Endo GIA Universal Stapler" },
-  { name: "DST Series™ GIA™ Single Use Reloadable Stapler", category: "Open staplers", summary: "Open GIA stapler image for the open stapling reference section and product recognition.", href: sourceLinks.nzOpenStaplers, image: "/assets/dst-series-gia-single-use-reloadable-stapler-f.avif", imageAlt: "DST Series GIA Single Use Reloadable Stapler" },
-  { name: "Endo GIA™ Reinforced Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Preloaded buttress/reinforcement reload family in purple and black options.", href: sourceLinks.nzReinforcedReload, image: "/assets/endo-gia-reinforced-reload-b.avif", imageAlt: "Endo GIA reinforced reload" },
-  { name: "Reinforced Reload 60 mm AXT for iDrive™ Ultra", category: "Stapler reloads", summary: "Extra-thick reinforced 60 mm reload image used for reinforced reload recognition.", href: sourceLinks.nzReinforcedReload, image: "/assets/reinforced-reload-60mm-axt-idrive-ultra-f.avif", imageAlt: "Reinforced reload 60 mm AXT iDrive Ultra" },
-  { name: "Endo GIA™ Curved Tip Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Curved distal tip reloads for visibility and maneuverability around target tissue models.", href: sourceLinks.nzCurvedTipReload, image: "/assets/endo-gia-curved-tip-reload-b.avif", imageAlt: "Endo GIA curved tip reload" },
-  { name: "Endo GIA™ Black Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Extra-thick reload option listed in 45 and 60 mm lengths.", href: sourceLinks.nzBlackReload, image: "/assets/endo-gia-black-reload-b.avif", imageAlt: "Endo GIA black reload" },
-  { name: "Endo GIA™ Radial Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Radial reload with 360-degree rotation and purple/black options.", href: sourceLinks.nzRadialReload, image: "/assets/endo-gia-radial-reload-b.avif", imageAlt: "Endo GIA radial reload" },
-  { name: "Endo GIA™ 30 mm Reload with Tri-Staple™ Technology", category: "Stapler reloads", summary: "Extra-short reload for confined-space simulation and reload recognition.", href: sourceLinks.nzReload30, image: "/assets/endo-gia-30mm-reload-purple.avif", imageAlt: "Endo GIA 30 mm purple reload" },
-  { name: "Laparoscopic Staplers", category: "Category page", summary: "Medtronic NZ listing for laparoscopic stapling systems and related products.", href: sourceLinks.nzLaparoscopicStaplers, image: "/assets/endo-gia-ultra-universal-stapler-f.avif", imageAlt: "Endo GIA Ultra Universal Stapler" },
-  { name: "Open Staplers", category: "Category page", summary: "Medtronic NZ listing for open stapling systems.", href: sourceLinks.nzOpenStaplers, image: "/assets/dst-series-gia-single-use-reloadable-stapler-f.avif", imageAlt: "DST Series GIA open stapler" },
-  { name: "Circular Staplers", category: "Category page", summary: "Medtronic NZ listing for circular stapling products.", href: sourceLinks.nzCircularStaplers },
-  { name: "Skin Staplers", category: "Category page", summary: "Medtronic NZ listing for skin stapling products.", href: sourceLinks.nzSkinStaplers }
-];
-
-const triStapleFamilies: TriStapleFamily[] = [
-  {
-    name: "30 mm Reload",
-    color: "#b8891f",
-    summary: "Extra-short profile for constrained-space training; the Medtronic NZ page lists tan and purple Tri-Staple options plus a gray vascular reload that is not Tri-Staple technology.",
-    href: sourceLinks.nzReload30,
-    details: ["EGIA30AVM tan: 2, 2.5, 3 mm", "EGIA30AMT purple: 3, 3.5, 4 mm", "EGIA30CTAVM curved tip tan: 2, 2.5, 3 mm"],
-    images: [{ src: "/assets/endo-gia-30mm-reload-purple.avif", alt: "Endo GIA 30 mm purple reload", caption: "30 mm purple reload" }]
-  },
-  {
-    name: "Curved Tip Reload",
-    color: "#6f2c91",
-    summary: "Curved anvil tip family intended to improve visibility and maneuverability around target tissues and vessels.",
-    href: sourceLinks.nzCurvedTipReload,
-    details: ["Tan 30, 45, 60 mm vascular/medium options", "Purple 45 and 60 mm medium/thick options", "Gray 45 mm vascular option listed without Tri-Staple technology marker"],
-    images: [{ src: "/assets/endo-gia-curved-tip-reload-b.avif", alt: "Endo GIA curved tip reload", caption: "Curved tip reload" }]
-  },
-  {
-    name: "Black Reload",
-    color: "#111827",
-    summary: "Extra-thick tissue family listed in 45 and 60 mm articulating lengths.",
-    href: sourceLinks.nzBlackReload,
-    details: ["EGIA45AXT black: 4, 4.5, 5 mm", "EGIA60AXT black: 4, 4.5, 5 mm", "Use as a simulation station for too-thick or abnormal-compression stop points"],
-    images: [{ src: "/assets/endo-gia-black-reload-b.avif", alt: "Endo GIA black reload", caption: "Black reload" }]
-  },
-  {
-    name: "Radial Reload",
-    color: "#0057a6",
-    summary: "Radial reload family with 360-degree rotation and purple/black options for access-angle learning.",
-    href: sourceLinks.nzRadialReload,
-    details: ["EGIARADMT purple: 3, 3.5, 4 mm", "EGIARADXT black: 4, 4.5, 5 mm", "Use for coronal/sagittal access discussion in simulation"],
-    images: [{ src: "/assets/endo-gia-radial-reload-b.avif", alt: "Endo GIA radial reload", caption: "Radial reload" }]
-  },
-  {
-    name: "Reinforced Reload",
-    color: "#e31b23",
-    summary: "Preloaded reinforcement family compatible with manual and powered handles per Medtronic NZ product content.",
-    href: sourceLinks.nzReinforcedReload,
-    details: ["Purple 45 and 60 mm medium/thick reinforced options", "Black 45 and 60 mm extra-thick reinforced options", "Teach buttress recognition, packaging check, and faculty confirmation before use"],
-    images: [
-      { src: "/assets/endo-gia-reinforced-reload-b.avif", alt: "Endo GIA reinforced reload", caption: "Reinforced reload" },
-      { src: "/assets/reinforced-reload-60mm-axt-idrive-ultra-f.avif", alt: "Reinforced reload 60 mm AXT iDrive Ultra", caption: "60 mm AXT reinforced reload" }
-    ]
+    tissue: "Small diameter / narrow access",
+    sizes: "30 mm short, 45 mm long",
+    source: sourceLinks.smallDiameter
   }
 ];
 
@@ -562,32 +383,21 @@ function SigniaPage({
       <PageHero
         eyebrow="Signia module"
         title="Signia powered stapler training"
-        description="A single Signia module that connects powered stapler controls, Adaptive Firing feedback, and Tri-Staple reload/load selection by color, tissue model, and simulation decision points."
+        description="A light, simulation-focused guide to Signia controls and Tri-Staple load selection."
         image="/assets/signia-side-view.jpg"
         imageAlt="Medtronic Signia powered stapler"
       />
 
-      <Section id="intro" label="Introduction to Stapler Use" title="Build a shared mental model before practice">
-        <div className="grid gap-5 lg:grid-cols-3">
+      <Section id="intro" label="Introduction" title="Signia at a glance">
+        <div className="grid gap-4 lg:grid-cols-3">
           <InfoCard icon={<SlidersHorizontal className="h-5 w-5" />} title="Controls">
-            <ul className="space-y-3 text-sm leading-6 text-slate-600">
-              <li>Identify the powered handle, power shell, linear adapter, jaws, OLED display, and manual retraction tool.</li>
-              <li>Discuss powered articulation, rotation, clamping, and feedback as simulation controls requiring faculty oversight.</li>
-              <li>Use LED/OLED feedback as a pause-and-confirm cue, not permission to proceed automatically.</li>
-            </ul>
+            <p className="text-sm leading-6 text-slate-600">Handle, shell, adapter, jaws, OLED feedback, articulation, clamp, fire, release.</p>
           </InfoCard>
-          <InfoCard icon={<Layers className="h-5 w-5" />} title="Tissue thickness">
-            <ul className="space-y-3 text-sm leading-6 text-slate-600">
-              <li>Match reload color to synthetic tissue thickness using current IFU and local inventory labels.</li>
-              <li>Practice recognizing when the tissue model looks too thin, too thick, twisted, or poorly visualized for the intended reload.</li>
-              <li>Stop and verbalize the next step when feedback or compression behavior is unexpected.</li>
-            </ul>
+          <InfoCard icon={<Layers className="h-5 w-5" />} title="Load choice">
+            <p className="text-sm leading-6 text-slate-600">Match Tri-Staple load color to tissue thickness and available length.</p>
           </InfoCard>
-          <InfoCard icon={<ShieldAlert className="h-5 w-5" />} title="Source guardrails">
-            <p className="text-sm leading-6 text-slate-600">
-              Medtronic notes that website material does not replace device manuals or IFU. This module stays educational and simulation-only.
-            </p>
-            <SourceLink href={sourceLinks.signia}>Open Signia product source</SourceLink>
+          <InfoCard icon={<ShieldAlert className="h-5 w-5" />} title="Safety stop">
+            <p className="text-sm leading-6 text-slate-600">Pause for poor visualization, unexpected compression, or uncertain tissue capture.</p>
           </InfoCard>
         </div>
       </Section>
@@ -600,79 +410,16 @@ function SigniaPage({
         </div>
       </Section>
 
-      <Section id="loads" label="Tri-Staple loads" title="Signia reload selection by color and tissue model">
-        <div className="max-w-4xl space-y-4 text-sm leading-6 text-slate-600">
-          <p>
-            Tri-Staple is not a separate curriculum tab here; it is the Signia reload/load system. Medtronic describes the Signia linear stapler with Tri-Staple technology as pairing powered stapling feedback with Tri-Staple reloads so learners must understand both the handle controls and the cartridge color map together.
-          </p>
-          <p>
-            Use the color cards as simulation recognition stations. They do not replace IFU review, local inventory labels, faculty supervision, or device representative guidance.
-          </p>
+      <Section id="loads" label="Tri-Staple loads" title="Signia load selector">
+        <div className="rounded-sm border-l-4 border-[#e31b23] bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+          Choose by tissue thickness and length. Confirm institutional policy, manufacturer IFU, and faculty supervision before practice.
         </div>
 
-        <div className="mt-6 grid gap-4 lg:grid-cols-3">
-          <InfoCard title="Signia platform" icon={<SlidersHorizontal className="h-5 w-5" />}>
-            <p className="text-sm leading-6 text-slate-600">The powered handle, shell, adapter, OLED feedback, and firing behavior are practiced before any reload station begins.</p>
-          </InfoCard>
-          <InfoCard title="Tri-Staple loads" icon={<Layers className="h-5 w-5" />}>
-            <p className="text-sm leading-6 text-slate-600">Tri-Staple reloads use a stepped cartridge concept and progressive staple heights. The learner task is color, thickness, and tissue-model matching.</p>
-          </InfoCard>
-          <InfoCard title="Selection rule" icon={<ShieldAlert className="h-5 w-5" />}>
-            <p className="text-sm leading-6 text-slate-600">Do not choose by color alone. Pause for visualization, compression behavior, tissue-model thickness, and faculty confirmation.</p>
-          </InfoCard>
-        </div>
-
-        <div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {reloads.map((reload) => (
             <ReloadTrainingCard key={reload.name} reload={reload} />
           ))}
         </div>
-
-        <details className="mt-6 rounded-sm border border-slate-200 bg-white shadow-card">
-          <summary className="cursor-pointer px-5 py-4 text-sm font-semibold text-[#0057a6]">Show Tri-Staple height matrix</summary>
-          <div className="overflow-x-auto border-t border-slate-200">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
-                <tr>
-                  <th className="px-4 py-3 font-bold">Color</th>
-                  <th className="px-4 py-3 font-bold">Open heights</th>
-                  <th className="px-4 py-3 font-bold">Closed heights</th>
-                  <th className="px-4 py-3 font-bold">Indicated range</th>
-                  <th className="px-4 py-3 font-bold">Lengths</th>
-                  <th className="px-4 py-3 font-bold">Training use</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {triStapleMatrix.map((reload) => (
-                  <tr key={reload.name} className="align-top">
-                    <td className="px-4 py-4 font-semibold text-[#101820]">
-                      <span className="mr-2 inline-block h-3 w-3 rounded-full align-middle" style={{ backgroundColor: reload.color }} />
-                      {reload.name}
-                    </td>
-                    <td className="px-4 py-4 text-slate-700">{reload.openHeights}</td>
-                    <td className="px-4 py-4 text-slate-700">{reload.closedHeights}</td>
-                    <td className="px-4 py-4 text-slate-700">{reload.indicatedRange}</td>
-                    <td className="px-4 py-4 text-slate-700">{reload.lengths}</td>
-                    <td className="px-4 py-4 text-slate-700">{reload.application}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </details>
-
-        <details className="mt-4 rounded-sm border border-slate-200 bg-white shadow-card">
-          <summary className="cursor-pointer px-5 py-4 text-sm font-semibold text-[#0057a6]">Show related Signia and Endo GIA product images</summary>
-          <div className="grid gap-4 border-t border-slate-200 p-5 md:grid-cols-2 xl:grid-cols-4">
-            {medtronicNzProductList.filter((product) => product.image).map((product) => (
-              <article key={product.name} className="rounded-sm border border-slate-200 bg-slate-50 p-3">
-                <ProductImage src={product.image || ""} alt={product.imageAlt || product.name} />
-                <p className="mt-3 text-xs font-bold uppercase tracking-[0.14em] text-[#e31b23]">{product.category}</p>
-                <h3 className="mt-1 text-sm font-semibold leading-5 text-[#101820]">{product.name}</h3>
-              </article>
-            ))}
-          </div>
-        </details>
       </Section>
 
       <Section id="practice" label="Stapler Practice" title="Simulation instructions and quick survey">
@@ -696,161 +443,6 @@ function SigniaPage({
             surveyTotals={surveyTotals}
             onSubmitSurvey={onSubmitSurvey}
           />
-        </div>
-      </Section>
-    </div>
-  );
-}
-
-function TriStaplePage() {
-  return (
-    <div className="bg-white">
-      <section className="border-b border-slate-200 bg-slate-50 px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-center">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#e31b23]">Tri Staple module</p>
-            <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-[#101820] sm:text-5xl">
-              Tri-Staple™ reload selection and product map
-            </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-              A simulation-focused reload reference built from the uploaded Tri Staple reload document and the Medtronic NZ surgical stapling product listing. Learners use this page to recognize reload colors, tissue ranges, lengths, and product families before faculty-supervised practice.
-            </p>
-            <div className="mt-6 rounded-sm border-l-4 border-[#e31b23] bg-white p-4 text-sm leading-6 text-slate-700 shadow-card">
-              Educational simulation only. Reload selection and device use must follow institutional policy, manufacturer IFU, and faculty supervision.
-            </div>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <SourceLink href={sourceLinks.nzSurgicalStapling}>Open Medtronic NZ product list</SourceLink>
-              <SourceLink href={sourceLinks.surgicalStapling}>Open Medtronic surgical stapling source</SourceLink>
-            </div>
-          </div>
-          <div className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
-            <ProductImage src="/assets/endo-gia-30mm-reload-purple.avif" alt="Endo GIA 30 mm purple reload" />
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              {triStapleMatrix.map((reload) => (
-                <ReloadIllustration key={reload.name} color={reload.color} textColor={reload.textColor} label={reload.name} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Section id="tri-concepts" label="Core concepts" title="What Tri-Staple adds to reload training">
-        <div className="grid gap-5 lg:grid-cols-4">
-          <InfoCard title="Stepped cartridge face" icon={<Layers className="h-5 w-5" />}>
-            <p className="text-sm leading-6 text-slate-600">The uploaded reload guide describes a stepped cartridge face. In simulation, learners use this as a visual cue to discuss tissue compression and reload orientation.</p>
-          </InfoCard>
-          <InfoCard title="Variable staple heights" icon={<SlidersHorizontal className="h-5 w-5" />}>
-            <p className="text-sm leading-6 text-slate-600">Tri-Staple reloads use progressive staple-height rows. The teaching goal is matching color and height range to a validated synthetic tissue station.</p>
-          </InfoCard>
-          <InfoCard title="Fixed anvil" icon={<ClipboardCheck className="h-5 w-5" />}>
-            <p className="text-sm leading-6 text-slate-600">The document lists a fixed anvil as a feature. Learners identify it and verbalize why instrument alignment matters before clamping.</p>
-          </InfoCard>
-          <InfoCard title="I-beam mechanism" icon={<ShieldAlert className="h-5 w-5" />}>
-            <p className="text-sm leading-6 text-slate-600">The I-beam is taught as a device-design concept, not a reason to bypass visualization, compression checks, IFU review, or faculty stop points.</p>
-          </InfoCard>
-        </div>
-      </Section>
-
-      <Section id="tri-matrix" label="Reload matrix" title="Laparoscopic Tri-Staple reload colors">
-        <div className="overflow-hidden rounded-sm border border-slate-200 bg-white shadow-card">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
-                <tr>
-                  <th className="px-4 py-3 font-bold">Color</th>
-                  <th className="px-4 py-3 font-bold">Open heights</th>
-                  <th className="px-4 py-3 font-bold">Closed heights</th>
-                  <th className="px-4 py-3 font-bold">Indicated tissue range</th>
-                  <th className="px-4 py-3 font-bold">Linear lengths</th>
-                  <th className="px-4 py-3 font-bold">Training application</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {triStapleMatrix.map((reload) => (
-                  <tr key={reload.name} className="align-top">
-                    <td className="px-4 py-4 font-semibold text-[#101820]">
-                      <span className="mr-2 inline-block h-3 w-3 rounded-full align-middle" style={{ backgroundColor: reload.color }} />
-                      {reload.name} <span className="block text-xs font-normal text-slate-500">{reload.tissue}</span>
-                    </td>
-                    <td className="px-4 py-4 text-slate-700">{reload.openHeights}</td>
-                    <td className="px-4 py-4 text-slate-700">{reload.closedHeights}</td>
-                    <td className="px-4 py-4 text-slate-700">{reload.indicatedRange}</td>
-                    <td className="px-4 py-4 text-slate-700">{reload.lengths}</td>
-                    <td className="px-4 py-4 text-slate-700">{reload.application}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="tri-products" label="Medtronic NZ listing" title="All surgical stapling items from the product list">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {medtronicNzProductList.map((product) => (
-            <article key={product.name} className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
-              {product.image && <ProductImage src={product.image} alt={product.imageAlt || product.name} />}
-              <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[#e31b23]">{product.category}</p>
-              <h3 className="mt-2 text-lg font-semibold text-[#101820]">{product.name}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{product.summary}</p>
-              <SourceLink href={product.href}>Open product page</SourceLink>
-            </article>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="tri-families" label="Tri-Staple families" title="Reload family details for simulation stations">
-        <div className="grid gap-5 lg:grid-cols-2">
-          {triStapleFamilies.map((family) => (
-            <article key={family.name} className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
-              {family.images && (
-                <div className={`mb-5 grid gap-3 ${family.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
-                  {family.images.map((image) => (
-                    <ProductImage key={image.src} src={image.src} alt={image.alt} caption={image.caption} />
-                  ))}
-                </div>
-              )}
-              <div className="flex items-start gap-4">
-                <span className="mt-1 h-4 w-4 shrink-0 rounded-full" style={{ backgroundColor: family.color }} />
-                <div>
-                  <h3 className="text-xl font-semibold text-[#101820]">{family.name}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-600">{family.summary}</p>
-                </div>
-              </div>
-              <ul className="mt-5 space-y-3 text-sm leading-6 text-slate-700">
-                {family.details.map((detail) => (
-                  <li key={detail} className="flex gap-2">
-                    <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#0057a6]" />
-                    <span>{detail}</span>
-                  </li>
-                ))}
-              </ul>
-              <SourceLink href={family.href}>Open family source</SourceLink>
-            </article>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="tri-open" label="Open and circular reference" title="Additional Tri-Staple details from the uploaded guide">
-        <div className="grid gap-5 lg:grid-cols-2">
-          <article className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
-            <ProductImage src="/assets/dst-series-gia-single-use-reloadable-stapler-f.avif" alt="DST Series GIA Single Use Reloadable Stapler" caption="DST Series GIA open stapler" />
-            <h3 className="mt-5 text-xl font-semibold text-[#101820]">Tri-Staple™ GIA™ open stapling</h3>
-            <p className="mt-3 text-sm leading-6 text-slate-600">The uploaded guide lists tan, purple, and black open GIA options with 60 and 80 mm linear lengths, seven reloads/eight total firings, and a new knife blade after every fire.</p>
-            <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-3">
-              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Tan</dt><dd className="mt-1 text-slate-600">2.4, 2.7, 3.0 mm open</dd></div>
-              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Purple</dt><dd className="mt-1 text-slate-600">3.0, 3.5, 4.0 mm open</dd></div>
-              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Black</dt><dd className="mt-1 text-slate-600">4.0, 4.5, 5.0 mm open</dd></div>
-            </dl>
-          </article>
-          <article className="rounded-sm border border-slate-200 bg-white p-6 shadow-card">
-            <h3 className="text-xl font-semibold text-[#101820]">Tri-Staple™ EEA™ circular stapling</h3>
-            <p className="mt-3 text-sm leading-6 text-slate-600">The uploaded guide lists purple and black circular options in 21, 25, 28, 31, and 33 mm diameters with standard and XL shaft lengths.</p>
-            <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
-              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Purple</dt><dd className="mt-1 text-slate-600">1.5-2.25 mm indicated tissue range</dd></div>
-              <div className="rounded-sm bg-slate-50 p-3"><dt className="font-semibold text-slate-900">Black</dt><dd className="mt-1 text-slate-600">2.25-3.0 mm indicated tissue range</dd></div>
-            </dl>
-          </article>
         </div>
       </Section>
     </div>
@@ -1041,10 +633,10 @@ function VideoCard({ title, videoId }: { title: string; videoId: string }) {
   );
 }
 
-function ProductImage({ src, alt, caption }: { src: string; alt: string; caption?: string }) {
+function ProductImage({ src, alt, caption, compact = false }: { src: string; alt: string; caption?: string; compact?: boolean }) {
   return (
     <figure className="overflow-hidden rounded-sm border border-slate-200 bg-white">
-      <img src={src} alt={alt} className="aspect-[16/10] w-full bg-white object-contain p-3" loading="lazy" />
+      <img src={src} alt={alt} className={`${compact ? "aspect-[4/3]" : "aspect-[16/10]"} w-full bg-white object-contain p-3`} loading="lazy" />
       {caption && <figcaption className="border-t border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">{caption}</figcaption>}
     </figure>
   );
@@ -1052,68 +644,29 @@ function ProductImage({ src, alt, caption }: { src: string; alt: string; caption
 
 function ReloadTrainingCard({ reload }: { reload: ReloadCard }) {
   return (
-    <article className="rounded-sm border border-slate-200 bg-white p-5 shadow-card">
+    <article className="rounded-sm border border-slate-200 bg-white p-4 shadow-card">
       {reload.image ? (
-        <ProductImage src={reload.image} alt={reload.imageAlt || reload.name} />
+        <ProductImage src={reload.image} alt={reload.imageAlt || reload.name} compact />
       ) : (
         <ReloadIllustration color={reload.color} textColor={reload.textColor} label={reload.name} />
       )}
-      <div className="mt-5 flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-xl font-semibold text-[#101820]">{reload.name}</h3>
-          <p className="mt-1 text-sm font-semibold text-[#0057a6]">{reload.tissue}</p>
-        </div>
-        <span className="mt-1 h-4 w-4 shrink-0 rounded-full border border-slate-300" style={{ backgroundColor: reload.color }} />
+      <div className="mt-4 flex items-center justify-between gap-3">
+        <h3 className="text-lg font-semibold text-[#101820]">{reload.name}</h3>
+        <span className="h-4 w-4 shrink-0 rounded-full border border-slate-300" style={{ backgroundColor: reload.color }} />
       </div>
       <dl className="mt-4 grid gap-3 text-sm">
         <div>
-          <dt className="font-semibold text-slate-900">Simulation tissue model</dt>
-          <dd className="mt-1 text-slate-600">{reload.trainingModel}</dd>
+          <dt className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Sizes</dt>
+          <dd className="mt-1 font-semibold text-[#101820]">{reload.sizes}</dd>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div>
-            <dt className="font-semibold text-slate-900">Staple heights</dt>
-            <dd className="mt-1 text-slate-600">{reload.stapleHeights}</dd>
-          </div>
-          <div>
-            <dt className="font-semibold text-slate-900">Best for simulation</dt>
-            <dd className="mt-1 text-slate-600">{reload.examples[0]}</dd>
-          </div>
+        <div>
+          <dt className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Tissue</dt>
+          <dd className="mt-1 font-semibold text-[#0057a6]">{reload.tissue}</dd>
         </div>
       </dl>
-      <details className="mt-4 rounded-sm border border-slate-200 bg-slate-50">
-        <summary className="cursor-pointer px-3 py-2 text-sm font-semibold text-[#0057a6]">Practice cues and source</summary>
-        <div className="space-y-4 border-t border-slate-200 p-3">
-          {reload.indicatedRange && (
-            <p className="text-sm leading-6 text-slate-600"><span className="font-semibold text-slate-900">Thickness note:</span> {reload.indicatedRange}</p>
-          )}
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Works well for simulation of</p>
-            <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
-              {reload.examples.map((example) => (
-                <li key={example} className="flex gap-2">
-                  <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#0057a6]" />
-                  <span>{example}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Recognition and safety cues</p>
-            <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
-              {reload.recognitionCues.map((cue) => (
-                <li key={cue} className="flex gap-2">
-                  <ShieldAlert className="mt-1 h-4 w-4 shrink-0 text-[#e31b23]" />
-                  <span>{cue}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <p className="text-sm leading-6 text-slate-600">{reload.description}</p>
-          {reload.sourceNote && <p className="text-xs leading-5 text-slate-500">{reload.sourceNote}</p>}
-          <SourceLink href={reload.source}>{reload.sourceLabel}</SourceLink>
-        </div>
-      </details>
+      <a className="mt-4 inline-flex text-xs font-semibold text-[#0057a6] hover:underline" href={reload.source} target="_blank" rel="noreferrer">
+        Source
+      </a>
     </article>
   );
 }
