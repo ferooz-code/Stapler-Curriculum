@@ -17,8 +17,9 @@ type ReloadCard = {
   name: string;
   color: string;
   textColor?: string;
-  tissue: string;
+  category: string;
   sizes: string;
+  typicalUse: string[];
   source: string;
   image?: string;
   imageAlt?: string;
@@ -99,15 +100,17 @@ const reloads: ReloadCard[] = [
   {
     name: "Gray",
     color: "#64748b",
-    tissue: "Vascular / extra thin",
+    category: "Vascular / extra thin",
     sizes: "30, 45 mm",
+    typicalUse: ["Pulmonary vessels", "Small vascular pedicles"],
     source: sourceLinks.reload30
   },
   {
     name: "Tan / Gold",
     color: "#b8891f",
-    tissue: "Vascular / medium",
+    category: "Vascular / medium",
     sizes: "30, 45, 60 mm",
+    typicalUse: ["Pulmonary vessels", "Mesentery"],
     source: sourceLinks.curvedTip,
     image: "/assets/endo-gia-curved-tip-reload-b.avif",
     imageAlt: "Endo GIA curved tip reload"
@@ -115,8 +118,9 @@ const reloads: ReloadCard[] = [
   {
     name: "Purple",
     color: "#6f2c91",
-    tissue: "Medium / thick",
+    category: "Medium / thick",
     sizes: "30, 45, 60 mm",
+    typicalUse: ["Esophagus", "Lung", "Small bowel", "Normal colon"],
     source: sourceLinks.purpleReload,
     image: "/assets/endo-gia-30mm-reload-purple.avif",
     imageAlt: "Endo GIA 30 mm purple reload"
@@ -124,8 +128,9 @@ const reloads: ReloadCard[] = [
   {
     name: "Black",
     color: "#111827",
-    tissue: "Extra thick",
+    category: "Extra thick",
     sizes: "45, 60 mm",
+    typicalUse: ["Thickened colon", "Abnormal colon"],
     source: sourceLinks.blackReload,
     image: "/assets/endo-gia-black-reload-b.avif",
     imageAlt: "Endo GIA black reload"
@@ -134,8 +139,9 @@ const reloads: ReloadCard[] = [
     name: "White",
     color: "#f8fafc",
     textColor: "#0f172a",
-    tissue: "Small diameter / narrow access",
+    category: "Small diameter / narrow access",
     sizes: "30 mm short, 45 mm long",
+    typicalUse: ["Small vessels", "Narrow-access targets"],
     source: sourceLinks.smallDiameter
   }
 ];
@@ -340,16 +346,38 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
         <div className="self-center">
           <div className="rounded-sm border border-slate-200 bg-slate-50 p-5 shadow-card">
             <div className="grid gap-4">
-              <img
-                src="/assets/signia-side-view.jpg"
-                alt="Medtronic Signia powered stapler side view"
-                className="aspect-[16/9] w-full rounded-sm bg-white object-contain"
-              />
-              <img
-                src="/assets/endo-stitch.webp"
-                alt="Medtronic Endo Stitch suturing device"
-                className="aspect-[16/9] w-full rounded-sm bg-white object-contain"
-              />
+              <button
+                aria-label="Open Signia module"
+                className="group overflow-hidden rounded-sm border border-slate-200 bg-white text-left transition hover:border-[#0057a6] hover:shadow-card focus:outline-none focus:ring-2 focus:ring-[#0057a6] focus:ring-offset-2"
+                type="button"
+                onClick={() => onNavigate("signia")}
+              >
+                <img
+                  src="/assets/signia-side-view.jpg"
+                  alt="Medtronic Signia powered stapler side view"
+                  className="aspect-[16/9] w-full object-contain p-2"
+                />
+                <span className="flex items-center justify-between border-t border-slate-200 px-4 py-3 text-sm font-semibold text-[#101820] group-hover:text-[#0057a6]">
+                  Signia
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </button>
+              <button
+                aria-label="Open Endo Stitch module"
+                className="group overflow-hidden rounded-sm border border-slate-200 bg-white text-left transition hover:border-[#0057a6] hover:shadow-card focus:outline-none focus:ring-2 focus:ring-[#0057a6] focus:ring-offset-2"
+                type="button"
+                onClick={() => onNavigate("endostitch")}
+              >
+                <img
+                  src="/assets/endo-stitch.webp"
+                  alt="Medtronic Endo Stitch suturing device"
+                  className="aspect-[16/9] w-full object-contain p-2"
+                />
+                <span className="flex items-center justify-between border-t border-slate-200 px-4 py-3 text-sm font-semibold text-[#101820] group-hover:text-[#0057a6]">
+                  Endo Stitch
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </button>
             </div>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               <MiniMetric label="Pages" value="2" />
@@ -660,8 +688,12 @@ function ReloadTrainingCard({ reload }: { reload: ReloadCard }) {
           <dd className="mt-1 font-semibold text-[#101820]">{reload.sizes}</dd>
         </div>
         <div>
-          <dt className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Tissue</dt>
-          <dd className="mt-1 font-semibold text-[#0057a6]">{reload.tissue}</dd>
+          <dt className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Typical Tissue Use</dt>
+          <dd className="mt-2 flex flex-wrap gap-1.5">
+            {reload.typicalUse.map((item) => (
+              <span key={item} className="rounded-sm bg-[#eaf3fb] px-2 py-1 text-xs font-semibold text-[#0057a6]">{item}</span>
+            ))}
+          </dd>
         </div>
       </dl>
       <a className="mt-4 inline-flex text-xs font-semibold text-[#0057a6] hover:underline" href={reload.source} target="_blank" rel="noreferrer">
