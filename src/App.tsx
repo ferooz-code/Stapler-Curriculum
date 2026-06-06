@@ -30,7 +30,7 @@ type SurveyLog = {
   date: string;
   attempts: number;
   handsFreeAt: number | null;
-  load: string;
+  load?: string;
   confidence?: number;
   notes: string;
 };
@@ -53,7 +53,6 @@ function loadSurveyLogs(): SurveyLog[] {
         date: entry.date || new Date().toISOString(),
         attempts: Number(entry.attempts),
         handsFreeAt: Number.isFinite(Number(entry.handsFreeAt)) ? Number(entry.handsFreeAt) : null,
-        load: entry.load || "Purple",
         confidence: Number.isFinite(Number(entry.confidence)) ? Number(entry.confidence) : undefined,
         notes: entry.notes || ""
       }));
@@ -103,7 +102,9 @@ const reloads: ReloadCard[] = [
     category: "Vascular / extra thin",
     sizes: "30, 45 mm",
     typicalUse: ["Pulmonary vessels", "Small vascular pedicles"],
-    source: sourceLinks.reload30
+    source: sourceLinks.reload30,
+    image: "/assets/gray-staple-reload.png",
+    imageAlt: "Gray Tri-Staple reload thumbnail"
   },
   {
     name: "Tan / Gold",
@@ -142,7 +143,9 @@ const reloads: ReloadCard[] = [
     category: "Small diameter / narrow access",
     sizes: "30 mm short, 45 mm long",
     typicalUse: ["Small vessels", "Narrow-access targets"],
-    source: sourceLinks.smallDiameter
+    source: sourceLinks.smallDiameter,
+    image: "/assets/white-staple-reload.png",
+    imageAlt: "White Tri-Staple reload thumbnail"
   }
 ];
 
@@ -164,7 +167,7 @@ function pageFromHash(): Page {
 
 function App() {
   const [page, setPage] = useState<Page>(() => pageFromHash());
-  const [survey, setSurvey] = useState({ attempts: "", handsFreeAt: "", load: "Purple", notes: "" });
+  const [survey, setSurvey] = useState({ attempts: "", handsFreeAt: "", notes: "" });
   const [surveyLogs, setSurveyLogs] = useState<SurveyLog[]>(() => loadSurveyLogs());
 
   useEffect(() => {
@@ -184,12 +187,12 @@ function App() {
   const surveySummary = useMemo(() => {
     const attempts = Number(survey.attempts || 0);
     const handsFreeAt = Number(survey.handsFreeAt || 0);
-    if (!attempts) return "Enter how many practice runs were completed, then submit to add the session to the tracker.";
+    if (!attempts) return "Enter the number of completed practice runs, then submit this session.";
     if (!handsFreeAt) {
-      return `${attempts} practice run${attempts === 1 ? "" : "s"} ready to submit with ${survey.load}; add the hands-visibility milestone if known.`;
+      return `${attempts} practice run${attempts === 1 ? "" : "s"} ready to submit. Add the hands-free milestone if you tracked it.`;
     }
-    return `${attempts} practice run${attempts === 1 ? "" : "s"} ready to submit; learner stopped needing to watch hands after ${handsFreeAt} run${handsFreeAt === 1 ? "" : "s"}.`;
-  }, [survey.attempts, survey.handsFreeAt, survey.load]);
+    return `${attempts} practice run${attempts === 1 ? "" : "s"} ready to submit. Hands-free milestone: run ${handsFreeAt}.`;
+  }, [survey.attempts, survey.handsFreeAt]);
 
   const surveyTotals = useMemo(() => {
     const totalAttempts = surveyLogs.reduce((sum, entry) => sum + entry.attempts, 0);
@@ -209,7 +212,6 @@ function App() {
       date: new Date().toISOString(),
       attempts,
       handsFreeAt: Number.isFinite(handsFreeAt) && handsFreeAt > 0 ? handsFreeAt : null,
-      load: survey.load,
       notes: survey.notes.trim()
     };
 
@@ -399,8 +401,8 @@ function SigniaPage({
   surveyTotals,
   onSubmitSurvey
 }: {
-  survey: { attempts: string; handsFreeAt: string; load: string; notes: string };
-  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; handsFreeAt: string; load: string; notes: string }>>;
+  survey: { attempts: string; handsFreeAt: string; notes: string };
+  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; handsFreeAt: string; notes: string }>>;
   surveySummary: string;
   surveyLogs: SurveyLog[];
   surveyTotals: { totalAttempts: number; totalSessions: number; averageHandsFreeAt: string };
@@ -731,8 +733,8 @@ function SurveyCard({
   surveyTotals,
   onSubmitSurvey
 }: {
-  survey: { attempts: string; handsFreeAt: string; load: string; notes: string };
-  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; handsFreeAt: string; load: string; notes: string }>>;
+  survey: { attempts: string; handsFreeAt: string; notes: string };
+  setSurvey: React.Dispatch<React.SetStateAction<{ attempts: string; handsFreeAt: string; notes: string }>>;
   surveySummary: string;
   surveyLogs: SurveyLog[];
   surveyTotals: { totalAttempts: number; totalSessions: number; averageHandsFreeAt: string };
@@ -743,10 +745,10 @@ function SurveyCard({
   return (
     <div className="rounded-sm border border-slate-200 bg-slate-50 p-6 shadow-card">
       <h3 className="text-xl font-semibold text-[#101820]">Survey and practice tracker</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">Submit each practice session to save it locally and update the totals below.</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">Log each practice session to update the local totals below.</p>
       <div className="mt-5 grid gap-4">
         <label className="text-sm font-semibold text-slate-900">
-          How many practice runs did you complete?
+          How many complete practice runs did you finish?
           <input
             className="mt-2 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
             min="0"
@@ -756,35 +758,23 @@ function SurveyCard({
           />
         </label>
         <label className="text-sm font-semibold text-slate-900">
-          Primary reload practiced
-          <select
-            className="mt-2 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
-            value={survey.load}
-            onChange={(event) => setSurvey((current) => ({ ...current, load: event.target.value }))}
-          >
-            {reloads.map((reload) => (
-              <option key={reload.name}>{reload.name}</option>
-            ))}
-          </select>
-        </label>
-        <label className="text-sm font-semibold text-slate-900">
-          How many practice runs did it take before you did not need to watch your hands?
+          After how many runs could you stop looking down at your hands?
           <input
             className="mt-2 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
             min="0"
             type="number"
             value={survey.handsFreeAt}
             onChange={(event) => setSurvey((current) => ({ ...current, handsFreeAt: event.target.value }))}
-            placeholder="Example: 5"
+            placeholder="Optional, example: 5"
           />
         </label>
         <label className="text-sm font-semibold text-slate-900">
-          Notes for faculty debrief
+          Optional debrief note
           <textarea
             className="mt-2 min-h-24 w-full rounded-sm border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#0057a6]"
             value={survey.notes}
             onChange={(event) => setSurvey((current) => ({ ...current, notes: event.target.value }))}
-            placeholder="Reload selection, visualization issue, feedback cue, or remediation item"
+            placeholder="Example: camera view, hand position, confidence, or next practice goal"
           />
         </label>
       </div>
@@ -815,11 +805,11 @@ function SurveyCard({
             {surveyLogs.slice(0, 5).map((entry) => (
               <li key={entry.id} className="rounded-sm border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-700">
                 <div className="flex flex-wrap items-center justify-between gap-2 font-semibold text-[#101820]">
-                  <span>{entry.attempts} run{entry.attempts === 1 ? "" : "s"} with {entry.load}</span>
+                  <span>{entry.attempts} practice run{entry.attempts === 1 ? "" : "s"}</span>
                   <span>{new Date(entry.date).toLocaleDateString()}</span>
                 </div>
                 <p className="mt-1 text-slate-600">
-                  Hands-free milestone: {entry.handsFreeAt ? `${entry.handsFreeAt} run${entry.handsFreeAt === 1 ? "" : "s"}` : "not recorded"}
+                  Hands-free milestone: {entry.handsFreeAt ? `run ${entry.handsFreeAt}` : "not recorded"}
                   {entry.notes ? ` - ${entry.notes}` : ""}
                 </p>
               </li>
